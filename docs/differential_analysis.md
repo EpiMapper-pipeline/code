@@ -1,9 +1,10 @@
-# CUT&Tag-Analyzer: A Complete Pipeline for CUT&Tag Data Analysis
-## cut_and_tag_analyzer Documentation
+# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+## epimapper Documentation
 
-CUT&Tag-Analyzer is a complete pipeline for data analysis of CUT&Tag sequencing data.
+EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
-[Home](index.md) | [Quality Control of Raw Reads](fastqc.md) | [Bowtie2 Alignment](bowtie2_alignment.md) | [Removal of Duplicated Reads](remove_duplicates.md) | [Evaluation of Fragment Length Distribution](fragment_length.md) | [Quality Filtering and File Conversion](filtering.md) | [Spike-in Normalization](spike_in_calibration.md) | [Peak Calling](peak_calling.md) | [Enrichment Visualization in Heatmaps](heatmaps.md) | [Differential Analysis and Annotaion](differential_analysis.md)
+[Home](index.md) | [Quality Control of Raw Reads](docs/fastqc.md) | [Bowtie2 Alignment](docs/bowtie2_alignment.md) | [Removal of Duplicated Reads](docs/remove_duplicates.md) | [Evaluation of Fragment Length Distribution](docs/fragment_length.md) | [Quality Filtering and File Conversion](docs/filtering.md) | [Spike-in Normalization](docs/spike_in_calibration.md) | [Peak Calling](docs/peak_calling.md) | [Enrichment Visualization in Heatmaps](docs/heatmaps.md) | [Differential Analysis and Annotaion](docs/differential_analysis.md)
+
 
 # differntial_analysis
 Preforms differntial analysis on enriched reagions/peaks before annotating the stastitically significant changes to spesific genomic reagions and visulizing the results. 
