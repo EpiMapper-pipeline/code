@@ -102,7 +102,6 @@ For more details, follow the readme file in the package.
 	<li><code>filtering</code> : Performs data filtering for mapped reads based on their alignment quality, and file format conversion before high-level data analysis,before  visulizing reproducibility among biological replicates.</li>
 	<li><code>spike_in_calibration</code> : Removes experimental bias by normalizing fragment counts based on sequencing depth to a spike-in genome and visulizes results.</li>
 	<li><code>peak_calling</code> :Finds enriched regions/calls for peaks from chromatin profiling data with SEACR, then visulizes results.</li>
-	<li><code>dmr_percent2plot</code> : Plot percentage of DMRs in predefined genomic or chromatin segment regions.</li>
 	<li><code>heatmap</code> : Visualizes the enrichment of target protein in predefined genomic regions and peaks by creating heatmaps.</li>
 	<li><code>differential_analysis</code>:Preforms differntial analysis on enriched reagions/peaks before annotating the stastitically significant changes to spesific genomic reagions and visulizing the results. </li>
 	
