@@ -1,15 +1,15 @@
 
-# CUT&Tag-Analyzer: A Complete Pipeline for CUT&Tag Data Analysis
-## cut_and_tag_analyzer Documentation
+# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+## epimapper Documentation
 
-CUT&Tag-Analyzer is a complete pipeline for data analysis of CUT&Tag sequencing data.
+EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 
 ## Download:
 
-cut_and_tag_analyzer is written in python. It can be installed and accessed from command line and is avalible for both linux and mac operating systems. 
+epimapper is written in Python. It can be installed and accessed from command line and is avalible for both linux and MAC operating systems. 
 	
-## Installation:
+
 ## Installation:
 <p>It is highly recommended to create a separate virtual environment for the package to avoid any library conflicts problem. You you create virtual environment using the following commands. We recommend to use install and use miniconda/anaconda (https://docs.conda.io/en/latest/miniconda.html). Tutorial of creating and updating virtual commands can be found at (https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) </p> 
 
@@ -32,15 +32,14 @@ Please allow any other installations when prompted
   <li>numpy==1.23.0</li>
   <li>pandas==1.5.2</li>
   <li>seaborn==0.12.2
-  <li> plotnine==0.10.1<li>
-  <li>HMST-seq-Analyzer==1.0 <li>
+  <li> plotnine==0.10.1</li>
   <li>setuptools==65.6.3</li>
   <li>bedtools==2.27.0</li>
-  <li>fastqc==0.11.9<li>
-  <li>bowtie2==2.2.5<li>
-  <li>samtools==1.6<li>
-  <li>seacr==1.3<li>
-  <li>deeptools==3.5.1<li>
+  <li>fastqc==0.11.9</li>
+  <li>bowtie2==2.2.5</li>
+  <li>samtools==1.6</li>
+  <li>seacr==1.3</li>
+  <li>deeptools==3.5.1</li>
 
 
 </ul>
@@ -67,7 +66,7 @@ You can install the package using following command, go to the dmr_analysis dire
 
 - The SEACR shell script that needs to be downloaded from their GitHub page : [SEACR](https://github.com/FredHutch/SEACR)
 
-- The HMST-seq-Analyzer needs to be downloaded and installed by the setup.py file located in the package, likewise the CUT&Tag-analyzer package. It is avalible for download from [HMST-seq-Analyzer](https://hmst-seq.github.io/hmst/)
+
 
 
 For more details, follow the readme file in the package.
