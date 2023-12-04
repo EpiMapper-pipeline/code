@@ -22,5 +22,7 @@ Performs data filtering for mapped reads based on their alignment quality, and f
 
 <p><strong>Optional, has default values:</strong></p>
 <ul>
+<li><code>-atac, --atac_seq_shift<code>: If the reads should be shiftet to accomodate ATAC-seq protocal. +4 on "+"strand and -5 on "-"strand. Default=False"<li>
+<li><code>-sn, --spike_in_norm</code>: If the samples are spike in calibrated later or not. Will produce Bedgraph files if there is no spike in calibration later. Default=False</li>
   <li><code>-o , --out_dir</code>: Output directory, default = current working directory </li>
 </ul>
