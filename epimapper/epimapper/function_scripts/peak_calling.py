@@ -76,7 +76,7 @@ def set_parser(parser):
     
     optional_name.add_argument("-b", "--bam", required=False, type = str, help ="Bam files for MACS2 peakcalling")
     
-    optional_name.add_argument("-p", "--percentage", required = False, type = str, help ="decimal of peaks to be picked out, default 0.01", default="0.01")
+    optional_name.add_argument("-p", "--percentage", required = False, type = str, help ="decimal of peaks to be picked out, default 0.01")
     
     optional_name.add_argument("-soft", "--software", required=False, type = str, default = "seacr", help = "Select peak calling software, either seacr or macs2")
     
@@ -197,7 +197,7 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
 
 
 
-def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top):
+def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent):
     
     tmp_files = glob.glob(os.path.join(bam_dir,"*mapped.bam"))
 
@@ -225,7 +225,12 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             control_str = " ".join(controls)
             
             cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
-            cmd_macs_top = "macs2 callpeak -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+            
+            if is_percent:
+                cmd_macs_top = "macs2 callpeak -p "+percentage+" -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+            else:
+                cmd_macs_top = "macs2 callpeak -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_peaks --outdir " + macs2_top
+                
             subprocess.run(cmd_macs_con,shell = True)
             subprocess.run(cmd_macs_top,shell = True)
         types=["macs2_control","macs2_top"]
@@ -235,8 +240,10 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             sample=pl.PurePath(file).name.split(".")[0]
             name= sample.split("_rep")[0]
             
-            
-            cmd_macs_top = "macs2 callpeak -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
+            if is_percent:
+                cmd_macs_top = "macs2 callpeak  -p "+ percentage+" -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
+            else:
+                cmd_macs_top = "macs2 callpeak -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
             subprocess.run(cmd_macs_top,shell = True)
         types=["macs2_top"]
     return types
@@ -964,7 +971,7 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
     
      
     
-def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size):
+def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size,is_percent):
     
     
     
@@ -987,11 +994,11 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
     
     if skip_plot:
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
-        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,macs2_control,macs2_top)
+        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,macs2_control,macs2_top,is_percent)
         print("Done with calling peaks using MACS2 software.\nCalled peaks avalible at: "+ macs2)
         exit(0)
     else:
-        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top)
+        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent)
         
         sorted_files, peak_summary, peak_width = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
         
@@ -1004,18 +1011,21 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
 def check_input(args,summary_tables):
     skip_plot=False
     
-   
-    percentage = args.percentage
-    try:
-        percentage_value = float(percentage)
-        if not 0 <= percentage_value <= 1:
-            print("Chosen percentage: " + percentage + " is not within the range [0, 1]. Please choose a value in that range.")
+    if args.percentage is not None:
+        percentage = args.percentage
+        is_percent = True
+        try:
+            percentage_value = float(percentage)
+            if not 0 <= percentage_value <= 1:
+                print("Chosen percentage: " + percentage + " is not within the range [0, 1]. Please choose a value in that range.")
+                exit(1)
+        except ValueError:
+            print("Chosen percentage: " + percentage + " is not a valid numeric value. Please choose a numeric value between [0, 1]")
             exit(1)
-    except ValueError:
-        print("Chosen percentage: " + percentage + " is not a valid numeric value. Please choose a numeric value between [0, 1]")
-        exit(1)
 
-
+    else: 
+        percentage="0.01"
+        is_percent=False
 
         
     software = args.software
@@ -1121,7 +1131,7 @@ def check_input(args,summary_tables):
                     exit(0)
                 else:
                     print("Invalid input. Please type 'y' or 'n'.")  
-    return tbl, percentage, fragments, control, skip_plot, software
+    return tbl, percentage, fragments, control, skip_plot, software, is_percent
        
 def run(args):
     """
@@ -1193,7 +1203,7 @@ def run(args):
     
         
           
-    tbl, percentage, fragments, control, skip_plot, software =check_input(args,summary_tables)
+    tbl, percentage, fragments, control, skip_plot, software,is_percent =check_input(args,summary_tables)
     
     
 
@@ -1210,7 +1220,7 @@ def run(args):
         else:
             sum_tbl =False
         
-        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size)
+        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size,is_percent)
     else:
         print("Starting peak calling with SEACR")
         

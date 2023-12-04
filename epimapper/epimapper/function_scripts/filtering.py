@@ -59,6 +59,8 @@ def set_parser(parser):
     
     optional_name.add_argument("-sn", "--spike_in_norm", help = "If the samples are being spike-in normalized or not",required = False, type = bool, default = False)
     
+    optional_name.add_argument("-atac", "--atac_seq_shift", help ="Shift start point in ATAC-seq data +4 on the + strand and -5 on the - strand.", required=False, type=bool, default = False)
+    
     
     
     
@@ -82,7 +84,7 @@ def check_command(out):
     
     
 def do_filtering(LEN, files, minQualityScore, sam ,  sam_quality,
-		bam, bed,chromosome_sizes,  align, genome_blacklist, genome, bedgraph, spike_in_norm ):
+		bam, bed,chromosome_sizes,  align, genome_blacklist, genome, bedgraph, spike_in_norm, atac):
     
     """
     Uses samtools and bedtools to filter and convert sam files to quality and blacklist filtered bed files. 
@@ -162,7 +164,13 @@ def do_filtering(LEN, files, minQualityScore, sam ,  sam_quality,
         out4 =subprocess.run(cmd4,shell=True)
         check_command(out4)
         
-        cmd5 = "samtools view -b -F 0x04 "+ bam + "/" +new_name+".bam > " + bam +"/" + new_name+ ".mapped.bam"
+        if atac: 
+            cmd_atac = "alignmentSieve --ATACshift --bam "+ bam +"/"+new_name +".bam " + "-o " + bam +"/"+new_name +"_atac.bam "
+            out_atac = subprocess.run(cmd_atac, shell=True)
+            check_command(out_atac)
+            cmd5 = "samtools view -b -F 0x04 " + bam +"/"+new_name +"_atac.bam > " + bam +"/" + new_name+ ".mapped.bam"
+        else:
+            cmd5 = "samtools view -b -F 0x04 "+ bam + "/" +new_name+".bam > " + bam +"/" + new_name+ ".mapped.bam"
         out5 = subprocess.run(cmd5,shell=True)
         check_command(out5)
         
@@ -475,6 +483,13 @@ def run(args):
         print("Chosen genome blacklist file: "+ genome_blacklist+" is not a file or does not exist. \n Please check your file or chose another one.")
         exit(1)
     
+    
+    atac = args.atac_seq_shift
+    if atac is not isinstance(atac, bool):
+        print("The -atac/--atac_seq_shift paramater must be set to either 'True' or 'False'. Default=False")
+        exit(1)
+    
+    
     genome = pl.PurePath(chromosome_sizes).name
     
     
@@ -484,7 +499,7 @@ def run(args):
     count_cutoff=8
     
     
-    filtered_files2 = do_filtering(LEN, files, minQualityScore, sam, sam_quality, bam, bed, chromosome_sizes, align, genome_blacklist, genome,bedgraph, args.spike_in_norm)
+    filtered_files2 = do_filtering(LEN, files, minQualityScore, sam, sam_quality, bam, bed, chromosome_sizes, align, genome_blacklist, genome,bedgraph, args.spike_in_norm,atac)
     
     
     corr_df1,corr_df2 = calculation(filtered_files2, count_cutoff)

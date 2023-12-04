@@ -12,12 +12,12 @@ Performs data filtering for mapped reads based on their alignment quality, and f
 
 <p><strong>Required:</strong></p>
 <ul>
-  <li><code>-s SAM, --sam SAM </code>: Input file folder of SAM files exported from alignment for filtering </li>
+  <li><code>-s SAM, --sam SAM </code>: Input file folder of SAM files exported from alignment for filtering. </li>
 
-  <li><code>-cs CHROMOSOME SIZES, --chromosome_sizes SAM </code>: Input file of sorted chromosome sizes information </li>
+  <li><code>-cs CHROMOSOME SIZES, --chromosome_sizes</code>: Input file of sorted chromosome sizes information. </li>
 
 
-  <li><code> -bl BLACKLIST, --blacklist BLACKLIST </code>: Input file in BED format with genomic reagion that should be excluded </li>
+  <li><code> -bl BLACKLIST, --blacklist BLACKLIST </code>: Input file in BED format with genomic region that should be excluded. </li>
 </ul>
 
 <p><strong>Optional, has default values:</strong></p>

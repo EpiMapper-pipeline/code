@@ -13,7 +13,7 @@ Evaluation of mapped fragment length distribution of input SAM files exported fr
 
 <p><strong>Required:</strong></p>
 <ul>
-  <li><code>-s SAM, --sam SAM </code>: Input file folder of SAM files exported from alignment for fragment length evaluation </li>
+  <li><code>-s SAM, --sam SAM </code>: Input file folder of SAM files exported from alignment for fragment length evaluation. </li>
   
 </ul>
 

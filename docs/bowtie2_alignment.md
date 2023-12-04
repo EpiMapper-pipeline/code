@@ -16,14 +16,14 @@ Mapping reads to a reference genome with Bowtie2 alignment of fastq sequencing r
 <ul>
   <li><code>-f FASTQ, --fastq FASTQ </code>: Input file folder of fastq files for aligment.</li>
 
-  
+ 
 </ul>
 
-<p><strong>Optional, has default values:</strong></p>
+<p><strong>Optional: </strong></p>
 <ul>
    <li><code>-i --bowtie2_index_pathway </code>: Input file folder of Bowtie2 reference genome indexing files.</li>
-   <li><code>-r, --reference: </code>: Input reference genome FASTA file for the creation of Bowtie2 reference genome indexing files if the user does not have indexing files avalible.
-  <li><code> -s , --spike_in</code>: If the alignment is spike-in, default = False </li>
-  <li><code> -m , --merge</code>: Merges technical replicates, default = False </li>
-  <li><code> -o , --out_dir</code>: Output directory, default = current working directory </li>
+   <li><code>-r, --reference: </code>: Input reference genome FASTA file for the creation of Bowtie2 reference genome. indexing files if the user does not have indexing files avalible.
+  <li><code> -s , --spike_in</code>: If the alignment is spike-in, default = False. </li>
+  <li><code> -m , --merge</code>: Merges technical replicates, default = False. </li>
+  <li><code> -o , --out_dir</code>: Output directory, default = current working directory. </li>
 </ul>

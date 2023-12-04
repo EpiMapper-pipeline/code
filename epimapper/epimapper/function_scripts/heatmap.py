@@ -107,6 +107,7 @@ def create_bed(ref):
     sorted_bed.to_csv(ref.replace(".txt", "_cleaned.bed"),header=False, sep="\t", index=False)
     
     return ref.replace(".txt", "_cleaned.bed")
+
     
 def coverage(tmp_files, bam_dir,bigwig, sample_names):   
     """

@@ -223,7 +223,7 @@ def make_master_peak(peak_files, diff_dir, out_combined_files, list_a, list_b):
     
         if new_name in list_a or new_name in list_b:
         
-            peak_df = pd.read_table(file, header=None)
+            peak_df = pd.read_table(file, header=None, sep = "\t")
             
             peak_df2 = peak_df[[0, 1, 2, 3]]
             
@@ -364,7 +364,7 @@ def map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, list_a, 
         
         out2=subprocess.run(cmd2,shell=True)
      
-        if not out1.retruncode==0 and out2.returncode==0:
+        if not out1.returncode==0 and out2.returncode==0:
             print("Error in mapping bedgraph files.")
             exit(1)
             
@@ -1024,7 +1024,9 @@ def run(args):
     
     peak_dir, bedgraph,chromosome_sizes, genome_blacklist, normalize, reference, X,Y,M,N,maxIntergenicLen, minIntergenicLen,intergenicBTGenes = check_input(args)
     
-    peak_files = glob.glob(os.path.join(peak_dir,"*peaks*.bed"))
+    peak_files_all = glob.glob(os.path.join(peak_dir,"*peaks*.bed"))
+    
+    peak_files = [x for x in peak_files_all if "summitRegion" not in x]
 
     bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
     

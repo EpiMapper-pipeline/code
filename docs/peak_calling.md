@@ -8,23 +8,23 @@ EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 
 # peak_calling
-Finds enriched regions/calls for peaks from chromatin profiling data with SEACR, then visulizes results
+Finds enriched regions/calls for peaks from chromatin profiling data with SEACR or MACS2, then visulizes results
 
 <p><strong>Required:</strong></p>
 <ul>
 
-  <li><code>-f, FRAGMENT BED --fragments  FRAGMENT BED </code>: Input file folder of filterd BED files for peak calling </li>
+  <li><code>-f, FRAGMENT BED --fragments  FRAGMENT BED </code>: Input file folder of filterd BED files for peak calling. </li>
 
 <p> *If using the SEACR software for peak calling:* </p>
 
- <li><code>-bg BEDGRAPH, --bedgraph_ex BEDGRAPH </code>: Input file folder of BedGraph files for peak calling with SEACR </li>
+ <li><code>-bg BEDGRAPH, --bedgraph BEDGRAPH </code>: Input file folder of BedGraph files for peak calling with SEACR. </li>
 
- <li><code>-s SEACR PATH, --seacr_path SEACR PATH  </code>: Input shell scurpt file of SEACR software </li>
+ <li><code>-s SEACR PATH, --seacr_path SEACR PATH  </code>: Input shell scurpt file of SEACR software. </li>
 
 
  <p> *If using the MACS2 software for peak calling:* </p>
-<li><code> -b BAM --bam </code>: Input folder containing BAM files for MACS2 peak calling </li>
-<li><code> -gs GENOME_size --genome_size</code>: Relative genome size of organism being studied.  About 90% or 70% of the genome size ()
+<li><code> -b BAM --bam </code>: Input folder containing BAM files for MACS2 peak calling. </li>
+<li><code> -gs GENOME_size --genome_size</code>: Relative genome size of organism being studied.  About 90% or 70% of the genome size. (i.e, 2.7e9 for humans, 1.87e9 for mice, 9e7 for <i>Caenorhabditis elegans</i>, or 1.2e8 for fruitfly).
 
 
 
@@ -34,9 +34,9 @@ Finds enriched regions/calls for peaks from chromatin profiling data with SEACR,
 
 <p><strong>Optional, has default values:</strong></p>
 <ul>
-    <li><code>-c CONTROL_INDEX --control_index: Indexes of control files (i.e, 'control' 'igG' ect.) that should be used as a background-noise reference during peak calling. If not provided the peak calling softwares will select peaks based on a cut-off value (i.e p-value for SEACR) Default = False </li>
+    <li><code>-c CONTROL_INDEX --control_index:</code> Indexes of control files (i.e, 'control' 'igG' ect.) that should be used as a background-noise reference during peak calling. If not provided the peak calling softwares will select peaks based on a cut-off value (i.e p-value for SEACR) Default = False. </li>
 
-   <li><code> -p, --percentage </code> Cut-off percentage for peak calling software, Default= 0.01 for SEACR, and for MACS2 it is 0.05 q-value
-  <li><code>-tbl ALIGNMENT SUMMARY TABLE, --fragment_table ALIGNMENT SUMMARY TABLE: Input CSV file with the following columns = ["Sample",	"Replication", "SequencingDepth", "MappedFragments", "AlignmentRate"] with corresponding sample information, default = “bowtie2_alignment_ref.csv” exported by this pipeline function: <code> bowtie2_alignment </code> </li>
-  <li><code>-o , --out_dir</code>: Output directory, default = current working directory </li>
+   <li><code> -p, --percentage </code> Cut-off percentage for peak calling software, Default= 0.01 for SEACR, and for MACS2 it is 0.05 q-value.
+  <li><code>-tbl ALIGNMENT SUMMARY TABLE, --fragment_table ALIGNMENT SUMMARY TABLE</code>: Input CSV file with the following columns = ["Sample",	"Replication", "SequencingDepth", "MappedFragments", "AlignmentRate"] with corresponding sample information, default = “bowtie2_alignment_ref.csv” exported by this pipeline function: <code> bowtie2_alignment </code>. </li>
+  <li><code>-o , --out_dir</code>: Output directory, default = current working directory. </li>
 </ul>
