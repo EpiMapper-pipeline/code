@@ -57,6 +57,7 @@ def set_parser(parser):
     optional_name.add_argument("-r", "--reference_file", help="Inputh path to reference genome file if no bowtie indexing files are made",required=False, type = str)
     optional_name.add_argument("-s", "--spike_in", help="True if the data is spike in alignment", required=False, type = bool, default=False)
     optional_name.add_argument("-m","--merge_replicates", required=False, type=bool, default=False)
+
     
     
     return parser
@@ -392,7 +393,7 @@ def summary_table(bowtie2_summary, spike_in):
         
         with open(file, "r") as t:
     
-            tbl = [line.split() for line in t.readlines()]
+            tbl = [line.split() for line in t.readlines() if not line.startswith("Warning")]
             clean_tbl = [i for i in tbl if i[0][0].isdigit()]
             if not clean_tbl:
                 break
