@@ -120,7 +120,7 @@ def picard(files, sam, sorted_sam, removeDuplicate, picard_summary):
         exit_code2 =subprocess.run(cmd2,shell=True)
         exit_code3 =subprocess.run(cmd3,shell=True)
         
-        if not exit_code1.returncode==0 and exit_code2.returncode ==0 and  exit_code3.returncode==0:
+        if not exit_code1.returncode==0 or not exit_code2.returncode ==0 or not exit_code3.returncode==0:
             print("Error in Picard duplication removal")
             exit(1)
         
