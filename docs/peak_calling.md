@@ -1,4 +1,4 @@
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Thotughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -8,12 +8,18 @@ EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 
 # peak_calling
-Finds enriched regions/calls for peaks from chromatin profiling data with SEACR or MACS2, then visulizes results
+Finds enriched regions/calls for peaks from chromatin profiling data with [SEACR](https://github.com/FredHutch/SEACR) or [MACS2](https://github.com/macs3-project/MACS), then visulizes results.
+
+Both of these peak calling software have an alternative where control samples are used to create a background noise level before finding enriched reagions, peaks. However, not every experiment does include control samples, therefore this a optional feature in the EpiMapper pipeline. If your experiment includes control samples and you wish it perform peak calling based on these, you may utilize the "-c, --control_index" parameter to insert the names of the control sampels. The peak_calling function will separate all the samples containing the "-c, --control_index", and use these at input for background-noise. An example would be if you have the samples: [H3K4me3_rep1, H3K4me3_rep2, H3K27me3_rep1, H3K27me3_rep2, IgG_rep1, IgG_rep1], you would input “IgG” into the "-c, --control_index". If you have the samples [healthy_rep1, healthy_rep2, cancer_rep1, cancer_rep2, control_rep1, control_rep2] you would input “control” into the "-c, --control_index".
+
+
 
 <p><strong>Required:</strong></p>
 <ul>
 
   <li><code>-f, FRAGMENT BED --fragments  FRAGMENT BED </code>: Input file folder of filterd BED files for peak calling. </li>
+
+  <li><code>-soft, --software </code>:  input has to be either “macs2” or “seacr”. Here you decide which peak calling software you would like to use. Generally, MACS2 is more used and prefered for samples with higher background noise ( ie. ATAC-seq and CHiP-seq), while SEACR may be used for samples with lower noise. </li>
 
 <p> *If using the SEACR software for peak calling:* </p>
 

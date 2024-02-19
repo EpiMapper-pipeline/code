@@ -9,6 +9,7 @@ import glob
 
 import subprocess
 
+from scipy.stats import zscore
 import re
 
 import pathlib as pl
@@ -26,6 +27,8 @@ from  .dar_scripts.find_dar import find_col_index4sample, parallel_do_DAR
 from .dar_scripts.dar_analysis_may import make_pvalue_files, plot_pca4samples, make_genome_annotation_files_by_hmst, pie_plot_of_dars
 
 from .dar_scripts.dar_peaks2genome import annotation
+
+from .dar_scripts.enrichment import enrichment_main
 
 from .dar_scripts.make_region_files import main as mk_region
 
@@ -84,7 +87,7 @@ def set_parser(parser):
     
     required_name.add_argument("-p", "--peaks", required = True, type = str)
     
-    required_name.add_argument("-bg", "--bedgraph", required = True, type = str)
+    optional_name.add_argument("-bg", "--bedgraph", required = False, type = str)
     
     required_name.add_argument("-cs", "--chromosome_sizes", required = True, type = str)
     
@@ -92,6 +95,7 @@ def set_parser(parser):
     
     required_name.add_argument("-la", "--list_a",  nargs='+', required = True)
     
+    optional_name.add_argument("-an", "--annotate", required=False, type =bool, default=False)
     
     required_name.add_argument ("-lb", "--list_b", nargs='+', required= True)
     
@@ -99,6 +103,9 @@ def set_parser(parser):
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
     
+    optional_name.add_argument("-fold", "--fold_enrichment", required=False, type = bool, default=False)
+    
+    optional_name.add_argument("-cut", "--p_value_cutoff", required=False, type=float)
     optional_name.add_argument("-n", "--normalize", required=False, type = bool, default = False)
     
     optional_name.add_argument("-X",
@@ -178,11 +185,13 @@ def make_100_windows(chromosome_sizes, genome_blacklist, LEN, diff_dir):
     out_code2 = subprocess.run(cmd2,shell=True)
     
     if out_code1.returncode ==0 and out_code2.returncode==0:
-        print("Done with - making 100bp blacklist removed window files")
+        print("Done with - making bp blacklist removed window files")
         
     else: 
         print("Error in making 100bp blacklist removed window files")
         exit(1)
+    
+    return diff_dir+"/"+ LEN+".b.windows.BlackListFiltered.bed"
 
 
 
@@ -470,7 +479,23 @@ def quantile_normalization(df_input):
     return df.copy()
 
 
-
+def combine_signal_enrichment(peaks_folder,blacklist_removed_bin, chromosome_sizes, out_combined_files, searchStr1,searchStr2):
+    
+    enrichment_main(peaks_folder,blacklist_removed_bin, chromosome_sizes, out_combined_files, searchStr1,searchStr2)
+    
+    merged_peaks = os.path.join(out_combined_files, "combined_peaks_merged.bed")
+    
+    rm_y = "grep -v ^chrY " + merged_peaks+ " > " +merged_peaks.replace(".bed", "_cleaned.bed")
+    subprocess.run(rm_y,shell=True)
+    
+    rm_m = "grep -v ^chrM " + merged_peaks.replace(".bed", "_cleaned.bed") + " > "+ merged_peaks
+    subprocess.run(rm_m,shell=True)
+    
+    rm = "rm " + merged_peaks.replace(".bed", "_cleaned.bed")
+    subprocess.run(rm,shell=True)
+    
+    
+    return
 
 
 
@@ -559,7 +584,7 @@ def map_peaks_in_wind(out_combined_files, normalize):
 
 
 
-def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files):
+def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff):
     """
     Uses the imported fdar and dar modules to preform DAR analysis on two groups of samples.
     
@@ -578,7 +603,7 @@ def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files):
     #number of processes and export DAR p.value
     num_of_process=15
     
-    export_cutoff=0.01
+    export_cutoff=cutoff
     
     #output data folder and names and pval cutoff for plot
     in_peak_mapped_signal_file = os.path.join(out_combined_files, "mapped_peaks_100bp_merged.bed.gz")
@@ -641,7 +666,7 @@ def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files):
 
 
 
-def make_pvalue_format(DAR, out_combined_files):
+def make_pvalue_format(DAR, out_combined_files,cut_off):
     """
     
     Uses imported dar module to create p value formated file.
@@ -659,7 +684,7 @@ def make_pvalue_format(DAR, out_combined_files):
     """
     in_dar_file = os.path.join(out_combined_files, "combined_peaks_merged.bed")
     in_dar_pval_file = os.path.join(DAR, "combined_peaks_merged_pval.csv")
-    pval_cutoff = 0.01
+    pval_cutoff = cut_off
     out_file, merged_df, out_df=make_pvalue_files(in_dar_file,in_dar_pval_file,pval_cutoff)
     print('Done with - Making dar file')
     
@@ -721,7 +746,7 @@ def make_genome_files(out_combined_files, out_file,data, sample_names):
 
 
      
-def make_pie_plot(out_combined_files, summary_tables,enhancer):
+def make_pie_plot(out_combined_files, summary_tables,enhancer,cut_off):
     """
     Uses the module dar to create pie plots based on genome files and saves them to
     summary_tables directory
@@ -736,7 +761,7 @@ def make_pie_plot(out_combined_files, summary_tables,enhancer):
         
        
     """
-    pval_cutoff = 0.001
+    pval_cutoff = cut_off
     in_folder=os.path.join(out_combined_files, "genome")
     file_name_string='combined*.bed'
     if isinstance(enhancer, str):
@@ -842,9 +867,8 @@ def check_input(args):
         else:
              print("Chosen bedgraph directory: "+bedgraph+" does not exist. \nPlease select check your path or select another one")
              exit(1)
-    else: 
-        print("No bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter")
-        exit(1)
+    else:
+        bedgraph=False
     
     chromosome_sizes = args.chromosome_sizes
     if  os.path.exists(chromosome_sizes) and os.path.isfile(chromosome_sizes):
@@ -878,7 +902,14 @@ def check_input(args):
     else:
         print("Chosen reference refFlat genome file: "+reference +" is not a file or does not exist. \n Please check your file or chose another one.")
         exit(1)
-        
+    
+    if args.p_value_cutoff is not None:
+        cut_off = args.p_value_cutoff 
+        if not isinstance(cut_off,float):
+            print("-cut, --p_value_cutoff needs to be a numeric value.")
+            exit(1)
+    else:
+        cut_off=0.05
     if args.X is not None:   
         X = args.X 
         if not isinstance(X,int):
@@ -939,7 +970,7 @@ def check_input(args):
             print("Chosen enhancer file: "+enhancer +" is not a file or does not exist. \n Please check your file or chose another one.")
         
         
-    return peak_dir, bedgraph,chromosome_sizes, genome_blacklist, normalize, reference, X,Y,M,N,maxIntergenicLen, minIntergenicLen,intergenicBTGenes
+    return peak_dir, bedgraph,chromosome_sizes, genome_blacklist, normalize, reference, X,Y,M,N,maxIntergenicLen, minIntergenicLen,intergenicBTGenes,cut_off
 
   
 def run(args):
@@ -1022,14 +1053,12 @@ def run(args):
     if not os.path.exists(DAR):
         os.mkdir(DAR)
     
-    peak_dir, bedgraph,chromosome_sizes, genome_blacklist, normalize, reference, X,Y,M,N,maxIntergenicLen, minIntergenicLen,intergenicBTGenes = check_input(args)
+    peak_dir, bedgraph,chromosome_sizes, genome_blacklist, normalize, reference, X,Y,M,N,maxIntergenicLen, minIntergenicLen,intergenicBTGenes, cutoff = check_input(args)
     
     peak_files_all = glob.glob(os.path.join(peak_dir,"*peaks*.bed"))
     
     peak_files = [x for x in peak_files_all if "summitRegion" not in x]
 
-    bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
-    
     LEN = "100"
     
     searchStr1 = args.list_a
@@ -1041,13 +1070,22 @@ def run(args):
     else: 
         enhancer = False
         
-    make_100_windows(chromosome_sizes, genome_blacklist, LEN, diff_dir)
+    blacklist_bin_file = make_100_windows(chromosome_sizes, genome_blacklist, LEN, diff_dir)
 
     make_master_peak(peak_files, diff_dir, out_combined_files, searchStr1, searchStr2)
     
-    map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, searchStr1, searchStr2)
-    
-    combine_windows(diff_dir, out_combined_files)
+    if args.fold_enrichment: 
+        
+
+        combine_signal_enrichment(peak_dir, blacklist_bin_file, chromosome_sizes, out_combined_files, searchStr1,searchStr2)
+        
+        
+        
+    else: 
+        bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
+        map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, searchStr1, searchStr2)
+        
+        combine_windows(diff_dir, out_combined_files)
     
     if normalize:
     
@@ -1057,21 +1095,23 @@ def run(args):
     map_peaks_in_wind(out_combined_files, normalize)
     
     
-    do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files)
+    do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff)
     
-    out_file = make_pvalue_format(DAR, out_combined_files)
-
-    region_file, data = make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenicBTGenes, minIntergenicLen, maxIntergenicLen,enhancer)
+    out_file = make_pvalue_format(DAR, out_combined_files,cutoff)
     
-    sample_names = searchStr1 + searchStr2
-    
-    make_genome_files(out_combined_files, out_file, data, sample_names)
-    
-    make_pie_plot(out_combined_files, summary_tables,enhancer)
-    
-    make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
-    
-    annotation2genome(diff_dir, DAR, out_combined_files)
+    if args.annotate:
+        region_file, data = make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenicBTGenes, minIntergenicLen, maxIntergenicLen,enhancer)
+        
+        sample_names = searchStr1 + searchStr2
+        
+        make_genome_files(out_combined_files, out_file, data, sample_names)
+        
+        make_pie_plot(out_combined_files, summary_tables,enhancer,cutoff)
+        
+        make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
+        
+        
+        annotation2genome(diff_dir, DAR, out_combined_files)
     
     return
 

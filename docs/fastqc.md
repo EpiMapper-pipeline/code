@@ -1,4 +1,4 @@
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Thotughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -10,7 +10,8 @@ EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 ## fastqc
 
-Performs quality control on raw reads fastq files from high-thoughput sequencing.
+Performs quality control on raw reads fastq files from high-thoughput sequencing with [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+
 <p><strong>Required:</strong></p>
 <ul>
   <li><code>-f FASTQ, --fastq FASTQ </code>: Input file folder of fastq files with raw reads for quality control.</li>

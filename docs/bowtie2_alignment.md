@@ -1,4 +1,4 @@
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Thotughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -10,7 +10,7 @@ EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 ## bowtie2_alignment
 
-Mapping reads to a reference genome with Bowtie2 alignment of fastq sequencing reads files from high-thoughput sequecing, and visulizing results.
+Mapping reads to a reference genome with [Bowtie2](https://bowtie-bio.sourceforge.net/bowtie2/index.shtml) alignment of fastq sequencing reads files from high-thoughput sequecing, and visulizing results.
 
 <p><strong>Required:</strong></p>
 <ul>

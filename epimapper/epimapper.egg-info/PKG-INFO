@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: epimapper
+Version: 1.0
+Summary: Python Package for analysing epigenetic data such as ChIP-seq, CUT&RUN, ATAC-seq and CUT&Tag
+Author: Jenny Sofie Dragland
+Author-email: jennysodr@gmail.com
+
+This contains the following functions to use for Cut&tag analysis:
+
+* For every function activated the folder CutAndTagAnalyzer will be made as an outfielder for all steps.
+* Appropriate folders will be made inside of the CutAndTagAnalyzer directory, depending on the function.
+* Input reads must have the following name structure: [sample name/histone]_rep[replication number]_[R1/R2)]_[(technical replicates]].fastq
+	Ex: 
+	H3K4me3_rep1_R1.fastq
+	H3K4me3_rep1_R1_001.fastq
+
+     

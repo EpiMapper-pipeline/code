@@ -1,5 +1,5 @@
 
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Thotughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -29,18 +29,18 @@ Please allow any other installations when prompted
 
 <p>Prior to installing the package, dependencies must be fulfilled. It is advised to install dependencies using miniconda. List of dependencies is as follows: </p>
 <ul>
-  <li>matplotlib==3.6.2</li>
-  <li>numpy==1.23.0</li>
-  <li>pandas==1.5.2</li>
-  <li>seaborn==0.12.2
-  <li> plotnine==0.10.1</li>
-  <li>setuptools==65.6.3</li>
-  <li>bedtools==2.27.0</li>
-  <li>fastqc==0.11.9</li>
-  <li>bowtie2==2.2.5</li>
-  <li>samtools==1.6</li>
-  <li>seacr==1.3</li>
-  <li>deeptools==3.5.1</li>
+  <li>matplotlib=3.2.0</li>
+  <li>numpy=1.23.0</li>
+  <li>pandas=1.5.2</li>
+  <li>seaborn=0.12.2
+  <li>plotnine=0.10.1</li>
+  <li>bedtools=2.27.0</li>
+  <li>fastqc=0.11.9</li>
+  <li>bowtie2=2.2.5</li>
+  <li>samtools=1.6</li>
+  <li>picard=3.0.0</li>
+  <li>openjdk=17.0.8</li>
+  <li>deeptools=3.5.1</li>
 
 
 </ul>

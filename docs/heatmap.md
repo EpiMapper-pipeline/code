@@ -1,4 +1,4 @@
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Thotughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -7,7 +7,7 @@ EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
 
 
 # heatmap
-Visualizes the enrichment of the exprimental target in predefined genomic regions and peaks by creating heatmaps.
+Visualizes the enrichment of the exprimental target in predefined genomic regions and peaks by creating heatmaps by using [DeepTools](https://deeptools.readthedocs.io/en/develop/index.html)
 
 
 

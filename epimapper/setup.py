@@ -16,7 +16,9 @@ setup(
         "epimapper",
         "epimapper.function_scripts",
         "epimapper.function_scripts.dar_scripts",
-        "epimapper.function_scripts.dar_scripts.scripts_high"],
+        "epimapper.function_scripts.dar_scripts.scripts_high",
+        "epimapper.seacr_tool"],
+    package_data={'epimapper': ['seacr_tool/*']},
     entry_points = {
         "console_scripts": ['epimapper = epimapper.epimapper:main']
         },
