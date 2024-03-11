@@ -30,7 +30,7 @@ def set_parser(parser):
         
         * --ref (-r), full pathway to a refFlat file 
         
-        * --peaks (-p), full pathway to directory with bed files containing peaks from SEACR peak calling
+        * --peaks (-p), full pathway to directory with bed files containing peaks from peak calling
         
         * --blacklist (-bl), full pathway to bed file containing blacklisted parts of the genome
         
@@ -66,7 +66,7 @@ def set_parser(parser):
     
     required_name.add_argument("-r","--ref", help="Referance BED file", required=True, type=str)
     
-    required_name.add_argument("-p","--peaks", help="Peaks from SEACR", required=True, type=str)
+    required_name.add_argument("-p","--peaks", help="Peaks", required=True, type=str)
     
     optional_name.add_argument("-c", "--cores", help="number of cores", required=False, type=str, default ="8")
     
@@ -214,12 +214,12 @@ def plot_one_heatmap(bigwig, summary_tables):
 
 def summitRegion(peaks_files):
     """
-    Generates new bed files containing the midpoint information in column 6 of SEACR files to find the midpoint of signal block to align signals in heatmaps
+    Generates new bed files containing the midpoint information in column 6 offiles to find the midpoint of signal block to align signals in heatmaps
 
 
     Function input:
         
-        * peaks_files, list, list of paths to bed files from SEACR peak calling being used to generate heatmaps.
+        * peaks_files, list, list of paths to bed files from peak calling being used to generate heatmaps.
         
         
     Function output:
@@ -232,18 +232,20 @@ def summitRegion(peaks_files):
     for file in peaks_files:
         file_name  = pl.Path(file).name
         sample = file_name.split("_")[0]+"_"+file_name.split("_")[1]
-        sample_names.append(sample)     
+        sample_names.append(sample)
         
-        txt2 = """awk  '{split($6, summit, ":"); split(summit[2], region, "-"); print summit[1]"\t"region[1]"\t"region[2]}' """
-        cmd4 = txt2 + file + " > " + file.replace(".bed", ".summitRegion.bed")
+        if "seacr" in file_name:
         
-        out_code4 =subprocess.run(cmd4, shell=True)
-        
-        if out_code4.returncode ==0:
-            print("Done with - Finding summit regions for "+sample)
-        else: 
-            print("Error in - Finding summit regions for "+ sample)
-            exit(1)
+            txt2 = """awk  '{split($6, summit, ":"); split(summit[2], region, "-"); print summit[1]"\t"region[1]"\t"region[2]}' """
+            cmd4 = txt2 + file + " > " + file.replace(".bed", ".summitRegion.bed")
+            
+            out_code4 =subprocess.run(cmd4, shell=True)
+            
+            if out_code4.returncode ==0:
+                print("Done with - Finding summit regions for "+sample)
+            else: 
+                print("Error in - Finding summit regions for "+ sample)
+                exit(1)
        
                        
     sample_names = list(dict.fromkeys(sample_names))           
@@ -259,7 +261,7 @@ def compute_many_matrixes(sample_names,bigwig,cores, peaks):
     
     """
     
-    Uses deeptools to create matrixes on cut&tag peaks, based on bigwig and peak files.
+    Uses deeptools to create matrixes on peaks, based on bigwig and peak files.
     
     Function input:
         
@@ -269,7 +271,7 @@ def compute_many_matrixes(sample_names,bigwig,cores, peaks):
          
         * cores, str, number of cores being used in the calculation
         
-        * peaks, str, full pathway to directory containing peak bed files from SEACR analyzis
+        * peaks, str, full pathway to directory containing peak bed files from analyzis
             The matrixes will be outputed in this directory 
         
         
@@ -277,9 +279,9 @@ def compute_many_matrixes(sample_names,bigwig,cores, peaks):
     """
     
     for sample in sample_names:
-        peak_file= glob.glob(os.path.join(peaks,sample+"*"))[0]
+        peak_file= glob.glob(os.path.join(peaks,sample+"*summit*.bed"))[0]
         cmd6 = "computeMatrix reference-point -S " +bigwig + "/"+ sample + ".bw -R " +peak_file +" --skipZeros -a 3000 -b 3000 --referencePoint center " \
-            + "-p " + cores + " -o " + peaks + "/" + sample+"_SEACR.mat.gz"
+            + "-p " + cores + " -o " + peaks + "/" + sample+".mat.gz"
 
         out_code6 = subprocess.run(cmd6, shell=True)
         
@@ -303,13 +305,13 @@ def plot_many_heatmaps(sample_names,summary_tables,peaks):
         
         *  summary_tables, str, full pathway to where the heatmap will be outputed
         
-        * peaks, str, full pathway to directory containing peak bed files from SEACR analyzis
+        * peaks, str, full pathway to directory containing peak bed files from analyzis
         
     
     
     """
     for sample in sample_names:
-        cmd7 = 'plotHeatmap --matrixFile ' + peaks  + "/"+ sample+'_SEACR.mat.gz --outFileName ' + summary_tables + '/' + sample +'SEACR_heatmap.png --sortUsing sum --startLabel "Peak start" --endLabel "Peak end" ' \
+        cmd7 = 'plotHeatmap --matrixFile ' + peaks  + "/"+ sample+'.mat.gz --outFileName ' + summary_tables + '/' + sample +'_heatmap.png --sortUsing sum --startLabel "Peak start" --endLabel "Peak end" ' \
         + '--xAxisLabel "" --regionsLabel "Peaks" --samplesLabel ' + sample
             
         

@@ -1,5 +1,5 @@
 
-# EpiMapper: Python Package for Data Analysis of Epigenomic Sequencing Data
+# EpiMapper: A New Tool for Analyzing High Throughput Sequencing from CUT&Tag
 ## epimapper Documentation
 
 EpiMapper is a complete pipeline for data analysis of epigenomic sequencing.
@@ -33,13 +33,12 @@ Please allow any other installations when prompted
   <li>numpy==1.23.0</li>
   <li>pandas==1.5.2</li>
   <li>seaborn==0.12.2
-  <li> plotnine==0.10.1</li>
+  <li>plotnine==0.10.1</li>
   <li>setuptools==65.6.3</li>
   <li>bedtools==2.27.0</li>
   <li>fastqc==0.11.9</li>
   <li>bowtie2==2.2.5</li>
   <li>samtools==1.6</li>
-  <li>seacr==1.3</li>
   <li>deeptools==3.5.1</li>
 
 
@@ -63,14 +62,6 @@ You can install the package using following command, go to the dmr_analysis dire
 <pre>pip install .</pre>
 
 
-### Exceptions:
-
-- The SEACR shell script that needs to be downloaded from their GitHub page : [SEACR](https://github.com/FredHutch/SEACR)
-
-
-
-
-For more details, follow the readme file in the package.
 
 		
 ## Contents of the package:
@@ -92,7 +83,7 @@ For more details, follow the readme file in the package.
 	
 ## Pipeline Tasks:
 	
-<p>The pipeline consists of follwoing tasks. To run a task, type cut_and_tag_analyzer task args. To see what are the options for each task of the pipeline, please run: cut_and_tag_analyzer -h </p>
+<p>The pipeline consists of follwoing tasks. To run a task, type epimapper task args. To see what are the options for each task of the pipeline, please run: epimapper -h </p>
 
 <ul>
  <li><code>fastqc </code> : Performs quality control on raw reads fastq files from high-thoughput sequencing.</li>

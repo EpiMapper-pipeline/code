@@ -59,7 +59,7 @@ def set_parser(parser):
     
     optional_name.add_argument("-sn", "--spike_in_norm", help = "If the samples are being spike-in normalized or not",required = False, type = bool, default = False)
     
-    optional_name.add_argument("-atac", "--atac_seq_shift", help ="Shift start point in ATAC-seq data +4 on the + strand and -5 on the - strand.", required=False, type=bool, default = False)
+    optional_name.add_argument("-atac", "--atac_seq_shift", help ="Shift start point in ATAC-seq data +4 on the + strand and -5 on the - strand.", required=False, default = False)
     
     
     
@@ -582,11 +582,15 @@ def run(args):
         exit(1)
     
     
-    atac = args.atac_seq_shift
-    if atac is not isinstance(atac, bool):
-        print("The -atac/--atac_seq_shift paramater must be set to either 'True' or 'False'. Default=False")
-        exit(1)
     
+    if args.atac_seq_shift:
+        atac = args.atac_seq_shift
+        if atac is not isinstance(atac, bool):
+            print("The -atac/--atac_seq_shift paramater must be set to either 'True' or 'False'. Default=False")
+            exit(1)
+    else: 
+        atac=False
+        
     
     genome = pl.PurePath(chromosome_sizes).name
     

@@ -204,7 +204,7 @@ def plot_pca4samples(head_file,data_file, normal_group_str,tumor_group_str,out_f
   gcb_col_idx=(np.array([i for i in range(0,len_gcb)]),)
   tumor_col_idx=(np.array([i for i in range(len_gcb,len_gcb+len_tumor)]),)
   tmp_column_names=out_df2.columns.values[1:]
-  tmp_column_names2=np.array([i.replace('_hg38_XY.200b.windows.bed.gz','') for i in tmp_column_names ],dtype=str)
+  tmp_column_names2=np.array([os.path.basename(i).split("100")[0] for i in tmp_column_names ],dtype=str)
   #print(out_data.T, gcb_col_idx,tumor_col_idx, tmp_column_names2)
   pca_df, col_name, pca_X =do_PCA_analysis(out_data.T,gcb_col_idx,tumor_col_idx, tmp_column_names2)
 

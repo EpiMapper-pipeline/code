@@ -35,7 +35,7 @@ The annotation step is derived from another epigenetic Python Package: [HMST-seq
 <ul>
   <li><code>-o , --out_dir</code>: Output directory, default = current working directory </li>
 
-  <li><code>-fold , --fold_enrichment </code>: Input must be either "True" or "False". The function will use fold enrichemnt as well as normalization before differential analysis. Default=Fasle</li>
+  <li><code>-fold , --fold_enrichment </code>: Input must be either "True" or "False". The function will use fold enrichemnt as well as normalization before differential analysis. Default=False</li>
 
 <li><code>-an , --annotate</code>: Input must be either "True" or "False" Weither to annotate the differntial peaks or not. This may be beneficial for some analysis protocols, however it may be a slightly time consuming taske. Default=False  </li>
 

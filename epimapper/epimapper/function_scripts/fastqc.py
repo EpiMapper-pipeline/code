@@ -191,8 +191,8 @@ def run_fastqc(sample_names,fastq, fastqc):
         if os.path.exists(sample_dir):
             shutil.rmtree(sample_dir)
         os.mkdir(sample_dir)
-        cmd1 = "fastqc -o "+ sample_dir + "  -f fastq " + fastq +"/" +R1 +".fastq" 
-        cmd2 = "fastqc -o "+ sample_dir + "  -f fastq " + fastq +"/" +R2 +".fastq" 
+        cmd1 = "fastqc -o "+ sample_dir + "  -f fastq " + fastq +"/" +R1 +".fastq*" 
+        cmd2 = "fastqc -o "+ sample_dir + "  -f fastq " + fastq +"/" +R2 +".fastq*" 
         exit_code1 = subprocess.run(cmd1,shell=True)
         exit_code2 = subprocess.run(cmd2, shell=True)
         k=k+2
