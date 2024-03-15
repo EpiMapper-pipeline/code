@@ -14,16 +14,24 @@ This dataset consists of 6 samples, targeting two histone modifications: H3K4me3
 
 To save space and since this is only a demo, the FASTQ data was filtered to only contain the first 10 chromosomes. 
 
-The data avalible for this demo is publicly avalible at a google drive:
+
+You need to download and create two folders:
+
+- fastq - containing demo FASTQ files from CUT&Tag, downloaded from : https://zenodo.org/records/10822274
+
+- in - containing all necceary input files for EpiMapper usage, downloaded from https://zenodo.org/records/10822349 
 
 
-The google drive contians three folders:
-- fastq - containing demo FASTQ files from CUT&Tag human histone modification data.
-- in - containing all necceary input files for EpiMapper usage.
-- out - output folder where EpiMapper will create and store new files.
+Additionally, you need to create an "out" folder where the output will be stored. 
 
 
-The script to run the demo is shown below, as well as it is avalible for download in the google drive folder:
+Folders can be created by using: 
+```
+$ mkdir out
+```
+
+
+The script to run the demo is shown below:
 
 ```
 # EpiMapper Demo run on human modification data (first 10 chromosomes)
@@ -88,17 +96,27 @@ The data used in this demo is from an ATAC-seq experiment of healthy/diabetic pa
 
 Here, the demo data only contians the chr21 from the orginal data, to save space. 
 
-This dataset conists of ATAC-seq data from 6 diabetic donors and 9 healthy donoer, only one replicate from each sample.
+This dataset conists of ATAC-seq data from 6 diabetic donors and 9 healthy donors, only one replicate from each sample.
 
-The data avalible for this demo is publicly avalible at a google drive:
+The data avalible for this demo is publicly avalible at a zenodo:
 
-The google drive contians three folders:
-- fastq - containing demo FASTQ files from ATAC-seq.
-- in - containing all necceary input files for EpiMapper usage.
-- out - output folder where EpiMapper will create and store new files.
+You need to download and create two folders:
 
-The script to run the demo is shown below, as well as it is avalible for download in the google drive folder:
+- fastq - containing demo FASTQ files from ATAC-seq, downloaded from : https://zenodo.org/records/10818453 
 
+- in - containing all necceary input files for EpiMapper usage, downloaded from https://zenodo.org/records/10818469
+
+
+Additionally, you need to create an "out" folder where the output will be stored. 
+
+
+Folders can be created by using: 
+```
+$ mkdir out
+```
+s
+
+The script to run the demo is shown below:
 
 ``` 
 # EpiMapper demo run on human ATAC-seq data (only chr21)
