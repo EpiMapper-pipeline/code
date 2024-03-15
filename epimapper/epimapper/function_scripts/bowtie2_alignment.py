@@ -90,10 +90,13 @@ def merge(files, fastq, fastq_merged):
         
         for file in tmp_files:
             
-            tmp_file_name = re.split(r"_\d+[.]",os.path.basename(file))[0]
+            tmp_file_name = os.path.basename(file).split(".fastq")[0]
             
-            cmd = "cat " + fastq +"/" +tmp_file_name+"*"+".fastq* > "+ fastq_merged + "/" + tmp_file_name +".fastq" 
+            base = tmp_file_name.split("_")[0]+"_"+tmp_file_name.split("_")[1]+"_"+tmp_file_name.split("_")[2]
+
             
+            cmd = "cat " + fastq +"/" +base+"*"+".fastq > "+ fastq_merged + "/" + base +".fastq" 
+
             exit_code = subprocess.run(cmd,shell=True)
             if not exit_code.returncode ==0:
                 print("Error in merging technical replicates")
@@ -482,7 +485,7 @@ def check_input(args):
     fastq = args.fastq
     if os.path.exists(fastq):
         
-        path = os.path.join(fastq,"*.fastq")
+        path = os.path.join(fastq,"*.fastq*")
         files = glob.glob(path)
         if files == []:
             print("Chosen fastq directory: " + fastq+" is empty or does not contain any fastq files. \n  Please check your directory or select another one.")
@@ -624,6 +627,15 @@ def run(args):
     
         files = os.path.join(fastq,"*.fastq*")
         
+        check_gz = glob.glob(files)[0]
+        
+        if ".gz" in check_gz:
+            
+    
+            gunzip = "gzip -d " + os.path.join(fastq,"*")
+            
+            subprocess.run(gunzip, shell=True)
+        
         if not args.bowtie2_index_pathway:
             
             ref_file = args.reference_file
@@ -641,7 +653,7 @@ def run(args):
             
             fastq_merged = os.path.join(ex_folder,name)
             
-            if not fastq_merged.exists():
+            if not os.path.exists(fastq_merged):
                 
                 os.mkdir(fastq_merged)
             
@@ -649,8 +661,8 @@ def run(args):
             
             fastq = fastq_merged
             
-            files = os.path.join(fastq_merged,"*.fastq*")
-        
+            files = os.path.join(fastq_merged,"*.fastq")
+            
         
         bowtie2(fastq, spike_in, ref, projPath,files)
         
