@@ -14,13 +14,11 @@ epimapper is written in Python. It can be installed and accessed from command li
 ## Installation:
 <p>It is highly recommended to create a separate virtual environment for the package to avoid any library conflicts problem. You you create virtual environment using the following commands. We recommend to use install and use miniconda/anaconda (https://docs.conda.io/en/latest/miniconda.html). Tutorial of creating and updating virtual commands can be found at (https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) </p> 
 
-If the minicinda is already installed, then you can proceed with the following step by step installation. We have already provided a quick installation setup file named quick_install.sh for your ease. A simple bash command will do everything autmatically and prepare the package, ready to run. 
-<pre> ./quick_install </pre>
 
-However step by step details are given as under and can be following if quick_install.sh is unsuccessful:
 
-<pre>conda create --name dmr_env python==3.8
-conda activate dmr_env</pre>
+
+<pre>conda create --name epimapper python==3.8
+conda activate epimapper </pre>
 
 <p>Install pip if not already installed: </p>
 <pre> conda install pip</pre>
@@ -70,7 +68,7 @@ You can install the package using following command, go to the dmr_analysis dire
 	</p>
 <ul>
 	
-	<li><code>cut_and_tag_analyzer</code> : Contains python soruce code of pipeline.</li>
+	<li><code>epimapper</code> : Contains python soruce code of pipeline.</li>
 	<li><code>readme.txt</code> : Instructions about usage of package.</li>
 	<li><code>requirments.txt</code> :  List of requirements. Can be used for automatic installation from miniconda or pip.</li>
 	<li><code>setup.py</code>: Setup file for package.</li>
