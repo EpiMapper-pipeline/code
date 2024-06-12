@@ -100,15 +100,27 @@ def picard(files, sam, sorted_sam, removeDuplicate, picard_summary):
     
     files = os.path.join(sam,"*.sam")
     tmp_files = glob.glob(files)
-    
+
+    #test jbw
+    TMP_folder=os.path.join(sam,'TMP')
+    TMP_folder=os.path.abspath(TMP_folder)
+    if not os.path.exists(TMP_folder):
+        os.makedirs(TMP_folder)
+        print('Create temporary folder, ', TMP_folder)
+    #end test
+
     for file in tmp_files:
         
         new_name = pl.PurePath(file).name.split(".")[0]
         tmp_file_name = pl.PurePath(file).name
-        
-        cmd1 = "picard  -Dpicard.useLegacyParser=false SortSam -I " +sam +"/" +tmp_file_name + \
+
+        #test jbw
+        #cmd1 = "picard  -Dpicard.useLegacyParser=false SortSam -I " +sam +"/" +tmp_file_name + \
             " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate"
-            
+        cmd1 = "picard  -Dpicard.useLegacyParser=false SortSam -I " +sam +"/" +tmp_file_name + \
+            " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate " + " -TMP_DIR " + TMP_folder
+        #end test
+    
         #cmd2 = "picard -Dpicard.useLegacyParser=false  MarkDuplicates -I "+sorted_sam+"/"+new_name+".sorted.sam  \
             #-O "+removeDuplicate+"/"+new_name+".sorted.dupMarked.sam \
                # -METRICS_FILE "+picard_summary+"/"+new_name+"_picard.dupMark.txt"
