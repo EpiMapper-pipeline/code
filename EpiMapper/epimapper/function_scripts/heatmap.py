@@ -456,12 +456,15 @@ def run(args):
     ref = create_bed(ref_txt)
 
     #test jbw 13.06
-    files = os.path.join(bam_dir,"*.mapped_sorted.BlackListFiltered.bam")
-    if len(files)==0:
-        files = os.path.join(bam_dir,"*.mapped_sorted.bam")
-
+    files = os.path.join(bam_dir,"*.BlackListFiltered.bam")
     tmp_files = glob.glob(files)
-    
+    if len(tmp_files)==0:
+        files = os.path.join(bam_dir,"*.mapped_sorted.bam")
+        tmp_files = glob.glob(files)
+
+    #end test 
+
+
         
     peaks_files = os.path.join(peaks, "*peaks*.bed")
     p_files =peaks_files 
