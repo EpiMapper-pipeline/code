@@ -273,10 +273,17 @@ def do_filtering(LEN, files, minQualityScore, sam,  sam_quality,
         cmd6 = "samtools sort -n " + bam + "/" + new_name + ".mapped.bam -o " + bam +"/" + new_name+".mapped_sorted.bam "
         out6= subprocess.run(cmd6,shell=True)
         check_command(out6)
+
+        #test jbw 13.06 try to filter black list at bam files
+        cmd6_2="bedtools intersect -v -abam " + bam +"/" + new_name+".mapped_sorted.bam " + " -b " +   genome_blacklist + " > " + bam +"/" + new_name+".mapped_sorted.BlackListFiltered.bam "
+        out6_2= subprocess.run(cmd6_2,shell=True)
+        check_command(out6_2)
+        #end test
+
         if atac:
-            shift_reads(bam +"/" + new_name+".mapped_sorted.bam ", bed +"/" + new_name + ".fragments.bed")
+            shift_reads(bam +"/" + new_name+".mapped_sorted.BlackListFiltered.bam ", bed +"/" + new_name + ".fragments.bed")
         else:
-            cmd7 = "bedtools bamtobed -i " + bam +"/"+ new_name +".mapped_sorted.bam -bedpe > " + bed +"/" +new_name +".bed"
+            cmd7 = "bedtools bamtobed -i " + bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam -bedpe > " + bed +"/" +new_name +".bed"
             out7=subprocess.run(cmd7,shell=True)
             check_command(out7)
             
