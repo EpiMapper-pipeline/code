@@ -370,10 +370,14 @@ def run(args):
         cmd_mv = "mv " + os.path.join(removeDuplicate,"*sorted.rmDup.sam") + " " + sam_duplicates_removed
         
         subprocess.run(cmd_mv,shell=True)
-        
+
+        #test jbw
         cmd_rm = "rm " + os.path.join(removeDuplicate, "*.sam")
         subprocess.run(cmd_rm,shell=True)
-        
+        cmd_rm2 = "rm " + os.path.join(sam, "*.sam")
+        subprocess.run(cmd_rm2,shell=True)
+        #end test
+
     else:
         print("Chosen sam folder: " + sam+" is empty or does not contain any sam files. \n Please select another directory")
         exit(1)
