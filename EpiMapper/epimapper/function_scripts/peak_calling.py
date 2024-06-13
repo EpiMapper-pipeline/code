@@ -198,9 +198,13 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
 
 
 def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent):
-    
-    tmp_files = glob.glob(os.path.join(bam_dir,"*mapped.bam"))
 
+    #teset jbw 13.06
+    tmp_files = glob.glob(os.path.join(bam_dir,"*.BlackListFiltered.bam"))
+    if len(tmp_files)==0:
+       tmp_files = glob.glob(os.path.join(bam_dir,"*mapped.bam"))
+    #end test
+    #print(tmp_files)
     
     if control:
         controls=[]
@@ -218,8 +222,14 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
         for sample in conditional:
             name= sample.split("_rep")[0]
             rep = sample.split("_rep")[1]
-            
-            file = glob.glob(os.path.join(bam_dir, sample+"*"))[0]
+
+	    #test jbw 13.06
+            #file = glob.glob(os.path.join(bam_dir, sample+"*"))[0]
+            file = glob.glob(os.path.join(bam_dir, sample+"*.BlackListFiltered.bam"))[0]
+            if len(file)<1:
+                file= glob.glob(os.path.join(bam_dir, sample+"*.mapped.bam"))[0]
+            #end test
+            #print(os.path.basename(file).split("."))
             
             name = os.path.basename(file).split(".")[0]
             control_str = " ".join(controls)
