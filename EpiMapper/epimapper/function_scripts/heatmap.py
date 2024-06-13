@@ -123,7 +123,8 @@ def coverage(tmp_files, bam_dir,bigwig, sample_names):
     
     """
     for file in tmp_files:
-        
+        #test jbw
+        print(file)        
         
         file_name  = pl.Path(file).name
         
@@ -453,14 +454,14 @@ def run(args):
     bam_dir, peaks,bl,ref_txt, cores = check_input(args)
     
     ref = create_bed(ref_txt)
-    
-    files = os.path.join(bam_dir,"*.mapped_sorted.bam")
-    
+
+    #test jbw 13.06
+    files = os.path.join(bam_dir,"*.mapped_sorted.BlackListFiltered.bam")
+    if len(files)==0:
+        files = os.path.join(bam_dir,"*.mapped_sorted.bam")
+
     tmp_files = glob.glob(files)
     
-    
-
-
         
     peaks_files = os.path.join(peaks, "*peaks*.bed")
     p_files =peaks_files 
