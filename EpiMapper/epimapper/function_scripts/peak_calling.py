@@ -83,9 +83,9 @@ def set_parser(parser):
     optional_name.add_argument("-tbl", "--fragment_table", required = False, type= str)
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
-    
-    optional_name.add_argument("-gs", "--genome_size", required=False, type =str, help=" The effective genome size of the organism, default = 2.7e9 for human genome.", default ="2.7e9")
-    
+    #test jbw
+    optional_name.add_argument("-gs", "--genome_size", required=False, type =str, help=" The effective genome size of the organism (hs, mm, ce, dm), default = hs for human genome.", default ="hs")
+    #end test
     
     
     
@@ -223,9 +223,12 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             
             name = os.path.basename(file).split(".")[0]
             control_str = " ".join(controls)
-            
-            cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
-            
+
+            #test jbw		
+            #cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+            cmd_macs_con = "macs2 callpeak -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+	    #end test
+		
             if is_percent:
                 cmd_macs_top = "macs2 callpeak -p "+percentage+" -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
             else:
@@ -261,27 +264,36 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
 
         cmd = "sort -k1,1V -k2,2n -k3,3 "+ file +" > " + file.replace(".narrowPeak","_sorted.bed")
         subprocess.run(cmd,shell=True)
+
+	#test jbw
+        tmp_in_file=file.replace(".narrowPeak","_sorted.bed")
+        print(tmp_in_file)
+        check_file=os.path.getsize(tmp_in_file)
+        if check_file>0:
+	#	
+          in_pd = pd.read_csv(file.replace(".narrowPeak","_sorted.bed"),sep = "\t", header=None)
         
-        in_pd = pd.read_csv(file.replace(".narrowPeak","_sorted.bed"),sep = "\t", header=None)
+          chrm = in_pd[in_pd[0].str.contains("M", na=False)]
+    
+          in_pd = in_pd.drop(list(chrm.index))
+    
+          new_pd = in_pd.append(chrm)
+    
+          new_pd[0] =  new_pd[0].apply(lambda x: 'chr' + str(x) if not str(x).startswith('chr') else str(x))
         
-        chrm = in_pd[in_pd[0].str.contains("M", na=False)]
-    
-        in_pd = in_pd.drop(list(chrm.index))
-    
-        new_pd = in_pd.append(chrm)
-    
-        new_pd[0] =  new_pd[0].apply(lambda x: 'chr' + str(x) if not str(x).startswith('chr') else str(x))
-        
-        new_pd.to_csv(file.replace(".narrowPeak", "_sorted.bed"),header=False, index=False, sep="\t")
+          new_pd.to_csv(file.replace(".narrowPeak", "_sorted.bed"),header=False, index=False, sep="\t")
  
-        tmp_width = new_pd.iloc[:,:3]
+          tmp_width = new_pd.iloc[:,:3]
         
-        tmp_width["Sample"] = file.split("/")[-1].split("_")[0]
-        tmp_width["Replication"] = file.split("/")[-1].split("_")[1]
-        tmp_width["peakType"] = file.split("/")[-1].split("_")[2] +"_"+file.split("/")[-1].split("_")[3]
-        tmp_width["PeakWidth"] = tmp_width[2] - tmp_width[1] 
-        peak_width = pd.concat(objs=[peak_width,tmp_width])
-        
+          tmp_width["Sample"] = file.split("/")[-1].split("_")[0]
+          tmp_width["Replication"] = file.split("/")[-1].split("_")[1]
+          tmp_width["peakType"] = file.split("/")[-1].split("_")[2] +"_"+file.split("/")[-1].split("_")[3]
+          tmp_width["PeakWidth"] = tmp_width[2] - tmp_width[1] 
+          peak_width = pd.concat(objs=[peak_width,tmp_width])
+	else:
+	  print('Empty file, skip - !', file)
+        #end test
+	
     peak_summary = pd.DataFrame(columns = ["Sample","Replication", "peakType", "peakN"])
     
     sorted_files =glob.glob(os.path.join(macs2_top,"*_sorted.bed"))
@@ -323,8 +335,10 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
         
     peak_summary.to_csv(os.path.join(summary_tables, "peak_summary.csv"), index=False)
 
+    #test jbw
+    reps=list(set(reps))
+    #end test	
     return sorted_files, peak_summary, peak_width, reps
-
 
 
 def seacr_summary(seacr, summary_tables,seacr_top,seacr_control):
@@ -1069,12 +1083,14 @@ def check_input(args,summary_tables):
             
         if args.genome_size is not None:
             genome_size= args.genome_size
-            try:
-                  float(genome_size)
-                  
-            except ValueError:
-                print("Chosen genome size: "+ genome_size+" is not numeric\nPlease choose provide the effective genome size of the organisme (i.e 1.87e9 for mus musculus")
-                exit(1)
+	    #test jbw
+            #try:
+            #      float(genome_size)
+            #      
+            #except ValueError:
+            #    print("Chosen genome size: "+ genome_size+" is not numeric\nPlease choose provide the effective genome size of the organisme (i.e 1.87e9 for mus musculus")
+            #    exit(1)
+	    #end test
                 
     else:
         print("Software not recognized.\nPlease choose between the peak calling software 'seacr' and 'macs2' in the -soft parameter.")
