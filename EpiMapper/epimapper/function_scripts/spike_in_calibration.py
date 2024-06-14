@@ -170,8 +170,12 @@ def summary(depth_files, summary_tables, sum_tbl):
         rep = "".join(re.findall("\Brep\d+", file_name))
         with open(file, "r") as t:
             seqDepth = t.readline()
-            scaleFactor.loc[len(scaleFactor)] = [name,rep,round(multiplier/int(seqDepth),2) ]
-            
+            #test jbw 14.06
+            if int(seqDepth)==0:
+              scaleFactor.loc[len(scaleFactor)] = [name,rep,0 ]  
+            else:
+              scaleFactor.loc[len(scaleFactor)] = [name,rep,round(multiplier/int(seqDepth),2) ]
+            #end test
             
         t.close()
 
