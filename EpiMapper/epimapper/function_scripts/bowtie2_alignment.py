@@ -55,7 +55,9 @@ def set_parser(parser):
     optional_name.add_argument("-o", "--out_dir", help="Output directory", required=False, type=str)
     optional_name.add_argument("-i", "--bowtie2_index_pathway", help="Input path to bowtie2 index direcotry", required= False, type=str)
     optional_name.add_argument("-r", "--reference_file", help="Inputh path to reference genome file if no bowtie indexing files are made",required=False, type = str)
-    optional_name.add_argument("-s", "--spike_in", help="True if the data is spike in alignment", required=False, type = bool, default=False)
+    #test jbw 14.06
+    optional_name.add_argument("-s", "--spike_in", help="True if the data is spike in alignment", required=False, type = str, default="False")
+    #end test
     optional_name.add_argument("-m","--merge_replicates", required=False, type=bool, default=False)
 
     
@@ -210,7 +212,7 @@ def bowtie2(fastq, spike_in, ref, projPath, files):
             " -2 " +fastq+"/"+R2+".fastq -S " + projPath +"/Epimapper/alignment/sam_spike_in/"+tmp_name+"_spike_in.sam &> "+ projPath+"/Epimapper/alignment/bowtie2_summary_spike_in/"+tmp_name+"_spike_in.txt"
         
         if spike_in:
-            
+            print("Spike in bowwtie")     
             exit_code = subprocess.run(cmd_spike_in,shell=True)
             if not exit_code.returncode==0:
                 print("Error Bowtie2 in spike in alignment.")
@@ -260,6 +262,7 @@ def plot_summary(summary_tables, table, spike_in):
         sns.set_style("whitegrid")
         sns.set_palette("husl")
         if spike_in:
+            print("Spike in plot summary")
             fig, axes= plt.subplots(nrows=1, ncols=2, figsize=(15, 15))
             
             plt1 = sns.boxplot(x = table.Sample, y = table.MappedFragments_SpikeIn, hue = table.Sample, dodge=False, ax = axes[0])
@@ -385,6 +388,7 @@ def summary_table(bowtie2_summary, spike_in):
     files = glob.glob(file_name)
     files.sort()
     if spike_in:
+        print("Spike in summary")
         summary= pd.DataFrame( columns = ["Sample","Replication", "SequencingDepth", "MappedFragments_SpikeIn","AlignmentRate_SpikeIn"])
     else:
         summary = pd.DataFrame(columns = ["Sample", "Replication", "SequencingDepth", "MappedFragments","AlignmentRate"])
@@ -452,7 +456,7 @@ def make_summary(bowtie2_summary, bowtie2_summary_spike_in, summary_tables, spik
                 exit(1)
         
     elif spike_in:
-        
+        print("Spike in make summary")        
         if len(os.listdir(bowtie2_summary_spike_in))!= 0:
             
             summary = summary_table(bowtie2_summary_spike_in, True)
@@ -596,9 +600,13 @@ def run(args):
     if not os.path.exists(sam):
         os.mkdir(sam)
         
-        
-   
-    if args.spike_in:
+    #test jbw 14.06
+    spike_in = args.spike_in.lower() == 'true'
+    print("Spike in , ", spike_in)
+    #end test
+    
+    #test jbw 14.06
+    if spike_in:
         bowtie2_summary = os.path.join(align,"bowtie2_summary")
         
         if  not os.path.exists(bowtie2_summary_spike_in):
@@ -620,11 +628,11 @@ def run(args):
 
 
     if check_input(args):
-        spike_in = args.spike_in
-    
+        #test jbw 14.06
+        #spike_in = args.spike_in
+       
         fastq = args.fastq
         
-    
         files = os.path.join(fastq,"*.fastq*")
         
         check_gz = glob.glob(files)[0]

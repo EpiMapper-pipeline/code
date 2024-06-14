@@ -100,7 +100,6 @@ def picard(files, sam, sorted_sam, removeDuplicate, picard_summary):
     
     files = os.path.join(sam,"*.sam")
     tmp_files = glob.glob(files)
-
     #test jbw
     TMP_folder=os.path.join(sam,'TMP')
     TMP_folder=os.path.abspath(TMP_folder)
@@ -113,28 +112,36 @@ def picard(files, sam, sorted_sam, removeDuplicate, picard_summary):
         
         new_name = pl.PurePath(file).name.split(".")[0]
         tmp_file_name = pl.PurePath(file).name
-
+        
         #test jbw
         #cmd1 = "picard  -Dpicard.useLegacyParser=false SortSam -I " +sam +"/" +tmp_file_name + \
-            " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate"
+        #    " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate"
         cmd1 = "picard  -Dpicard.useLegacyParser=false SortSam -I " +sam +"/" +tmp_file_name + \
-            " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate " + " -TMP_DIR " + TMP_folder
+            " -O "+sorted_sam+"/"+new_name+".sorted.sam --SORT_ORDER coordinate " + " -TMP_DIR " + TMP_folder   
+     
         #end test
-    
+
         #cmd2 = "picard -Dpicard.useLegacyParser=false  MarkDuplicates -I "+sorted_sam+"/"+new_name+".sorted.sam  \
             #-O "+removeDuplicate+"/"+new_name+".sorted.dupMarked.sam \
                # -METRICS_FILE "+picard_summary+"/"+new_name+"_picard.dupMark.txt"
                 
+        #test jbw 14.06        
+        #cmd3 = "picard -Dpicard.useLegacyParser=false  MarkDuplicates -I "+sorted_sam+"/"+new_name+".sorted.sam \
+        #    -O "+removeDuplicate+"/"+new_name+".sorted.rmDup.sam \
+        #        -REMOVE_DUPLICATES true -METRICS_FILE "+picard_summary+"/"+new_name+"_picard.rmDup.txt"
+
         cmd3 = "picard -Dpicard.useLegacyParser=false  MarkDuplicates -I "+sorted_sam+"/"+new_name+".sorted.sam \
-            -O "+removeDuplicate+"/"+new_name+".sorted.rmDup.sam \
-                -REMOVE_DUPLICATES true -METRICS_FILE "+picard_summary+"/"+new_name+"_picard.rmDup.txt"
+            -O "+removeDuplicate+"/"+new_name+".rmDup.sam \
+            -REMOVE_DUPLICATES true -METRICS_FILE "+picard_summary+"/"+new_name+"_picard.rmDup.txt"
+
+        cmd4= "picard  -Dpicard.useLegacyParser=false SortSam -I " + removeDuplicate +"/" + new_name + ".rmDup.sam" +  \
+            " -O "+ removeDuplicate + "/"+new_name+".sorted.rmDup.sam --SORT_ORDER queryname " + " -TMP_DIR " + TMP_folder
+       
         exit_code1 = subprocess.run(cmd1,shell=True)
         #exit_code2 =subprocess.run(cmd2,shell=True)
         exit_code3 =subprocess.run(cmd3,shell=True)
-        
-        
-
-
+        exit_code4= subprocess.run(cmd4,shell=True)
+        #end test
 
 
     
@@ -247,7 +254,7 @@ def make_summary(picard_summary,summary_tables):
         sample = sample_name.split("_")[0]
         
         rep = "".join(re.findall("\Brep\d+", sample_name))
-        
+        print(file) 
         tbl = pd.read_table(file, header = 5, nrows = 1, decimal= ",")
         uniquemapped = round(float(tbl.at[0,"READ_PAIRS_EXAMINED"]) * (1-float(tbl.at[0,"PERCENT_DUPLICATION"])))
     
@@ -370,14 +377,14 @@ def run(args):
         cmd_mv = "mv " + os.path.join(removeDuplicate,"*sorted.rmDup.sam") + " " + sam_duplicates_removed
         
         subprocess.run(cmd_mv,shell=True)
-
-        #test jbw
+       
+        #test jbw 13.06
         cmd_rm = "rm " + os.path.join(removeDuplicate, "*.sam")
         subprocess.run(cmd_rm,shell=True)
-        cmd_rm2 = "rm " + os.path.join(sam, "*.sam")
-        subprocess.run(cmd_rm2,shell=True)
+        #cmd_rm2 = "rm " + os.path.join(sam, "*.sam")
+        #subprocess.run(cmd_rm2,shell=True)
         #end test
-
+        
     else:
         print("Chosen sam folder: " + sam+" is empty or does not contain any sam files. \n Please select another directory")
         exit(1)

@@ -83,6 +83,7 @@ def set_parser(parser):
     optional_name.add_argument("-tbl", "--fragment_table", required = False, type= str)
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
+   
     #test jbw
     optional_name.add_argument("-gs", "--genome_size", required=False, type =str, help=" The effective genome size of the organism (hs, mm, ce, dm), default = hs for human genome.", default ="hs")
     #end test
@@ -180,8 +181,9 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
                 control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm+ " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
             
             top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + norm+ " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
-    
+            print(control_cmd)
             subprocess.run(control_cmd, shell = True)
+            print(top_cmd)
             subprocess.run(top_cmd,shell = True)
 
 
@@ -198,47 +200,46 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
 
 
 def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent):
-
+   
     #teset jbw 13.06
     tmp_files = glob.glob(os.path.join(bam_dir,"*.BlackListFiltered.bam"))
     if len(tmp_files)==0:
        tmp_files = glob.glob(os.path.join(bam_dir,"*mapped.bam"))
     #end test
     #print(tmp_files)
-    
+
     if control:
         controls=[]
         conditional =[]
         for file in tmp_files:
-            
-            
+            print(file, "\n") 
+            #print(control) 
             if control in  pl.PurePath(file).name.split(".")[0]:
                 controls.append(file)
             
             else:
                 conditional.append(pl.PurePath(file).name.split(".")[0])
-         
 
         for sample in conditional:
             name= sample.split("_rep")[0]
             rep = sample.split("_rep")[1]
-
-	    #test jbw 13.06
+            
+            #test jbw 13.06
             #file = glob.glob(os.path.join(bam_dir, sample+"*"))[0]
             file = glob.glob(os.path.join(bam_dir, sample+"*.BlackListFiltered.bam"))[0]
             if len(file)<1:
                 file= glob.glob(os.path.join(bam_dir, sample+"*.mapped.bam"))[0]
             #end test
             #print(os.path.basename(file).split("."))
-            
+
             name = os.path.basename(file).split(".")[0]
             control_str = " ".join(controls)
-
-            #test jbw		
+            
+            #test jbw
             #cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
             cmd_macs_con = "macs2 callpeak -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
-	    #end test
-		
+            #end test
+
             if is_percent:
                 cmd_macs_top = "macs2 callpeak -p "+percentage+" -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
             else:
@@ -252,7 +253,7 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
         for file in tmp_files:
             sample=pl.PurePath(file).name.split(".")[0]
             name= sample.split("_rep")[0]
-            
+            #print(file) 
             if is_percent:
                 cmd_macs_top = "macs2 callpeak  -p "+ percentage+" -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
             else:
@@ -274,13 +275,13 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
 
         cmd = "sort -k1,1V -k2,2n -k3,3 "+ file +" > " + file.replace(".narrowPeak","_sorted.bed")
         subprocess.run(cmd,shell=True)
-
-	#test jbw
+        
+        #test jbw
         tmp_in_file=file.replace(".narrowPeak","_sorted.bed")
         print(tmp_in_file)
         check_file=os.path.getsize(tmp_in_file)
         if check_file>0:
-	#	
+        #
           in_pd = pd.read_csv(file.replace(".narrowPeak","_sorted.bed"),sep = "\t", header=None)
         
           chrm = in_pd[in_pd[0].str.contains("M", na=False)]
@@ -300,10 +301,10 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
           tmp_width["peakType"] = file.split("/")[-1].split("_")[2] +"_"+file.split("/")[-1].split("_")[3]
           tmp_width["PeakWidth"] = tmp_width[2] - tmp_width[1] 
           peak_width = pd.concat(objs=[peak_width,tmp_width])
-	else:
-	  print('Empty file, skip - !', file)
+        else:
+          print('Empty file, skip - !', file)
         #end test
-	
+
     peak_summary = pd.DataFrame(columns = ["Sample","Replication", "peakType", "peakN"])
     
     sorted_files =glob.glob(os.path.join(macs2_top,"*_sorted.bed"))
@@ -347,8 +348,9 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
 
     #test jbw
     reps=list(set(reps))
-    #end test	
+    #end test
     return sorted_files, peak_summary, peak_width, reps
+
 
 
 def seacr_summary(seacr, summary_tables,seacr_top,seacr_control):
@@ -635,7 +637,8 @@ def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_c
                 else:
                     files = [os.path.join(seacr_top,x) for x in names_filtered]
                     cmd = "bedtools intersect -a " +os.path.join(seacr_top,value)+" -b  "+ " ".join(files) +" -u |wc -l"
-                
+               
+                print(cmd)
                 out=subprocess.check_output(cmd,shell=True)
     
                 overlaps[value]=out
@@ -717,18 +720,21 @@ def bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl, macs2_c
         for col in sample_df:
     
             for index, value in sample_df[col].iteritems():
-    
+                print(value)
                 if not value in overlaps:
                     overlaps[value] = []
                 names = sample_df[sample_df.index != index][col].to_list()
                 names_filtered = [x  for x in names if value.split("_")[3] in x]
+                print(names, names_filtered)
+                #test jbw bug here??
                 if "control" in value.split("_")[3]:
                     files = [os.path.join(macs2_control,x) for x in names_filtered]
                     cmd = "bedtools intersect -a " +os.path.join(macs2_control,value)+" -b  "+ " ".join(files) +" -u |wc -l"
                 else:
                     files = [os.path.join(macs2_top,x) for x in names_filtered]
                     cmd = "bedtools intersect -a " +os.path.join(macs2_top,value)+" -b  "+ " ".join(files) +" -u |wc -l"
-                
+               
+                print(cmd)
                 out=subprocess.check_output(cmd,shell=True)
     
                 overlaps[value]=out
@@ -1020,13 +1026,17 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
     if skip_plot:
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage, genome_size,macs2_control,macs2_top,is_percent)
+        #test jbw 2024 sort peak files for heatmap plot??
+        #sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
+        #end test
         print("Done with calling peaks using MACS2 software.\nCalled peaks avalible at: "+ macs2)
         exit(0)
     else:
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent)
         
         sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
-        
+       
+        print('reps -> ',reps)
         full_peak_summary=bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl,macs2_control, macs2_top,reps)
        
         plot(full_peak_summary, summary_tables,peak_width, types,reps)
@@ -1093,14 +1103,14 @@ def check_input(args,summary_tables):
             
         if args.genome_size is not None:
             genome_size= args.genome_size
-	    #test jbw
+            #test jbw
             #try:
             #      float(genome_size)
             #      
             #except ValueError:
             #    print("Chosen genome size: "+ genome_size+" is not numeric\nPlease choose provide the effective genome size of the organisme (i.e 1.87e9 for mus musculus")
             #    exit(1)
-	    #end test
+            #end test
                 
     else:
         print("Software not recognized.\nPlease choose between the peak calling software 'seacr' and 'macs2' in the -soft parameter.")

@@ -56,8 +56,9 @@ def set_parser(parser):
     optional_name.add_argument("-cs", "--chromosome_sizes", help = "Path to file with chomosome sizes", required = True, type = str)
     
     optional_name.add_argument("-bl", "--blacklist", help= "Path to genome blacklist", required  = True, type = str)
-    
-    optional_name.add_argument("-sn", "--spike_in_norm", help = "If the samples are being spike-in normalized or not",required = False, type = bool, default = False)
+   
+    #test jbw 14.06
+    optional_name.add_argument("-sn", "--spike_in_norm", help = "If the samples are being spike-in normalized or not",required = False, type = str, default = "False")
     
     optional_name.add_argument("-atac", "--atac_seq_shift", help ="Shift start point in ATAC-seq data +4 on the + strand and -5 on the - strand.", required=False, default = False)
     
@@ -73,7 +74,7 @@ def make_bg(spike_in_norm, bed, chromosome_sizes, new_name, bedgraph):
       if not spike_in_norm:
           
           cmd_bg = "bedtools genomecov -bg -i " + bed +"/" + new_name + ".fragments_sorted.bed  -g "+ chromosome_sizes + " > " + bedgraph + "/" + new_name+ ".fragments.bedgraph"
-          
+          print(cmd_bg)      
           subprocess.run(cmd_bg,shell=True)
  
         
@@ -249,7 +250,7 @@ def do_filtering(LEN, files, minQualityScore, sam,  sam_quality,
         
         
     for file in files:
-        
+        print(file)     
         new_name = re.split(r"[.]",pl.PurePath(file).name)[0]
        
         tmp_file_name = pl.PurePath(file).name
@@ -257,11 +258,13 @@ def do_filtering(LEN, files, minQualityScore, sam,  sam_quality,
         cmd3 = "samtools view -Shq"+ minQualityScore+ " "+ sam + "/"+ tmp_file_name +"> "+ sam_quality + "/"+ new_name + "_QualityScore_" + minQualityScore+ ".sam"
         out3 =subprocess.run(cmd3,shell=True)
         check_command(out3)
-        
+        #print(3)
+
         cmd4 = "samtools view -bS "+  sam_quality + "/"+ new_name + "_QualityScore_" + minQualityScore+ ".sam" +" > " + bam +"/"+new_name +".bam"
         out4 =subprocess.run(cmd4,shell=True)
         check_command(out4)
-        
+        #print(4)
+
         rm_q = "rm "+ sam_quality + "/"+ new_name + "_QualityScore_" + minQualityScore+ ".sam"
         subprocess.run(rm_q, shell=True)
         
@@ -269,32 +272,51 @@ def do_filtering(LEN, files, minQualityScore, sam,  sam_quality,
         cmd5 = "samtools view -b -F 0x04 "+ bam + "/" +new_name+".bam > " + bam +"/" + new_name+ ".mapped.bam"
         out5 = subprocess.run(cmd5,shell=True)
         check_command(out5)
-        
+        #print(5)
+
         cmd6 = "samtools sort -n " + bam + "/" + new_name + ".mapped.bam -o " + bam +"/" + new_name+".mapped_sorted.bam "
         out6= subprocess.run(cmd6,shell=True)
         check_command(out6)
+        #print(6)
 
-        #test jbw 13.06 try to filter black list at bam files
-        cmd6_2="bedtools intersect -v -abam " + bam +"/" + new_name+".mapped_sorted.bam " + " -b " +   genome_blacklist + " > " + bam +"/" + new_name+".mapped_sorted.BlackListFiltered.bam "
+        #test jbw 14.06 try to filter black list at bam files
+        #sorted reads coordiate of bam file
+        cmd6_2="bedtools intersect -v -abam " + bam +"/" + new_name+".mapped_sorted.bam " + " -b " +   genome_blacklist + " > " + bam +"/" + new_name+".mapped.BlackListFiltered.bam "
         out6_2= subprocess.run(cmd6_2,shell=True)
         check_command(out6_2)
+
+        #to sort reads name of bam file
+        cmd6_3="samtools fixmate " +  bam +"/" + new_name+".mapped.BlackListFiltered.bam " + " " +  bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam "
+        out6_3= subprocess.run(cmd6_3,shell=True)
+        check_command(out6_3)
+
+        #cmd6_4="samtools sort " +  bam +"/"+ new_name +".mapped_fixed.BlackListFiltered.bam "  + " -o " +  bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam "
+        #out6_4= subprocess.run(cmd6_4,shell=True)
+        #check_command(out6_4)
         #end test
+        #print(62)
 
         if atac:
+            #test jbw
             shift_reads(bam +"/" + new_name+".mapped_sorted.BlackListFiltered.bam ", bed +"/" + new_name + ".fragments.bed")
         else:
-            cmd7 = "bedtools bamtobed -i " + bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam -bedpe > " + bed +"/" +new_name +".bed"
+            #test jbw here is a warning  when convert bam to bed
+            #cmd7 = "bedtools bamtobed -i " + bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam -bedpe > " + bed +"/" +new_name +".bed"
+            cmd7= "samtools view -bf 0x2 " +  bam +"/"+ new_name +".mapped_sorted.BlackListFiltered.bam | bedtools bamtobed -i stdin -bedpe > " + bed +"/" +new_name +".bed"
+
             out7=subprocess.run(cmd7,shell=True)
             check_command(out7)
-            
+            #print(7)
+
             cmd8 = "awk '$1==$4 && $6-$2 < 1000 {print $0}' " + bed + "/" + new_name + ".bed" + "> "+ bed +"/" + new_name + ".clean.bed"
             out8=subprocess.run(cmd8,shell=True)
             check_command(out8)
-            
+            #print(8)
+
             cmd9 = "cut -f 1,2,6 " + bed +"/" + new_name + ".clean.bed"+ " | sort -k1,1V -k2,2n -k3,3n  > " + bed +"/" + new_name + ".fragments.bed"
             out9=subprocess.run(cmd9,shell=True)
             check_command(out9)
-        
+            #print(9)
         in_pd=pd.read_csv(bed +"/" + new_name + ".fragments.bed", sep='\t',header=None)
 
         in_pd.insert(3,3,1)
@@ -316,14 +338,19 @@ def do_filtering(LEN, files, minQualityScore, sam,  sam_quality,
     
         cmd10= "bedtools map -g " +chromosome_sizes+" -a " +align + "/"+genome+ "."+ LEN+".b.windows.BlackListFiltered.bed -b "+ bed +"/" + new_name + ".fragments_sorted.bed  -c 4 -o sum > " \
             + bed+"/"+new_name+".fragments_sorted."+LEN+"b.windows.BlackListFiltered.bed"
-    
+        #print(10)
+
         out10 =subprocess.run(cmd10,shell=True)
         check_command(out10)
-   
-        if not spike_in_norm:
+
+        #test jbw 14.06
+        if not spike_in_norm :
             print("Creating bedgraph files")
             make_bg(spike_in_norm, bed, chromosome_sizes, new_name, bedgraph)
-            
+        else:
+            print("Use spike in norm ")
+        #end test
+
     cmd_rm_3 = "rm -r " +sam_quality
     subprocess.run(cmd_rm_3,shell=True)
      
@@ -549,8 +576,11 @@ def run(args):
     bed = os.path.join(align,"bed")
     if not os.path.exists(bed):
         os.mkdir(bed)
-    
-    spike_in_norm = args.spike_in_norm
+   
+    #test jbw 14.06
+    #spike_in_norm = args.spike_in_norm
+    spike_in_norm = args.spike_in_norm.lower() == 'true'
+    #end test
     
     bedgraph = os.path.join(align,"bedgraph")
     if not spike_in_norm:
@@ -607,9 +637,9 @@ def run(args):
     
     count_cutoff=8
     
-    
-    filtered_files2 = do_filtering(LEN, files, minQualityScore, sam, sam_quality, bam, bed, chromosome_sizes, align, genome_blacklist, genome,bedgraph, args.spike_in_norm,atac)
-    
+    #test jbw 14.06
+    filtered_files2 = do_filtering(LEN, files, minQualityScore, sam, sam_quality, bam, bed, chromosome_sizes, align, genome_blacklist, genome,bedgraph, spike_in_norm,atac)
+    #end test
     
     corr_df1,corr_df2 = calculation(filtered_files2, count_cutoff)
     
