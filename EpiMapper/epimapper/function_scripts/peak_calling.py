@@ -159,28 +159,65 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
             else:
                 conditional.append(pl.PurePath(file).name.split(".")[0])
          
-            
-         
+        #test jbw 15.06   
+        #print(control, controls, conditional ) 
         for sample in conditional:
-            
             name= sample.split("_rep")[0]
             rep = sample.split("_rep")[1]
-            
+            #print(sample, name, rep) 
             file = glob.glob(os.path.join(bedgraph, sample+"*"))[0]
-   
-            if name+"_"+control+"_rep"+rep in controls:
-                control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep"+rep+"*"))[0]  
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + norm+ " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
-                
+            #print(file)
+            #print(name + "_" + control + "_rep" + rep )
+            #print(name + "_" + control + "_rep" + str(1))
+            tmp_control_file=''
+            for ci in controls:
+                if 'rep'+rep in ci :
+                    tmp_control_file=ci
+            print('tmp_ctrl, ', tmp_control_file)
+
+            #test jbw 15.06 
+            #if name+"_"+control+"_rep"+rep in controls:
+            #    #control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep"+rep+"*"))[0]
+            #    control_files = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep"+rep+"*"))
+            #    control_file=control_files[0]
+            #    print(1, control_files)
+            #    control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + norm+ " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
+            if len(tmp_control_file)>1:
+                control_files=  glob.glob(os.path.join(bedgraph,tmp_control_file+"*"))
+                control_file=control_files[0]
+                tmp_ctrl= os.path.basename(control_file)
+                #print(tmp_ctrl)
+                if ('normalize' in tmp_ctrl):
+                    str2norm='norm'
+                else:
+                    str2norm='non'
+
+                print(1, control_files)
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + str2norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
             elif any(name + "_" + control + "_rep" + str(i) in controls for i in range(1, 10)):
-                control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))[0]
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm+  " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
+                #control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))[0]
+                control_files=  glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))
+                control_file=control_files[0]
+                print(2, control_files)
+                if 'normalize' in os.path.basename(control_file):
+                    str2norm='norm'
+                else:
+                    str2norm='non'
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + str2norm +  " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
             else:
-                control_file=glob.glob(os.path.join(bedgraph,controls[0]+"*"))[0]
-                
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm+ " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
+                #control_file=glob.glob(os.path.join(bedgraph,controls[0]+"*"))[0] 
+                control_files=glob.glob(os.path.join(bedgraph,controls[0]+"*"))
+                control_file=control_files[0]
+                print(3, control_files)
+                if 'normalize' in os.path.basename(control_file):
+                    str2norm='norm'
+                else:
+                    str2norm='non'
+
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + str2norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
             
-            top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + norm+ " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
+            #top comd
+            top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
             print(control_cmd)
             subprocess.run(control_cmd, shell = True)
             print(top_cmd)
@@ -190,7 +227,7 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
     else:
         for file in  tmp_files:
             sample = pl.PurePath(file).name.split(".")[0]
-            top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + norm+ " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
+            top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
             subprocess.run(top_cmd,shell = True)
 
 

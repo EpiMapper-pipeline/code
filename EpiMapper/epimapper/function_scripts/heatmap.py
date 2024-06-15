@@ -8,14 +8,6 @@ import pandas as pd
 import subprocess
 
 
-
-
-
-
-
-
-
-
 def set_parser(parser):
     """
     
@@ -124,7 +116,7 @@ def coverage(tmp_files, bam_dir,bigwig, sample_names):
     """
     for file in tmp_files:
         #test jbw
-        print(file)        
+        print(file)
         
         file_name  = pl.Path(file).name
         
@@ -177,7 +169,7 @@ def compute_one_matrix(bigwig,ref,cores,bl):
     cmd2 =" computeMatrix scale-regions -S " + txt + "  -R " + ref + "  --beforeRegionStartLength 3000 --regionBodyLength 5000  --afterRegionStartLength 3000 --skipZeros -p " + cores \
         + " -bl " + bl + " -o " +bigwig+"/matrix_gene.mat.gz"
     
-    
+    print(cmd2)
     out_code2 = subprocess.run(cmd2, shell=True)
     
     if out_code2.returncode  ==0:
@@ -281,7 +273,8 @@ def compute_many_matrixes(sample_names,bigwig,cores, peaks):
     
     for sample in sample_names:
         peak_file= glob.glob(os.path.join(peaks,sample+"*summit*.bed"))[0]
-        cmd6 = "computeMatrix reference-point -S " +bigwig + "/"+ sample + ".bw -R " +peak_file +" --skipZeros -a 3000 -b 3000 --referencePoint center " \
+        #test jbw 15.06
+        cmd6 = "computeMatrix reference-point -S " +bigwig + "/"+ sample + ".bw -R " +peak_file +" --skipZeros -a 3000 -b 3000 --referencePoint center --sortRegions no " \
             + "-p " + cores + " -o " + peaks + "/" + sample+".mat.gz"
 
         out_code6 = subprocess.run(cmd6, shell=True)
@@ -454,17 +447,15 @@ def run(args):
     bam_dir, peaks,bl,ref_txt, cores = check_input(args)
     
     ref = create_bed(ref_txt)
-
+    
     #test jbw 13.06
     files = os.path.join(bam_dir,"*.BlackListFiltered.bam")
     tmp_files = glob.glob(files)
     if len(tmp_files)==0:
-        files = os.path.join(bam_dir,"*.mapped_sorted.bam")
+        files = os.path.join(bam_dir,"*.mapped_sorted.bam") 
         tmp_files = glob.glob(files)
 
     #end test 
-
-
         
     peaks_files = os.path.join(peaks, "*peaks*.bed")
     p_files =peaks_files 
