@@ -83,9 +83,11 @@ def set_parser(parser):
     optional_name.add_argument("-tbl", "--fragment_table", required = False, type= str)
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
-   
+  
     #test jbw
     optional_name.add_argument("-gs", "--genome_size", required=False, type =str, help=" The effective genome size of the organism (hs, mm, ce, dm), default = hs for human genome.", default ="hs")
+    
+    optional_name.add_argument("-norm","--seacr_norm", required=False, type=str, help="Seacr peakcalling normalization option (norm, non), default= non for Seacr peakcalling", default="non")
     #end test
     
     
@@ -187,34 +189,34 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
                 control_file=control_files[0]
                 tmp_ctrl= os.path.basename(control_file)
                 #print(tmp_ctrl)
-                if ('normalize' in tmp_ctrl):
-                    str2norm='norm'
-                else:
-                    str2norm='non'
+                #if ('normalize' in tmp_ctrl):
+                #    str2norm='norm'
+                #else:
+                #    str2norm='non'
 
                 print(1, control_files)
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + str2norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
             elif any(name + "_" + control + "_rep" + str(i) in controls for i in range(1, 10)):
                 #control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))[0]
                 control_files=  glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))
                 control_file=control_files[0]
                 print(2, control_files)
-                if 'normalize' in os.path.basename(control_file):
-                    str2norm='norm'
-                else:
-                    str2norm='non'
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + str2norm +  " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
+                #if 'normalize' in os.path.basename(control_file):
+                #    str2norm='norm'
+                #else:
+                #    str2norm='non'
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm +  " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
             else:
                 #control_file=glob.glob(os.path.join(bedgraph,controls[0]+"*"))[0] 
                 control_files=glob.glob(os.path.join(bedgraph,controls[0]+"*"))
                 control_file=control_files[0]
                 print(3, control_files)
-                if 'normalize' in os.path.basename(control_file):
-                    str2norm='norm'
-                else:
-                    str2norm='non'
+                #if 'normalize' in os.path.basename(control_file):
+                #    str2norm='norm'
+                #else:
+                #    str2norm='non'
 
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + str2norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
+                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
             
             #top comd
             top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
@@ -993,9 +995,9 @@ def plot(fragInPeak_df,summary_tables, width,types,reps):
     
 
     
-    
-def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot):
-    
+    #test jbw 16.06
+def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm): 
+
     seacr = os.path.join(peakCalling, "seacr")
     if not os.path.exists(seacr):
         os.mkdir(seacr)
@@ -1016,7 +1018,8 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
     
     tmp_files = glob.glob(os.path.join(bedgraph,"*.bedgraph"))
     
-    norm = "non"
+    #test jbw 16.06
+    #norm = "non"
     
     if skip_plot:
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
@@ -1297,9 +1300,12 @@ def run(args):
         seacr_dir = pkg_resources.resource_filename('epimapper', 'seacr_tool')
         seacr_path= os.path.join(seacr_dir,"SEACR_1.3.sh")
         bedgraph = args.bedgraph
-        
-        peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot)
-    
+   
+        #test jbw 16.06
+        norm=args.seacr_norm
+ 
+        peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm)
+        #end test   
     
 if __name__=='__main__':
     
