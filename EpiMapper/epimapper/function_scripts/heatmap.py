@@ -446,8 +446,11 @@ def run(args):
         
     bam_dir, peaks,bl,ref_txt, cores = check_input(args)
     
-    ref = create_bed(ref_txt)
-    
+    #test jbw 17.06
+    #ref = create_bed(ref_txt)
+    ref=ref_txt
+    #end test
+
     #test jbw 13.06
     files = os.path.join(bam_dir,"*.BlackListFiltered.bam")
     tmp_files = glob.glob(files)
