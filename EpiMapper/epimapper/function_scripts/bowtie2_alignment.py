@@ -266,7 +266,7 @@ def plot_summary(summary_tables, table, spike_in):
             fig, axes= plt.subplots(nrows=1, ncols=2, figsize=(15, 15))
             
             plt1 = sns.boxplot(x = table.Sample, y = table.MappedFragments_SpikeIn, hue = table.Sample, dodge=False, ax = axes[0])
-            plt1.set_title("Aligneble Fragments", fontsize = 25.0)
+            plt1.set_title("Alignable Fragments", fontsize = 25.0)
             plt1.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
             plt1.set_xlabel("")
             plt1.legend([],[], frameon=False)
@@ -296,7 +296,7 @@ def plot_summary(summary_tables, table, spike_in):
             
             
             plt2 = sns.boxplot(x = table.Sample, y = table.MappedFragments/1000000, hue = table.Sample, dodge=False, ax = axes[0,1])
-            plt2.set_title("Aligneble Fragments", fontsize = 25.0)
+            plt2.set_title("Alignable Fragments", fontsize = 25.0)
             plt2.set_xlabel("")
             plt2.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
             plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
@@ -337,7 +337,7 @@ def plot_summary(summary_tables, table, spike_in):
             
             
             plt2 = sns.boxplot(x = table.Sample, y = table.MappedFragments/1000000, hue = table.Sample, dodge=False, ax = axes[1])
-            plt2.set_title("Aligneble Fragments", fontsize = 25.0)
+            plt2.set_title("Alignable Fragments", fontsize = 25.0)
             plt2.set_xlabel("")
             plt2.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
             plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
