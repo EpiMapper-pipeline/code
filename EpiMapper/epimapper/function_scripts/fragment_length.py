@@ -129,10 +129,10 @@ def plot_len(frag_length_summary, summary_tables):
     fig, plot = (pn.ggplot() + pn.aes(x = frag_length_summary.Sample.to_list(), y = frag_length_summary.Fragment_length.to_list(), weight = frag_length_summary.Weight.to_list(), fill = frag_length_summary.Sample.to_list()) + \
     pn.geom_violin(bw = 5) +\
     pn.scale_y_continuous(breaks = np.arange(0,850,50)) + \
-    pn.theme_bw(base_size = 55) + \
-    pn.theme(axis_text_x=pn.element_text(rotation=20, hjust=1,size=40),axis_text_y=pn.element_text(size=40),axis_title=pn.element_text(size=50))+ \
-    pn.ylab("Fragment Length") + pn.theme(legend_position=(.5, 0.95), legend_direction='horizontal', legend_title=pn.element_blank())  +\
-    pn.theme(figure_size=(5*sample_n, 30)) + \
+    pn.theme_bw(base_size = 60) + \
+    pn.theme(axis_text_x=pn.element_text(rotation=20, hjust=1,size=38, face='bold'),axis_text_y=pn.element_text(size=50),axis_title=pn.element_text(size=50),axis_title_y=pn.element_text(size=55) )+ \
+    pn.ylab("Fragment Length") + pn.theme(legend_position=(.5, 0.95), legend_direction='horizontal', legend_title=pn.element_blank(),legend_text=pn.element_text(size=55))  +\
+    pn.theme(figure_size=(5*sample_n, 33)) + \
     pn.xlab("")).draw(show=False, return_ggplot=True)
     
         
