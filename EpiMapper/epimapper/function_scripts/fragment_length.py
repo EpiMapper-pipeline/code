@@ -124,37 +124,34 @@ def plot_len(frag_length_summary, summary_tables):
     
     """
     
-    
     sample_n = len(set(frag_length_summary.Sample))
     fig, plot = (pn.ggplot() + pn.aes(x = frag_length_summary.Sample.to_list(), y = frag_length_summary.Fragment_length.to_list(), weight = frag_length_summary.Weight.to_list(), fill = frag_length_summary.Sample.to_list()) + \
     pn.geom_violin(bw = 5) +\
     pn.scale_y_continuous(breaks = np.arange(0,850,50)) + \
     pn.theme_bw(base_size = 60) + \
-    pn.theme(axis_text_x=pn.element_text(rotation=20, hjust=1,size=38, face='bold'),axis_text_y=pn.element_text(size=50),axis_title=pn.element_text(size=50),axis_title_y=pn.element_text(size=55) )+ \
+    pn.theme(axis_text_x=pn.element_text(rotation=25, hjust=1,size=45),axis_text_y=pn.element_text(size=45),axis_title=pn.element_text(size=50),axis_title_y=pn.element_text(size=60,weight='bold'))+ \
     pn.ylab("Fragment Length") + pn.theme(legend_position=(.5, 0.95), legend_direction='horizontal', legend_title=pn.element_blank(),legend_text=pn.element_text(size=55))  +\
     pn.theme(figure_size=(5*sample_n, 33)) + \
     pn.xlab("")).draw(show=False, return_ggplot=True)
     
         
     
-    fig.savefig(os.path.join(summary_tables, "Fragment_length_violin.png") )
+    fig.savefig(os.path.join(summary_tables, "Fragment_length_violin.png"), dpi=300)
     
     
     plt.figure(figsize=(15,8))
     frag_length_summary.reset_index(drop=True,inplace=True)
     plt2 = sns.lineplot(x =  frag_length_summary.Fragment_length.to_list(), y = frag_length_summary.Fragment_count.to_list(), hue = frag_length_summary.Sample,)
-    plt2.set_ylabel("Count",fontsize=20)
-    plt2.set_xlabel("Fragment Length (bp)",fontsize=20)  
+    plt2.set_ylabel("Count",fontsize=22, fontweight='bold')
+    plt2.set_xlabel("Fragment Length (bp)",fontsize=22, fontweight='bold')  
     plt2.tick_params(labelsize=18) #axis font
     plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90)
     plt2.legend(bbox_to_anchor=(1.005, 0.5), loc="center left", borderaxespad=0, fontsize=20)
     plt.tight_layout()
     
-    plt.savefig(os.path.join(summary_tables, "Fragment_length_lineplot.png"))
+    plt.savefig(os.path.join(summary_tables, "Fragment_length_lineplot.png"), dpi=300)
 
 
-    
-    
   
 
 
