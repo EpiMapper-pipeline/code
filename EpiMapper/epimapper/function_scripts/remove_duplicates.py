@@ -181,25 +181,34 @@ def plot_summary(duplication_summary, summary_tables):
     fig, axes= plt.subplots(nrows=1, ncols=3)
      
     plt1 = sns.boxplot( x = duplication_summary.Sample, y = duplication_summary.DuplicationRate, hue = duplication_summary.Sample, dodge=False, ax=axes[0])
-    plt1.set_ylabel("Duplication Rate (*100%)")
+    plt1.set_ylabel("Duplication Rate (*100%)",fontsize = 11, fontweight='bold')
+    plt1.set_xlabel("Sample",fontsize = 10, fontweight='bold')
+    plt1.tick_params(axis='x', which='major', labelsize=9)  
+    plt1.tick_params(axis='y', which='major', labelsize=7) 
     plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90)
     plt1.legend([],[], frameon=False)
      
      
     plt2 = sns.boxplot(x = duplication_summary.Sample, y = duplication_summary.EstimatedLibrarySize, hue = duplication_summary.Sample, dodge=False, ax = axes[1])
-    plt2.set_ylabel("Estimated Library Size")
+    plt2.set_ylabel("Estimated Library Size",fontsize = 11, fontweight='bold')
+    plt2.set_xlabel("Sample",fontsize = 10, fontweight='bold')
+    plt2.tick_params(axis='x', which='major', labelsize=9)  
+    plt2.tick_params(axis='y', which='major', labelsize=7) 
     plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90)
     plt2.legend([],[], frameon=False)
      
      
     plt3 = sns.boxplot(x = duplication_summary.Sample, y = duplication_summary.UniqueFragNumber, hue = duplication_summary.Sample, dodge=False, ax = axes[2])
-    plt3.set_ylabel("Number of Uniqe Fragments")
+    plt3.set_ylabel("Number of Uniqe Fragments",fontsize = 11, fontweight='bold')
+    plt3.set_xlabel("Sample",fontsize = 11, fontweight='bold')
+    plt3.tick_params(axis='x', which='major', labelsize=9)  
+    plt3.tick_params(axis='y', which='major', labelsize=7) 
     plt.setp(plt3.xaxis.get_majorticklabels(), rotation=90)
     plt3.legend([],[], frameon=False)
 
     fig.tight_layout(pad=3.0)
      
-    fig.savefig(os.path.join(summary_tables, "Duplication_rate.png"))
+    fig.savefig(os.path.join(summary_tables, "Duplication_rate.png"), dpi=300)
     
     print("Done with plotting. Plots avalible at: "+summary_tables)
 
