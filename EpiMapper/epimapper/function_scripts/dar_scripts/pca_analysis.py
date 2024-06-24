@@ -34,8 +34,8 @@ def plot_3D_PCA(fig,sub_plot_num, pca_df,wildType_fileString,num_of_gcb,num_of_t
    #plot 3D PCA
    ax=fig.add_subplot(sub_plot_num,projection='3d')
    my_color=[1]*num_of_gcb + [2]*num_of_tumor
-   ax1= ax.scatter(pca_df['PCA 1'][0:num_of_gcb], pca_df['PCA 2'][0:num_of_gcb], pca_df['PCA 3'][0:num_of_gcb], c='green', s=80,label=wildType_fileString )
-   ax2= ax.scatter(pca_df['PCA 1'][num_of_gcb:num_of_tumor+num_of_gcb], pca_df['PCA 2'][num_of_gcb:num_of_tumor+num_of_gcb], pca_df['PCA 3'][num_of_gcb:num_of_tumor+num_of_gcb], c='red', s=80,label=other_group_str)
+   ax1= ax.scatter(pca_df['PCA 1'][0:num_of_gcb], pca_df['PCA 2'][0:num_of_gcb], pca_df['PCA 3'][0:num_of_gcb], c='green', s=100,label=wildType_fileString )
+   ax2= ax.scatter(pca_df['PCA 1'][num_of_gcb:num_of_tumor+num_of_gcb], pca_df['PCA 2'][num_of_gcb:num_of_tumor+num_of_gcb], pca_df['PCA 3'][num_of_gcb:num_of_tumor+num_of_gcb], c='red', s=100,label=other_group_str)
 
    # make simple, bare axis lines through space:
    xAxisLine = ((min(pca_df['PCA 1']), max(pca_df['PCA 1'])), (0, 0), (0,0))
@@ -51,11 +51,12 @@ def plot_3D_PCA(fig,sub_plot_num, pca_df,wildType_fileString,num_of_gcb,num_of_t
           ax.text(row['PCA 1'], row['PCA 2'], row['PCA 3'], idx)
 
    # label the axes
-   ax.set_xlabel("PC1")
-   ax.set_ylabel("PC2")
-   ax.set_zlabel("PC3")
-   ax.set_title("PCA ")
-   ax.legend()
+   ax.set_xlabel("PC1",fontdict={'fontsize': 16, 'weight': 'bold'})
+   ax.set_ylabel("PC2",fontdict={'fontsize': 16, 'weight': 'bold'})
+   ax.set_zlabel("PC3",fontdict={'fontsize': 16, 'weight': 'bold'})
+   ax.tick_params(labelsize=13) #axis font
+   ax.set_title("PCA ",fontsize=21, fontweight='bold')
+   ax.legend(fontsize=14)
 
 
 
