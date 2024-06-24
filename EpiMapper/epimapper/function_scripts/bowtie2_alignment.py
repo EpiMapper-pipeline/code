@@ -263,97 +263,115 @@ def plot_summary(summary_tables, table, spike_in):
         sns.set_palette("husl")
         if spike_in:
             print("Spike in plot summary")
-            fig, axes= plt.subplots(nrows=1, ncols=2, figsize=(15, 15))
+            fig, axes= plt.subplots(nrows=1, ncols=2, figsize=(18, 18))
             
             plt1 = sns.boxplot(x = table.Sample, y = table.MappedFragments_SpikeIn, hue = table.Sample, dodge=False, ax = axes[0])
-            plt1.set_title("Alignable Fragments", fontsize = 25.0)
-            plt1.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
-            plt1.set_xlabel("")
+            plt1.set_title("Alignable Fragments", fontsize = 26.0, fontweight='bold')
+            plt1.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt1.set_ylabel("Mapped Fragments per Million", fontsize = 24.0, fontweight='bold')
+            plt1.tick_params(axis='x', which='major', labelsize=22)  
+            plt1.tick_params(axis='y', which='major', labelsize=19)  
+            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt1.legend([],[], frameon=False)
-            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
             
             plt2 = sns.boxplot(x = table.Sample, y = table.AlignmentRate_SpikeIn.str.strip("%").astype(float), hue = table.Sample, dodge = False, ax = axes[1])
-            plt2.set_title("Alignment Rate to Spike In", fontsize = 25.0)
-            plt2.set_ylabel("% of Mapped Fragments", fontsize = 25.0)
-            plt2.set_xlabel("")
+            plt2.set_title("Alignment Rate to Spike In", fontsize = 26.0, fontweight='bold')
+            plt2.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt2.set_ylabel("% of Mapped Fragments", fontsize = 24.0, fontweight='bold')
+            plt2.tick_params(axis='x', which='major', labelsize=22)  
+            plt2.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt2.legend([],[], frameon=False)
-            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
             
             fig.tight_layout(pad=2.0)
             
-            fig.savefig(os.path.join(summary_tables, "Sequencing_depth_spikeIn.png"))
+            fig.savefig(os.path.join(summary_tables, "Sequencing_depth_spikeIn.png"), dpi=300)
     
         elif len(table.columns) == 7: 
         
-            fig, axes= plt.subplots(nrows=2, ncols=2, figsize=(15, 15))
+            fig, axes= plt.subplots(nrows=2, ncols=2, figsize=(18, 18))
             
             plt1 = sns.boxplot( x = table.Sample, y = table.SequencingDepth/1000000, hue = table.Sample, dodge=False, ax=axes[0,0])
-            plt1.set_title("Sequencing Depth", fontsize = 25.0)
-            plt1.set_ylabel("Sequencing Depth per Million",fontsize = 25.0)
-            plt1.set_xlabel("")
-            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt1.set_title("Sequencing Depth", fontsize = 26.0, fontweight='bold')
+            plt1.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt1.set_ylabel("Sequencing Depth per Million",fontsize = 24.0, fontweight='bold')
+            plt1.tick_params(axis='x', which='major', labelsize=22)  
+            plt1.tick_params(axis='y', which='major', labelsize=19)
+            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt1.legend([],[], frameon=False)
             
             
             plt2 = sns.boxplot(x = table.Sample, y = table.MappedFragments/1000000, hue = table.Sample, dodge=False, ax = axes[0,1])
-            plt2.set_title("Alignable Fragments", fontsize = 25.0)
-            plt2.set_xlabel("")
-            plt2.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
-            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt2.set_title("Alignable Fragments", fontsize = 26.0, fontweight='bold')
+            plt2.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt2.set_ylabel("Mapped Fragments per Million",fontsize = 24.0, fontweight='bold')
+            plt2.tick_params(axis='x', which='major', labelsize=22)  
+            plt2.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt2.legend([],[], frameon=False)
             
             
             plt3 = sns.boxplot(x = table.Sample, y = table.AlignmentRate.str.strip("%").astype(float), hue = table.Sample, dodge=False, ax = axes[1,0])
-            plt3.set_title("Alignment Rate",fontsize = 25.0)
-            plt3.set_xlabel("")
-            plt3.set_ylabel("% of Mapped Fragments",fontsize = 25.0)
-            plt.setp(plt3.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt3.set_title("Alignment Rate", fontsize = 26.0, fontweight='bold')
+            plt3.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt3.set_ylabel("% of Mapped Fragments",fontsize = 24.0, fontweight='bold')
+            plt3.tick_params(axis='x', which='major', labelsize=22)  
+            plt3.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt3.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt3.legend([],[], frameon=False)
             
             
             plt4 = sns.boxplot(x = table.Sample, y = table.AlignmentRate_SpikeIn.str.strip("%").astype(float), hue = table.Sample, dodge = False, ax = axes[1,1])
-            plt4.set_title("Alignment Rate to Spike In",fontsize = 25.0)
-            plt4.set_xlabel("")
-            plt4.set_ylabel("% of Mapped Fragments",fontsize = 25.0)
+            plt4.set_title("Alignment Rate to Spike In", fontsize = 26.0, fontweight='bold')
+            plt4.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt4.set_ylabel("% of Mapped Fragments",fontsize = 24.0, fontweight='bold')
+            plt4.tick_params(axis='x', which='major', labelsize=22)  
+            plt4.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt4.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt4.legend([],[], frameon=False)
-            plt.setp(plt4.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
             
             fig.tight_layout(pad=2.0)
             
             
-            fig.savefig(os.path.join(summary_tables, "Sequencing_depth.png"))
+            fig.savefig(os.path.join(summary_tables, "Sequencing_depth.png"), dpi=300)
         
         
         else:
         
-            fig, axes= plt.subplots(nrows=1, ncols=3, figsize=(15, 15))
+            fig, axes= plt.subplots(nrows=1, ncols=3, figsize=(18, 18))
             
             plt1 = sns.boxplot( x = table.Sample, y = table.SequencingDepth/1000000, hue = table.Sample, dodge=False, ax=axes[0])
-            plt1.set_title("Sequencing Depth",fontsize = 25.0)
-            plt1.set_xlabel("")
-            plt1.set_ylabel("Sequencing Depth per Million", fontsize = 25.0)
-            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt1.set_title("Sequencing Depth", fontsize = 26.0, fontweight='bold')
+            plt1.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt1.set_ylabel("Sequencing Depth per Million", fontsize = 24.0, fontweight='bold')
+            plt1.tick_params(axis='x', which='major', labelsize=22)  
+            plt1.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt1.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt1.legend([],[], frameon=False)
             
             
             plt2 = sns.boxplot(x = table.Sample, y = table.MappedFragments/1000000, hue = table.Sample, dodge=False, ax = axes[1])
-            plt2.set_title("Alignable Fragments", fontsize = 25.0)
-            plt2.set_xlabel("")
-            plt2.set_ylabel("Mapped Fragments per Million", fontsize = 25.0)
-            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt2.set_title("Alignable Fragments", fontsize = 26.0, fontweight='bold')
+            plt2.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt2.set_ylabel("Mapped Fragments per Million", fontsize = 24.0, fontweight='bold')
+            plt2.tick_params(axis='x', which='major', labelsize=22)  
+            plt2.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt2.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt2.legend([],[], frameon=False)
             
             
             plt3 = sns.boxplot(x = table.Sample, y = table.AlignmentRate.str.strip("%").astype(float), hue = table.Sample, dodge=False, ax = axes[2])
-            plt3.set_title("Alignment Rate",fontsize = 25.0)
-            plt3.set_xlabel("")
-            plt3.set_ylabel("% of Mapped Fragments",fontsize = 25.0)
-            plt.setp(plt3.xaxis.get_majorticklabels(), rotation=90, fontsize =25)
+            plt3.set_title("Alignment Rate", fontsize = 26.0, fontweight='bold')
+            plt3.set_xlabel("Sample", fontsize = 24.0, fontweight='bold')
+            plt3.set_ylabel("% of Mapped Fragments",fontsize = 24.0, fontweight='bold')
+            plt3.tick_params(axis='x', which='major', labelsize=22)  
+            plt3.tick_params(axis='y', which='major', labelsize=19) 
+            plt.setp(plt3.xaxis.get_majorticklabels(), rotation=90, fontsize =22)
             plt3.legend([],[], frameon=False)
             
             fig.tight_layout(pad=2.0)
             
-            fig.savefig(os.path.join(summary_tables, "Sequencing_depth_ref.png"))
+            fig.savefig(os.path.join(summary_tables, "Sequencing_depth_ref.png"), dpi=300)
 
 
 
