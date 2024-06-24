@@ -88,7 +88,7 @@ def make_genome_annotation_files_by_hmst(out_gfolder, in_file,
   in_outFile_folder =out_folder2genome
   dmr_min_cutoff = pval_cutoff
   dmr_map2_genome_main(in_sortedDMR_file, in_geneRegion_file, in_refFlat_file, in_minimum_overlap4bedtools, in_outFile_folder, dmr_min_cutoff)
-
+  #print ("dmr_map2_genome_main")  
 
 
   ##calculate percentage of DMR in annotated genomic regions
@@ -100,7 +100,7 @@ def make_genome_annotation_files_by_hmst(out_gfolder, in_file,
   in_LogReg_proba = str(pval_cutoff)
   
   dmr_cal2genome_percent_main(in_outFile_folder, in_fileName_string, in_outFile_name, in_Ls_or_Gt_pval, in_LogReg_proba)
-
+  #print ("dmr_cal2genome_percent_main")
 
 
 
@@ -108,6 +108,7 @@ def make_genome_annotation_files_by_hmst(out_gfolder, in_file,
   in_countFile_name = out_file_name+ '_DAR_ttest_pval_'+str(pval_cutoff)+'.csv' 
   names = sample_names
   dmr_percent2plot_main(in_countFile_folder, in_countFile_name, names)
+  #print ("dmr_percent2plot_main")
 
 
 
@@ -159,15 +160,20 @@ def pie_plot_of_dars(in_folder,file_name_string, regions,
 
   colors=make_color_array(len(regions))
   
+  plt.figure(figsize=(14, 7))
   plt.subplot(1,2,1)
-  
-  plt.pie(pie_plot_tbl["number_of_total_dars"],colors=colors,labels=pie_plot_tbl.index)
-  plt.title("Number of total DARs")
+  plt.pie(pie_plot_tbl["number_of_total_dars"],colors=colors,labels=pie_plot_tbl.index, textprops={'fontsize': 15}) #fontsize
+  plt.title("Number of total DARs", fontsize=18, fontweight='bold')
      
   plt.subplot(1,2,2)
-  plt.pie(pie_plot_tbl["number_of_dars_0.001"],colors=colors,labels=pie_plot_tbl.index)
-  plt.title("Number of DARs (p-value < 0.001)")
+  plt.pie(pie_plot_tbl["number_of_dars_0.001"],colors=colors,labels=pie_plot_tbl.index, textprops={'fontsize': 15}) #fontsize
+  plt.title("Number of DARs (p-value < 0.001)", fontsize=18, fontweight='bold')
   plt.savefig(out_fig_name,dpi=150)
+
+  # save png
+  out_fig_name2 = out_fig_name.replace('.pdf','.png')
+  plt.savefig(out_fig_name2,format='png',dpi=300)
+  print("finished pie_plot_of_dars.png")
   
   return 
 
@@ -211,8 +217,8 @@ def plot_pca4samples(head_file,data_file, normal_group_str,tumor_group_str,out_f
   #plot PCA
   fig=plt.figure(figsize=(8,7))
   sub_plot_num=111
-  wildType_fileString="Group A"  #'N_'
-  other_group_str = "Group B"
+  wildType_fileString="Group A"  #'H3K27me3'
+  other_group_str = "Group B" #'H3K4me3'
 
   #mlt.use('TkAgg')
 
@@ -221,8 +227,13 @@ def plot_pca4samples(head_file,data_file, normal_group_str,tumor_group_str,out_f
   for idx, row in pca_df.iterrows():
     tmp_ax.text(row['PCA 1'], row['PCA 2'], row['PCA 3'], tmp_column_names2[idx])
   #plt.show()
-
+  
   plt.savefig(out_fig_name,dpi=150)
+
+  # save png
+  out_fig_name2 = out_fig_name.replace('.pdf','.png')
+  plt.savefig(out_fig_name2,format='png',dpi=300)
+  print("finished plot_3D_PCA.png")
   return out_fig_name, pca_df, col_name
 
 
