@@ -86,7 +86,8 @@ def set_parser(parser):
     optional_name = parser.add_argument_group("optional")
     
     required_name.add_argument("-p", "--peaks", required = True, type = str)
-    
+   
+    #test jbw 23.06
     optional_name.add_argument("-bg", "--bedgraph", required = False, type = str)
     
     required_name.add_argument("-cs", "--chromosome_sizes", required = True, type = str)
@@ -868,8 +869,10 @@ def check_input(args):
              print("Chosen bedgraph directory: "+bedgraph+" does not exist. \nPlease select check your path or select another one")
              exit(1)
     else:
-        bedgraph=False
-    
+        #test jbw 23.06
+        bedgraph=None
+    #end test
+
     chromosome_sizes = args.chromosome_sizes
     if  os.path.exists(chromosome_sizes) and os.path.isfile(chromosome_sizes):
         if not os.path.getsize(chromosome_sizes)>0:
@@ -1080,13 +1083,18 @@ def run(args):
         combine_signal_enrichment(peak_dir, blacklist_bin_file, chromosome_sizes, out_combined_files, searchStr1,searchStr2)
         
         
-        
-    else: 
+       #test jbw 23.06 
+    elif bedgraph is not None: 
         bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
         map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, searchStr1, searchStr2)
         
         combine_windows(diff_dir, out_combined_files)
-    
+    else:
+        print("Neither folder_enrichment nor bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter or use True for folder_enrichment")
+        exit(1)
+    #end test
+
+
     if normalize:
     
         do_normalization(out_combined_files)

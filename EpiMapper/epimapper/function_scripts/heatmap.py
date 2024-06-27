@@ -451,8 +451,8 @@ def run(args):
     ref=ref_txt
     #end test
 
-    #test jbw 13.06
-    files = os.path.join(bam_dir,"*.BlackListFiltered.bam")
+    #test jbw 23.06
+    files = os.path.join(bam_dir,"*_sorted.BlackListFiltered.bam")
     tmp_files = glob.glob(files)
     if len(tmp_files)==0:
         files = os.path.join(bam_dir,"*.mapped_sorted.bam") 

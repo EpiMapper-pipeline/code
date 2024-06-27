@@ -19,5 +19,6 @@ pathlib
 re
 glob
 subprocess
+scikit-learn
 
 
