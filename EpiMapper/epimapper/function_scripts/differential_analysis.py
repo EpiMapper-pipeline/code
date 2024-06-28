@@ -715,7 +715,6 @@ def make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenic_be
     
 
   
-  
 def make_genome_files(out_combined_files, out_file,data, sample_names):
     """
     Uses the imported dar module to create statistics about where the peaks are located in 
@@ -806,7 +805,8 @@ def make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, no
         data_file=out_data_folder+'/combined_signals_100b_quantLog.bed.gz'
     else: 
         data_file = out_data_folder + "/combined_signals_100b.bed.gz"
-    out_fig_name=os.path.join(summary_tables,  searchStr1[0].replace('_rep','')+'vs_'+searchStr2[0].replace('_rep','') +'_pca.pdf')
+    #test jbw 06.23    
+    out_fig_name=os.path.join(summary_tables,  searchStr1[0].split('_rep')[0]+'_vs_'+searchStr2[0].split('_rep')[0] +'_pca.pdf')
     plot_pca4samples(head_file,data_file, searchStr1,searchStr2,out_fig_name)
     print('Done with - PCA plot')
       
@@ -1110,10 +1110,13 @@ def run(args):
     if args.annotate:
         region_file, data = make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenicBTGenes, minIntergenicLen, maxIntergenicLen,enhancer)
         
-        sample_names = searchStr1 + searchStr2
-        
+        #test jbw 06.23
+        #here sample_names only contain the 2 conditions of the two groups samples, respectively
+        #sample_names = searchStr1 + searchStr2
+        sample_names= [searchStr1[0].split('_rep')[0] , searchStr2[0].split('_rep')[0]]
         make_genome_files(out_combined_files, out_file, data, sample_names)
-        
+        #end test
+
         make_pie_plot(out_combined_files, summary_tables,enhancer,cutoff)
         
         make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)

@@ -154,7 +154,11 @@ def make_TSS_TES_gene_5dist(df, X, Y, M, N, rem):
     #added jbw
     TSS = []; TES = []; gene = []; dist5 = []; dist5D=[] 
     size = len(df.values)
-
+    
+    #test jbw 06.23
+    #print(df)
+    #print(X,Y,M,N, rem)
+    #end test
     for i, row in enumerate(df.values):
         gene_start_pos = int(row[1])+Y
         gene_end_pos = int(row[2])-Y
@@ -474,8 +478,14 @@ def make_region_files(reference, genomeFile, X, Y, M, N, intergenic_between_gene
 
     
     
-
+    #test jbw 06.23
+    #input refFlat file which has to be cleaned before using it !!
     ref_df = pd.read_csv(reference, index_col=False, header=0, sep='\t')
+    #df = pd.read_csv(reference, sep='\t',header=0, usecols=[0, 1, 2, 3, 4, 5],
+    #            names=['gene_name', 'rna_name', 'chr', 'strand', 'TSS', 'TES'])
+    #new_ref = find_uniq_genes(df, numerical_chr_name, human, remove_mir)
+ 
+
     reference_name = reference.split('/')[-1][:-4]
 
     dfs = make_TSS_TES_gene_5dist(ref_df, X, Y, M, N, remove_short)

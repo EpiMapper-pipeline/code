@@ -56,7 +56,7 @@ def set_parser(parser):
     
     optional_name.add_argument("-out_dir", "--out_dir", help="Output directory", required=False, type=str)
     
-    required_name.add_argument("-r","--ref", help="Referance BED file", required=True, type=str)
+    required_name.add_argument("-r","--ref", help="Genome referance in BED file format or gtf format", required=True, type=str)
     
     required_name.add_argument("-p","--peaks", help="Peaks", required=True, type=str)
     
@@ -352,7 +352,7 @@ def check_input(args):
     ref = args.ref
     if  os.path.exists(ref) and os.path.isfile(ref):
         if not os.path.getsize(ref)>0:
-            print("Chosen reference refFlat genome file: "+ref +" is empty.\n Please check your file or chose another one.")
+            print("Chosen reference genome file: "+ref +" is empty.\n Please check your file or chose another one.")
             exit(1)
     else:
         print("Chosen reference file: "+ ref+ " is not a file or does not exist. \n Please check your file or chose another one.")
