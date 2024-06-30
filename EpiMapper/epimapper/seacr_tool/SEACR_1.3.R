@@ -88,7 +88,17 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	x<-sort(unique(both)) ## New for SEACR_1.1
 	x0<-x[which(na.omit(pctremain(x[pctremain(x) < 1])) == max(na.omit(pctremain(x[pctremain(x) < 1]))))]  ## New for SEACR_1.1
 	z<-x[x <= x0[1]]	## New for SEACR_1.1
-	z2<-z[abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z))==min(abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z)))] ## New for SEACR_1.1
+	#test jbw
+	#print('x0')
+	#print(length(x0))
+	#print(length(abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z))))
+	#print('z')
+	#print(length(z))
+        #print( min(abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z))))
+	#z2<-z[abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z))==min(abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z)))] ## New for SEACR_1.1
+        mean_x0=max(x0)
+  	z2<-z[abs(((pctremain(mean_x0)+min(pctremain(z)))/2)-pctremain(z)) == min(abs(((pctremain(mean_x0)+min(pctremain(z)))/2)-pctremain(z)))] 
+        #end test
 	if(x0[1]!=z2[1]){  ## Added 7/15/19 to avoid omitting z when x0==z2
 		z<-z[z > z2[1]] ## New for SEACR_1.1
 		z0<-z[abs(z-(max(z)-((1/2)*(max(z)-min(z)))))==min(abs(z-(max(z)-((1/2)*(max(z)-min(z))))))] ## New for SEACR_1.1
@@ -111,7 +121,15 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	a<-frame$thresh[frame$diff != 0 & frame$diff < quantile(frame$diff, test3)]
 	a0<-a[which(na.omit(pctremain(a[pctremain(a) < 1])) == max(na.omit(pctremain(a[pctremain(a) <  1]))))]
 	b<-a[a <= a0[1]]
-	b2<-b[abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b))==min(abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b)))]
+	#test jbw
+	#b2<-b[abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b))==min(abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b)))]
+	#print(length(a0))
+	#print('b')
+        #print(length(b))
+	#print(min(abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b))))
+	mean_a0=max(a0)
+        b2<-b[abs(((pctremain(mean_a0)+min(pctremain(b)))/2)-pctremain(b)) == min(abs(((pctremain(mean_a0)+min(pctremain(b)))/2)-pctremain(b)))]
+	#end test
 	if(a0[1]!=b2[1]){  ## Added 7/15/19 to avoid omitting b when a0==b2
 		b<-b[b > b2[1]]
 		b0<-b[abs(b-(max(b)-((1/2)*(max(b)-min(b)))))==min(abs(b-(max(b)-((1/2)*(max(b)-min(b))))))]

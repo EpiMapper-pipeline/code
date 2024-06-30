@@ -462,9 +462,17 @@ def run(args):
         
     peaks_files = os.path.join(peaks, "*peaks*.bed")
     p_files =peaks_files 
-        
-    peaks_files = glob.glob(p_files)
     
+    #added jbw 06.28
+    peaks_files0 = glob.glob(p_files)
+    print(len(peaks_files0))
+    peaks_files=[]
+    for pi in peaks_files0:
+        if ".summitRegion.bed" not in pi:
+            peaks_files.append(pi)
+    print(len(peaks_files))
+    #end test
+
     
     a =[os.path.basename(file) for file in peaks_files]
     
