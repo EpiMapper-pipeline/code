@@ -697,7 +697,15 @@ def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_c
                 wc = "wc -l " +os.path.join(seacr_top,col)
             out = subprocess.check_output(wc,shell=True)
             match = re.search(r'\d+', out.decode('utf-8'))
-            replication_rate = round((overlaps_df[col].item()/ int(match.group())) *100,2)
+            #test jbw 06.28
+            #replication_rate = round((overlaps_df[col].item()/ int(match.group())) *100,2)
+            num_of_match_group=int(match.group())
+            if num_of_match_group>0:
+                replication_rate = round((overlaps_df[col].item()/num_of_match_group ) *100,2)
+            else:
+                replication_rate = 0
+
+            #end test
             peak_summary.loc[(peak_summary["Sample"] == sample_name) & (peak_summary["Replication"]==rep) & (peak_summary["peakType"] ==peak_type),"PeakReprodRate"] = replication_rate
         
     peak_summary["Frips"]= ""

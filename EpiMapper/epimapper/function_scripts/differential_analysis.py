@@ -1107,23 +1107,25 @@ def run(args):
     
     out_file = make_pvalue_format(DAR, out_combined_files,cutoff)
     
-    if args.annotate:
-        region_file, data = make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenicBTGenes, minIntergenicLen, maxIntergenicLen,enhancer)
+    #test jbw 06.31
+    #if args.annotate:
+    region_file, data = make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenicBTGenes, minIntergenicLen, maxIntergenicLen,enhancer)
         
-        #test jbw 06.23
-        #here sample_names only contain the 2 conditions of the two groups samples, respectively
-        #sample_names = searchStr1 + searchStr2
-        sample_names= [searchStr1[0].split('_rep')[0] , searchStr2[0].split('_rep')[0]]
-        make_genome_files(out_combined_files, out_file, data, sample_names)
-        #end test
+    #test jbw 06.23
+    #here sample_names only contain the 2 conditions of the two groups samples, respectively
+    #sample_names = searchStr1 + searchStr2
+    sample_names= [searchStr1[0].split('_rep')[0] , searchStr2[0].split('_rep')[0]]
+    make_genome_files(out_combined_files, out_file, data, sample_names)
+    #end test
 
-        make_pie_plot(out_combined_files, summary_tables,enhancer,cutoff)
+    make_pie_plot(out_combined_files, summary_tables,enhancer,cutoff)
         
-        make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
+    make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
         
-        
+    if args.annotate:
         annotation2genome(diff_dir, DAR, out_combined_files)
-    
+    #end test
+
     return
 
 
