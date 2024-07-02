@@ -43,6 +43,9 @@ def set_parser(parser):
         
         * --fragments (-f), full pathway to directory with fragment bed files being used to find FRiPs (Fragment in peaks)
         
+        * --list_a (-la), List of samples that will be used in peak calling 
+
+        * --list_b (-lb), List of control samples that will be used in peak calling  
         
 	-Optional input:
         
@@ -63,6 +66,11 @@ def set_parser(parser):
     parser=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False, description="Input sam files for fragment length analysis")
     
     required_name=parser.add_argument_group("required arguments")
+
+    #test jbw 07.01
+    required_name.add_argument("-la", "--list_a", nargs='+', required=True, help="A list of sample names")
+    required_name.add_argument("-lb", "--list_b", nargs='+', required=True, help="A list of control sample names")
+    #end test
     
     optional_name = parser.add_argument_group("optional")
     
@@ -120,8 +128,8 @@ def get_line_num(byte_string):
 
 
 
- 
-def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm):
+#test jbw 
+def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,group_a_sample_list, control_sample_list):
     
     """
     
@@ -149,75 +157,44 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
     
     """
     if isinstance(control,str):
-        controls=[]
-        conditional =[]
+        #test jbw
+        controls0=[]
+        conditional0 =[]
         
         for file in tmp_files:
-            
-            
             if control in  pl.PurePath(file).name.split(".")[0]:
-                controls.append( pl.PurePath(file).name.split(".")[0])
+                controls0.append( pl.PurePath(file).name.split(".")[0])
             
             else:
-                conditional.append(pl.PurePath(file).name.split(".")[0])
-         
+                conditional0.append(pl.PurePath(file).name.split(".")[0])
+        
+        controls=list(set(controls0))
+        conditional=list(set(conditional0))
+
         #test jbw 15.06   
-        #print(control, controls, conditional ) 
+        #print(control)
+        #print(controls)
+        #print(conditional ) 
         for sample in conditional:
-            name= sample.split("_rep")[0]
-            rep = sample.split("_rep")[1]
-            #print(sample, name, rep) 
-            file = glob.glob(os.path.join(bedgraph, sample+"*"))[0]
+            file = glob.glob(os.path.join(bedgraph, sample+"*sorted.bedgraph"))[0]
             #print(file)
-            #print(name + "_" + control + "_rep" + rep )
-            #print(name + "_" + control + "_rep" + str(1))
-            tmp_control_file=''
-            for ci in controls:
-                if 'rep'+rep in ci :
-                    tmp_control_file=ci
-            print('tmp_ctrl, ', tmp_control_file)
+            #test jbw 07.01
+            loop=0
+            ni_index=0
+            for ni in group_a_sample_list:
+                if ni in file:
+                   ni_index=loop
+                   break
+                else:
+                   loop =loop +1
+            control_sample=control_sample_list[ni_index]
+            #print(control_sample)
+            control_file = glob.glob(os.path.join(bedgraph, control_sample+"*sorted.bedgraph"))[0]
 
-            #test jbw 15.06 
-            #if name+"_"+control+"_rep"+rep in controls:
-            #    #control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep"+rep+"*"))[0]
-            #    control_files = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep"+rep+"*"))
-            #    control_file=control_files[0]
-            #    print(1, control_files)
-            #    control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + norm+ " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
-            if len(tmp_control_file)>1:
-                control_files=  glob.glob(os.path.join(bedgraph,tmp_control_file+"*"))
-                control_file=control_files[0]
-                tmp_ctrl= os.path.basename(control_file)
-                #print(tmp_ctrl)
-                #if ('normalize' in tmp_ctrl):
-                #    str2norm='norm'
-                #else:
-                #    str2norm='non'
-
-                print(1, control_files)
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file +" " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
-            elif any(name + "_" + control + "_rep" + str(i) in controls for i in range(1, 10)):
-                #control_file = glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))[0]
-                control_files=  glob.glob(os.path.join(bedgraph,name+"_"+control+"_rep*"))
-                control_file=control_files[0]
-                print(2, control_files)
-                #if 'normalize' in os.path.basename(control_file):
-                #    str2norm='norm'
-                #else:
-                #    str2norm='non'
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm +  " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"
-            else:
-                #control_file=glob.glob(os.path.join(bedgraph,controls[0]+"*"))[0] 
-                control_files=glob.glob(os.path.join(bedgraph,controls[0]+"*"))
-                control_file=control_files[0]
-                print(3, control_files)
-                #if 'normalize' in os.path.basename(control_file):
-                #    str2norm='norm'
-                #else:
-                #    str2norm='non'
-
-                control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
-            
+            #print(control_file)
+            control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
+            #end test
+      
             #top comd
             top_cmd = "bash "  + seacr_path+ " "+file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+sample+"_seacr_top."+percentage+"_peaks"
             print(control_cmd)
@@ -237,13 +214,13 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
 
 
 
-
-def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent):
-   
+#test jbw
+def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent, group_a_sample_list, control_sample_list):
+    
     #teset jbw 13.06
-    tmp_files = glob.glob(os.path.join(bam_dir,"*.BlackListFiltered.bam"))
+    tmp_files = glob.glob(os.path.join(bam_dir,"*mapped_sorted.BlackListFiltered.bam"))
     if len(tmp_files)==0:
-       tmp_files = glob.glob(os.path.join(bam_dir,"*mapped.bam"))
+       tmp_files = glob.glob(os.path.join(bam_dir,"*mapped_sorted.bam"))
     #end test
     #print(tmp_files)
 
@@ -251,7 +228,7 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
         controls=[]
         conditional =[]
         for file in tmp_files:
-            print(file, "\n") 
+            #print(file, "\n") 
             #print(control) 
             if control in  pl.PurePath(file).name.split(".")[0]:
                 controls.append(file)
@@ -265,16 +242,32 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             
             #test jbw 13.06
             #file = glob.glob(os.path.join(bam_dir, sample+"*"))[0]
-            file = glob.glob(os.path.join(bam_dir, sample+"*.BlackListFiltered.bam"))[0]
+            file = glob.glob(os.path.join(bam_dir, sample+"*mapped_sorted.BlackListFiltered.bam"))[0]
             if len(file)<1:
-                file= glob.glob(os.path.join(bam_dir, sample+"*.mapped.bam"))[0]
+                file= glob.glob(os.path.join(bam_dir, sample+"*.mapped_sorted.bam"))[0]
             #end test
             #print(os.path.basename(file).split("."))
 
             name = os.path.basename(file).split(".")[0]
-            control_str = " ".join(controls)
-            
-            #test jbw
+            #test jbw 07.01
+            #control_str = " ".join(controls)
+            #based on file find corresponding control sample name
+            loop=0
+            ni_index=0
+            for ni in group_a_sample_list:
+                if ni in file:
+                   ni_index=loop
+                   break
+                else:
+                   loop =loop +1
+            control_sample=control_sample_list[ni_index]
+            #print(file)
+            #print(control_sample)
+            for ci in controls:
+                if control_sample in ci:
+                    control_str=ci
+                    break
+            #end test
             #cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
             cmd_macs_con = "macs2 callpeak -B --SPMR -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
 
@@ -1006,8 +999,7 @@ def plot(fragInPeak_df,summary_tables, width,types,reps):
 
     
     #test jbw 16.06
-def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm): 
-
+def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm, group_a_sample_list, control_sample_list): 
     seacr = os.path.join(peakCalling, "seacr")
     if not os.path.exists(seacr):
         os.mkdir(seacr)
@@ -1033,11 +1025,13 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
     
     if skip_plot:
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
-        seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
+        #test jbw
+        seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm, group_a_sample_list, control_sample_list)
         print("Done with calling peaks using SEACR software.\n Called peaks avalible at: "+ seacr)
         exit(0)
     else:
-        seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm)
+        #test jbw
+        seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm, group_a_sample_list, control_sample_list)
         sample_names, reps, types, peak_summary = seacr_summary(seacr, summary_tables,seacr_top,seacr_control)
     
         width = peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control)
@@ -1051,9 +1045,8 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
         plot(fragInPeak_df,summary_tables, width,types,reps)
     
      
-    
-def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size,is_percent):
-    
+    #test jbw 07.01
+def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list): 
     
     
     macs2 = os.path.join(peakCalling, "macs2")
@@ -1075,14 +1068,18 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
     
     if skip_plot:
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
-        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage, genome_size,macs2_control,macs2_top,is_percent)
+        #test jbw
+        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage, genome_size,macs2_control,macs2_top,is_percent,
+                group_a_sample_list, control_sample_list)
         #test jbw 2024 sort peak files for heatmap plot??
         #sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
         #end test
         print("Done with calling peaks using MACS2 software.\nCalled peaks avalible at: "+ macs2)
         exit(0)
     else:
-        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent)
+        #test jbw
+        types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent,
+                group_a_sample_list, control_sample_list)
         
         sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
        
@@ -1095,7 +1092,17 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
 
 def check_input(args,summary_tables):
     skip_plot=False
-    
+   
+    #test jbw 07.1
+    group_a_sample_list=args.list_a
+    control_sample_list=args.list_b
+    if len(group_a_sample_list)<1 or len(control_sample_list)<1:
+        print("Please input proper paired names for both samples and cotnrols before peak calling!")
+        print(group_a_sample_list)
+        print(control_sample_list)
+        exit(1) 
+    #end test
+
     if args.percentage is not None:
         percentage = args.percentage
         is_percent = True
@@ -1131,9 +1138,6 @@ def check_input(args,summary_tables):
         else: 
             print("No bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter")
             exit(1)
-    
-        
-    
     
     elif software=="macs2":
         
@@ -1209,8 +1213,9 @@ def check_input(args,summary_tables):
                     exit(0)
                 else:
                     print("Invalid input. Please type 'y' or 'n'.")  
-    return tbl, percentage, fragments, control, skip_plot, software, is_percent
-       
+    return tbl, percentage, fragments, control, skip_plot, software, is_percent, group_a_sample_list, control_sample_list    
+    #end test
+
 def run(args):
     """
     
@@ -1280,10 +1285,9 @@ def run(args):
         os.mkdir(peakCalling)
     
         
-          
-    tbl, percentage, fragments, control, skip_plot, software,is_percent =check_input(args,summary_tables)
-    
-    
+    #test jbw 07.01
+    tbl, percentage, fragments, control, skip_plot, software,is_percent , group_a_sample_list, control_sample_list =check_input(args,summary_tables)
+    #end test
 
 
     if args.software == "macs2":
@@ -1298,7 +1302,9 @@ def run(args):
         else:
             sum_tbl =False
         
-        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size,is_percent)
+        #test jbw 07.01
+        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list)
+        #end test
     else:
         print("Starting peak calling with SEACR")
         
@@ -1314,7 +1320,7 @@ def run(args):
         #test jbw 16.06
         norm=args.seacr_norm
  
-        peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm)
+        peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,control, fragments, percentage,skip_plot,norm, group_a_sample_list, control_sample_list)
         #end test   
     
 if __name__=='__main__':
