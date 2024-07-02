@@ -176,7 +176,13 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
         #print(controls)
         #print(conditional ) 
         for sample in conditional:
-            file = glob.glob(os.path.join(bedgraph, sample+"*sorted.bedgraph"))[0]
+            #test jbw
+            file0 = glob.glob(os.path.join(bedgraph, sample+"*sorted.bedgraph"))
+            if len(file0)<1:
+                file= glob.glob(os.path.join(bedgraph, sample+"*.bedgraph"))[0]
+            else:
+                file=file0[0]
+
             #print(file)
             #test jbw 07.01
             loop=0
@@ -189,7 +195,11 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
                    loop =loop +1
             control_sample=control_sample_list[ni_index]
             #print(control_sample)
-            control_file = glob.glob(os.path.join(bedgraph, control_sample+"*sorted.bedgraph"))[0]
+            control_file0 = glob.glob(os.path.join(bedgraph, control_sample+"*sorted.bedgraph"))
+            if len(control_file0)<1:
+                control_file = glob.glob(os.path.join(bedgraph, control_sample+"*.bedgraph"))[0]
+            else:
+                control_file=control_file0[0]
 
             #print(control_file)
             control_cmd = "bash " +seacr_path+" "+ file+ " " + control_file + " " + norm + " stringent "+ os.path.join(seacr,"control") + "/"+ sample +"_seacr_control_peaks"  
