@@ -289,7 +289,7 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             if macs2_qvalue==None:
                 cmd_macs_top = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
             else:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_peaks --outdir " + macs2_top
+                cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
             #end test
 
             subprocess.run(cmd_macs_con,shell = True)
@@ -303,9 +303,9 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             #print(file) 
             #test jbw
             if macs2_qvalue==None:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -p "+ percentage + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
+                cmd_macs_top = "macs2 callpeak -B --SPMR -p "+ percentage + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + percentage + " --outdir " + macs2_top
             else:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -q " + macs2_qvalue + "-t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top. --outdir " + macs2_top
+                cmd_macs_top = "macs2 callpeak -B --SPMR -q " + macs2_qvalue + "-t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
             subprocess.run(cmd_macs_top,shell = True)
             #end test
         types=["macs2_top"]
