@@ -66,17 +66,18 @@ def set_parser(parser):
     parser=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False, description="Input sam files for fragment length analysis")
     
     required_name=parser.add_argument_group("required arguments")
-
-    #test jbw 07.01
-    required_name.add_argument("-la", "--list_a", nargs='+', required=True, help="A list of sample names")
-    required_name.add_argument("-lb", "--list_b", nargs='+', required=True, help="A list of control sample names")
-    #end test
     
     optional_name = parser.add_argument_group("optional")
-    
+   
+    #test jbw 07.01
+    optional_name.add_argument("-la", "--list_a", nargs='+', required=False, default=None, help="A list of sample names")
+    optional_name.add_argument("-lb", "--list_b", nargs='+', required=False, default=None, help="A list of control sample names")
+    #end test
+
     optional_name.add_argument("-bg", "--bedgraph", required = False, type = str)
     
-    optional_name.add_argument("-c", "--control_index", required=False, help = "Indexes of control files (i.e, 'control' 'igG' ect.", default = False)
+    #test jbw 
+    optional_name.add_argument("-c", "--control_index", required=False, help = "Indexes of control files (i.e, 'control' 'igG' ect. If this option does not set then top percentage will be used.", default = False)
     
     optional_name.add_argument("-s", "--seacr_path", required=False, type=str)
     
@@ -98,6 +99,7 @@ def set_parser(parser):
     optional_name.add_argument("-gs", "--genome_size", required=False, type =str, help=" The effective genome size of the organism (hs, mm, ce, dm), default = hs for human genome.", default ="hs")
     
     optional_name.add_argument("-norm","--seacr_norm", required=False, type=str, help="Seacr peakcalling normalization option (norm, non), default= non for Seacr peakcalling", default="non")
+    optional_name.add_argument("-eB","--export_bdg", required=False, type=str, help="MACS2 - Whether or not to save extended fragment pileup, defualt=False for not export, use True or exporting", default="False")
     #end test
     
     
@@ -174,9 +176,6 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
         conditional=list(set(conditional0))
 
         #test jbw 15.06   
-        #print(control)
-        #print(controls)
-        #print(conditional ) 
         for sample in conditional:
             #test jbw
             file0 = glob.glob(os.path.join(bedgraph, sample+"*sorted.bedgraph"))
@@ -215,10 +214,11 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
             print(top_cmd)
             subprocess.run(top_cmd,shell = True)
 
+            #since peak summary calculation assume the same number of files in top and control exported , we have to ignor this top2
             #test jbw top cmd2 for control
-            top_cmd2 = "bash "  + seacr_path+ " "+ control_file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+control_sample+"_seacr_top."+percentage+"_peaks"
-            print(top_cmd2)
-            subprocess.run(top_cmd2,shell = True)
+            #top_cmd2 = "bash "  + seacr_path+ " "+ control_file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+control_sample+"_seacr_top."+percentage+"_peaks"
+            #print(top_cmd2)
+            #subprocess.run(top_cmd2,shell = True)
 
     else:
         for file in  tmp_files:
@@ -232,7 +232,7 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
 
 
 #test jbw
-def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent, group_a_sample_list, control_sample_list, macs2_qvalue): 
+def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_control,macs2_top,is_percent, group_a_sample_list, control_sample_list, macs2_qvalue,is_export_bdg): 
 
     #teset jbw 13.06
     tmp_files = glob.glob(os.path.join(bam_dir,"*mapped_sorted.BlackListFiltered.bam"))
@@ -263,7 +263,6 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             if len(file)<1:
                 file= glob.glob(os.path.join(bam_dir, sample+"*.mapped_sorted.bam"))[0]
             #end test
-            #print(os.path.basename(file).split("."))
 
             name = os.path.basename(file).split(".")[0]
             #test jbw 07.01
@@ -287,29 +286,26 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             #end test
             #cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
             if macs2_qvalue==None:
-               cmd_macs_con = "macs2 callpeak -B --SPMR -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
-               cmd_macs_top = "macs2 callpeak -B --SPMR -p "+   percentage  + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
-               cmd_macs_top2 = "macs2 callpeak -B --SPMR -p " + percentage  + " -t " +control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample +"_macs2_top_"+percentage+" --outdir " + macs2_top
+               if is_export_bdg : 
+                 cmd_macs_con = "macs2 callpeak -B --SPMR -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+                 cmd_macs_top = "macs2 callpeak -B --SPMR -p "+   percentage  + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+                 #cmd_macs_top2 = "macs2 callpeak -B --SPMR -p " + percentage  + " -t " +control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample +"_macs2_top_"+percentage+" --outdir " + macs2_top
+               else:
+                 cmd_macs_con = "macs2 callpeak -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+                 cmd_macs_top = "macs2 callpeak -p "+   percentage  + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
             else:
-               cmd_macs_con = "macs2 callpeak -B --SPMR -q " +  macs2_qvalue  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
-               cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
-               cmd_macs_top2 = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " + control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+               if is_export_bdg: 
+                 cmd_macs_con = "macs2 callpeak -B --SPMR -q " +  macs2_qvalue  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+                 cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+                 #cmd_macs_top2 = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " + control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+               else:
+                 cmd_macs_con = "macs2 callpeak -q " +  macs2_qvalue  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+                 cmd_macs_top = "macs2 callpeak -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
 
-            #if macs2_qvalue==None:
-            #    cmd_macs_top = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
-            #else:
-            #    cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
-
-            #if macs2_qvalue==None:
-            #    cmd_macs_top2 = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +control_str +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
-            #else:
-            #    cmd_macs_top2 = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " + control_str +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
-
-            #end test
-
+            # since in peak summary assume the same number of files for top and control , we ignor the top2 command
             subprocess.run(cmd_macs_con,shell = True)
             subprocess.run(cmd_macs_top,shell = True)
-            subprocess.run(cmd_macs_top2,shell = True)
+            #subprocess.run(cmd_macs_top2,shell = True)
 
         types=["macs2_control","macs2_top"]
     
@@ -320,9 +316,16 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             #print(file) 
             #test jbw
             if macs2_qvalue==None:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -p "+ percentage + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + percentage + " --outdir " + macs2_top
+                if is_export_bdg:
+                   cmd_macs_top = "macs2 callpeak -B --SPMR -p "+ percentage + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + percentage + " --outdir " + macs2_top
+                else:
+                   cmd_macs_top = "macs2 callpeak -p "+ percentage + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + percentage + " --outdir " + macs2_top 
             else:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -q " + macs2_qvalue + "-t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+                if is_export_bdg:
+                  cmd_macs_top = "macs2 callpeak -B --SPMR -q " + macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+                else:
+                  cmd_macs_top = "macs2 callpeak -q " + macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+"  -n " + sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+
             subprocess.run(cmd_macs_top,shell = True)
             #end test
         types=["macs2_top"]
@@ -678,16 +681,20 @@ def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_c
     sample_data = {}
     
     for file in sorted_files:
-        
+        #test jbw
+        #print(file) 
         sample_name = file.split("/")[-1].split("_")[0]
         file_name = file.split("/")[-1]
         
         if sample_name not in sample_data:
             
             sample_data[sample_name] = []
-
+        
+        #print(sample_name, file_name)
         sample_data[sample_name].append(file_name)
-
+    
+    #here assume sample with the same number of export files in top and control
+    #print(sample_data)
     sample_df = pd.DataFrame(sample_data)
     
     overlaps = {}
@@ -790,6 +797,7 @@ def bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl, macs2_c
 
         sample_data[sample_name].append(file_name)
 
+    #here assume all sample has the same number of data or export files!!
     sample_df = pd.DataFrame(sample_data)
     
     overlaps = {}
@@ -940,7 +948,10 @@ def plot(fragInPeak_df,summary_tables, width,types,reps):
             
             
             v = sns.FacetGrid(fragInPeak_df, col = "peakType")
-            
+           
+            #test jbw 
+            print(fragInPeak_df)
+            #end test
             v.map_dataframe(sns.boxplot,x = "Sample", y = "Frips",dodge=False, hue = "Sample")
             
             v.set_xlabels("% of Fragments in Peaks")
@@ -1065,24 +1076,25 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
         print("Done with calling peaks using SEACR software.\n Called peaks avalible at: "+ seacr)
         exit(0)
     else:
-        #test jbw
         seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm, group_a_sample_list, control_sample_list)
         sample_names, reps, types, peak_summary = seacr_summary(seacr, summary_tables,seacr_top,seacr_control)
-    
+     
+        #assume top and control exported same number of files
         width = peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control)
         
         p_files = glob.glob(os.path.join(seacr_top,"*.stringent.bed"))
         if isinstance(control, str):
             p_files+= glob.glob(os.path.join(seacr_control,"*.stringent.bed"))
         
+        #assume top and control exported same number of files
         fragInPeak_df = bedtools_seacr(p_files, seacr, peak_summary, fragments,sum_tbl, seacr_control, seacr_top,reps)
     
         plot(fragInPeak_df,summary_tables, width,types,reps)
     
      
     #test jbw 07.01
-def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list, macs2_qvalue):     
-    
+def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl, skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list, macs2_qvalue,is_export_bdg):
+
     macs2 = os.path.join(peakCalling, "macs2")
     
     if not os.path.exists(macs2):
@@ -1104,7 +1116,7 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
         print("Performing peak calling without calculating peak reproducibility or generating plots.")
         #test jbw
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage, genome_size,macs2_control,macs2_top,is_percent,
-                group_a_sample_list, control_sample_list, macs2_qvalue)
+                group_a_sample_list, control_sample_list, macs2_qvalue,is_export_bdg)
         #test jbw 2024 sort peak files for heatmap plot??
         #sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
         #end test
@@ -1113,10 +1125,11 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
     else:
         #test jbw
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent,
-                group_a_sample_list, control_sample_list,macs2_qvalue)
+                group_a_sample_list, control_sample_list,macs2_qvalue,is_export_bdg)
         
         sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
-       
+      
+        #assume top and control exported the same number of files
         print('reps -> ',reps)
         full_peak_summary=bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl,macs2_control, macs2_top,reps)
        
@@ -1128,15 +1141,27 @@ def check_input(args,summary_tables):
     skip_plot=False
    
     #test jbw 07.1
-    group_a_sample_list=args.list_a
-    control_sample_list=args.list_b
-    if len(group_a_sample_list)<1 or len(control_sample_list)<1:
-        print("Please input proper paired names for both samples and cotnrols before peak calling!")
+    if args.list_a is not None:
+       group_a_sample_list=args.list_a
+    else:
+       group_a_sample_list=[]
+
+    if args.list_b is not None:
+       control_sample_list=args.list_b
+    else:
+       control_sample_list=[]
+
+    if  isinstance(args.control_index, str):
+      if len(group_a_sample_list)<1 or len(control_sample_list)<1 :
+        print("Please input proper paired names for both samples and cotnrols before peak calling because control option is enabled !")
         print(group_a_sample_list)
         print(control_sample_list)
         exit(1)
 
     macs2_qvalue=args.macs2_qvalue
+
+    is_export_bdg = args.export_bdg.lower() == 'true'
+
     #end test
 
     if args.percentage is not None:
@@ -1249,7 +1274,7 @@ def check_input(args,summary_tables):
                     exit(0)
                 else:
                     print("Invalid input. Please type 'y' or 'n'.")  
-    return tbl, percentage, fragments, control, skip_plot, software, is_percent, group_a_sample_list, control_sample_list, macs2_qvalue
+    return tbl, percentage, fragments, control, skip_plot, software, is_percent, group_a_sample_list, control_sample_list, macs2_qvalue, is_export_bdg
     #end test
 
 def run(args):
@@ -1322,7 +1347,7 @@ def run(args):
     
         
     #test jbw 07.01
-    tbl, percentage, fragments, control, skip_plot, software,is_percent , group_a_sample_list, control_sample_list , macs2_qvalue =check_input(args,summary_tables)
+    tbl, percentage, fragments, control, skip_plot, software,is_percent , group_a_sample_list, control_sample_list , macs2_qvalue , is_export_bdg =check_input(args,summary_tables)
     #end test
 
 
@@ -1339,7 +1364,7 @@ def run(args):
             sum_tbl =False
         
         #test jbw 07.01
-        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list,macs2_qvalue)
+        peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragments,sum_tbl,skip_plot,genome_size,is_percent, group_a_sample_list, control_sample_list,macs2_qvalue, is_export_bdg)
         #end test
     else:
         print("Starting peak calling with SEACR")
