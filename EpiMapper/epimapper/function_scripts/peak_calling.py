@@ -184,7 +184,7 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
                 file= glob.glob(os.path.join(bedgraph, sample+"*.bedgraph"))[0]
             else:
                 file=file0[0]
-
+            #print(sample)
             #print(file)
             #test jbw 07.01
             loop=0
@@ -199,6 +199,7 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
             #print(control_sample)
             control_file0 = glob.glob(os.path.join(bedgraph, control_sample+"*sorted.bedgraph"))
             if len(control_file0)<1:
+                print(os.path.join(bedgraph, control_sample+"*.bedgraph"))
                 control_file = glob.glob(os.path.join(bedgraph, control_sample+"*.bedgraph"))[0]
             else:
                 control_file=control_file0[0]
@@ -214,6 +215,10 @@ def seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm,
             print(top_cmd)
             subprocess.run(top_cmd,shell = True)
 
+            #test jbw top cmd2 for control
+            top_cmd2 = "bash "  + seacr_path+ " "+ control_file+ " " + percentage+ " " + "non" + " stringent " + os.path.join(seacr,"top_"+percentage) + "/"+control_sample+"_seacr_top."+percentage+"_peaks"
+            print(top_cmd2)
+            subprocess.run(top_cmd2,shell = True)
 
     else:
         for file in  tmp_files:
@@ -283,17 +288,29 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
             #cmd_macs_con = "macs2 callpeak -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
             if macs2_qvalue==None:
                cmd_macs_con = "macs2 callpeak -B --SPMR -p " +  percentage  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
+               cmd_macs_top = "macs2 callpeak -B --SPMR -p "+   percentage  + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+               cmd_macs_top2 = "macs2 callpeak -B --SPMR -p " + percentage  + " -t " +control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample +"_macs2_top_"+percentage+" --outdir " + macs2_top
             else:
                cmd_macs_con = "macs2 callpeak -B --SPMR -q " +  macs2_qvalue  + " -t " +file +" -f  BAMPE -g "+g_size +" -c " +control_str + "  -n " + name+"_macs2_control --outdir " + macs2_control
- 
-            if macs2_qvalue==None:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
-            else:
-                cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+               cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+               cmd_macs_top2 = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " + control_str +" -f  BAMPE -g "+ g_size+" -n " + control_sample+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+
+            #if macs2_qvalue==None:
+            #    cmd_macs_top = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+            #else:
+            #    cmd_macs_top = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " +file +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+
+            #if macs2_qvalue==None:
+            #    cmd_macs_top2 = "macs2 callpeak -B --SPMR -p "+percentage + " -t " +control_str +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_"+percentage+" --outdir " + macs2_top
+            #else:
+            #    cmd_macs_top2 = "macs2 callpeak -B --SPMR -q "+ macs2_qvalue + " -t " + control_str +" -f  BAMPE -g "+ g_size+" -n " + name+"_macs2_top_" + macs2_qvalue + " --outdir " + macs2_top
+
             #end test
 
             subprocess.run(cmd_macs_con,shell = True)
             subprocess.run(cmd_macs_top,shell = True)
+            subprocess.run(cmd_macs_top2,shell = True)
+
         types=["macs2_control","macs2_top"]
     
     else:
@@ -510,16 +527,19 @@ def peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control):
                 else:
                     file = seacr_top+"/"+Sample+"_"+rep+"_"+peak+"_peaks.stringent.bed"
                 
-            
-                tbl = pd.read_table(file, names = ["Chromosome", "Start" ,"End", "v4", "v5", "v6"])
-      
-                
+                #test jbw
+                if os.path.exists(file):
+                  tbl = pd.read_table(file, names = ["Chromosome", "Start" ,"End", "v4", "v5", "v6"])
+                else:
+                  print('Not find file: ', file, ' ignored !!')
+                  tbl=pd.DataFrame(columns=["Chromosome", "Start" ,"End", "v4", "v5", "v6"])
+                    
                 tbl["Sample"] = Sample
                 tbl["Replication"] = rep
                 tbl["peakType"] = peak
                 tbl["PeakWidth"] = tbl["End"] - tbl["Start"] 
                 peak_width = pd.concat(objs=[peak_width,tbl])
-                
+                #end test
     if peak_width.shape[0] ==0:
         print("Error in finding peak widths. Exiting.")
         exit(1)
