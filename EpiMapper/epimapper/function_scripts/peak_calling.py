@@ -1273,19 +1273,28 @@ def check_input(args,summary_tables):
         tbl = os.path.join(summary_tables,"bowtie2_alignment_ref.csv")
         
         if not os.path.exists(tbl):
-            # test jbw  try to find file in other folder?
-            while True:
-                x = input("No summary table provided and non avalible in :"+ summary_tables+". \n:Do you wish to continue peak calling without peak reproducibility report and plot generation? y/n")
-                if "y" in x or "yes" in x:
-                    
-                    print("Continuing without peak reproducibility report and plot generation")
-                    skip_plot = True
-                    break
-                elif "n" in x or "no" in x:
-                    print("Exiting.")
-                    exit(0)
-                else:
-                    print("Invalid input. Please type 'y' or 'n'.")  
+            # test jbw bug  try to find file in fragment folder?
+            tbl = os.path.join(fragments.split('alignment')[0],"summary_tables","bowtie2_alignment_ref.csv")
+            print(tbl)
+        
+        if not os.path.exists(tbl):
+            skip_plot=True
+            print("No summary table provided but continue peak calling without peak reproducibility report and plot generation")
+            #break
+
+            #end test
+            #while True:
+            #    x = input("No summary table provided and non avalible in :"+ summary_tables+". \n:Do you wish to continue peak calling without peak reproducibility report and plot generation? y/n")
+            #    if "y" in x or "yes" in x:
+            #        
+            #        print("Continuing without peak reproducibility report and plot generation")
+            #        skip_plot = True
+            #        break
+            #    elif "n" in x or "no" in x:
+            #        print("Exiting.")
+            #        exit(0)
+            #    else:
+            #        print("Invalid input. Please type 'y' or 'n'.")  
     return tbl, percentage, fragments, control, skip_plot, software, is_percent, group_a_sample_list, control_sample_list, macs2_qvalue, is_export_bdg
     #end test
 
