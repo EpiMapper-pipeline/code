@@ -89,7 +89,7 @@ def set_parser(parser):
     
     optional_name.add_argument("-soft", "--software", required=False, type = str, default = "seacr", help = "Select peak calling software, either seacr or macs2")
     
-    optional_name.add_argument("-tbl", "--fragment_table", required = False, type= str)
+    optional_name.add_argument("-tbl", "--fragment_table", required = False, type= str, help="Full file path of alignment summary report such as in summary_table fold file bowtie2_alignment_ref.csv ")
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
   
@@ -332,12 +332,16 @@ def macs2_run(macs2,peakCalling, bam_dir,control,percentage, g_size,macs2_contro
     return types
 
 
-def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
+def macs2_summary(macs2,summary_tables, macs2_control, macs2_top, control):
     
     files = glob.glob(os.path.join(macs2_top,"*.narrowPeak"))
-    if os.path.exists(macs2_control):
+    
+    #test jbw
+    if isinstance(control,str):
+      if os.path.exists(macs2_control):
         files= files + glob.glob(os.path.join(macs2_control,"*.narrowPeak"))
-        
+    #end test
+
     peak_width = pd.DataFrame(columns = ["Sample", "Replication" ,"peakType", "PeakWidth"])
     
     for file in files:
@@ -378,10 +382,12 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
     
     sorted_files =glob.glob(os.path.join(macs2_top,"*_sorted.bed"))
     
-    if os.path.exists(macs2_control):
-        
-        sorted_files= sorted_files + glob.glob(os.path.join(macs2_control,"*_sorted.bed"))
-    
+    #test jbw
+    if isinstance(control,str):
+       if os.path.exists(macs2_control): 
+          sorted_files= sorted_files + glob.glob(os.path.join(macs2_control,"*_sorted.bed"))
+    #end test
+
     sample_names =[]
     
     reps = []
@@ -421,8 +427,8 @@ def macs2_summary(macs2,summary_tables, macs2_control, macs2_top):
     return sorted_files, peak_summary, peak_width, reps
 
 
-
-def seacr_summary(seacr, summary_tables,seacr_top,seacr_control):
+#test jbw
+def seacr_summary(seacr, summary_tables,seacr_top,seacr_control,control):
     """
     Creates summary table from SEACR peak calling.
     
@@ -448,9 +454,12 @@ def seacr_summary(seacr, summary_tables,seacr_top,seacr_control):
     
     peak_summary = pd.DataFrame(columns = ["Sample","Replication", "peakType", "peakN" ])
     p_files = glob.glob(os.path.join(seacr_top, "*.stringent.bed"))
-    if os.path.exists(seacr_control):
-       p_files = p_files + glob.glob(os.path.join(seacr_control,"*.stringent.bed"))
 
+    #test jbw
+    if isinstance(control,str):
+      if os.path.exists(seacr_control):
+         p_files = p_files + glob.glob(os.path.join(seacr_control,"*.stringent.bed"))
+    #end test
     
     sample_names =[]
     
@@ -498,8 +507,8 @@ def seacr_summary(seacr, summary_tables,seacr_top,seacr_control):
 
 
        
-    
-def peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control):
+   #test jbw 
+def peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control,control):
     
     """
     Calculates peak width from bed files containing peaks.
@@ -1077,10 +1086,11 @@ def peakcall_seacr(seacr_path,peakCalling, summary_tables,sum_tbl,bedgraph,contr
         exit(0)
     else:
         seacr_run(tmp_files, seacr_path, control, seacr, percentage, bedgraph, norm, group_a_sample_list, control_sample_list)
-        sample_names, reps, types, peak_summary = seacr_summary(seacr, summary_tables,seacr_top,seacr_control)
+        sample_names, reps, types, peak_summary = seacr_summary(seacr, summary_tables,seacr_top,seacr_control,control)
      
         #assume top and control exported same number of files
-        width = peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control)
+        #test jbw
+        width = peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control,control)
         
         p_files = glob.glob(os.path.join(seacr_top,"*.stringent.bed"))
         if isinstance(control, str):
@@ -1127,7 +1137,8 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent,
                 group_a_sample_list, control_sample_list,macs2_qvalue,is_export_bdg)
         
-        sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top)
+        #test jbw
+        sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top,control)
       
         #assume top and control exported the same number of files
         print('reps -> ',reps)
@@ -1262,6 +1273,7 @@ def check_input(args,summary_tables):
         tbl = os.path.join(summary_tables,"bowtie2_alignment_ref.csv")
         
         if not os.path.exists(tbl):
+            # test jbw  try to find file in other folder?
             while True:
                 x = input("No summary table provided and non avalible in :"+ summary_tables+". \n:Do you wish to continue peak calling without peak reproducibility report and plot generation? y/n")
                 if "y" in x or "yes" in x:
