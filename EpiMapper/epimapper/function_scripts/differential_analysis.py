@@ -97,7 +97,7 @@ def set_parser(parser):
     required_name.add_argument("-la", "--list_a",  nargs='+', required = True)
     
     #test jbw
-    optional_name.add_argument("-an", "--annotate", required=False, type =str, default="False", help="Map peaks to various genomic regions , default=False")
+    optional_name.add_argument("-an", "--annotate", required=False, type =str, default=None, help="Map peaks to various genomic regions , default=None, use True to enable this function")
     
     required_name.add_argument ("-lb", "--list_b", nargs='+', required= True)
     
@@ -105,11 +105,14 @@ def set_parser(parser):
     
     optional_name.add_argument("-o", "--out_dir", required=False, type = str)
     
-    optional_name.add_argument("-fold", "--fold_enrichment", required=False, type = bool, default=False)
+    optional_name.add_argument("-fold", "--fold_enrichment", required=False, type = bool, default=False, help="Use either fold enrichment or bedgraph for differential analysis, default = bedgraph")
     
     optional_name.add_argument("-cut", "--p_value_cutoff", required=False, type=float)
-    optional_name.add_argument("-n", "--normalize", required=False, type = bool, default = False)
-    
+    #test jbw
+    #optional_name.add_argument("-n", "--normalize", required=False, type = bool, default = False, help="Whether to normlaize input reads, default= False")
+    optional_name.add_argument("-n", "--normalize", required=False, type =str, default = None , help="Whether to normlaize input reads, default= None, use True if need to normalize the data")
+
+
     optional_name.add_argument("-X",
                         metavar='',
                         type=int,
@@ -893,12 +896,17 @@ def check_input(args):
       print("Chosen genome blacklist file: "+ genome_blacklist+" is not a file or does not exist. \n Please check your file or chose another one.")
       exit(1)
 
+    #test jbw
     if args.normalize is not None:
-        normalize = args.normalize
-        if  not isinstance(normalize,bool):
-            print("-n parameter needs either 'True' or 'False' input, please check your spelling.")
-            exit(1)
+        #normalize = args.normalize
+        normalize = args.normalize.lower() == 'true'
+        #if  not isinstance(normalize,str):
+        #    print("-n parameter needs either 'True' or 'False' input, please check your spelling.")
+        #    exit(1)
+    else:
+        normalize=False
     
+
     reference = args.reference_refFlat 
     if  os.path.exists(reference) and os.path.isfile(reference):
         if not os.path.getsize(reference)>0:
@@ -1080,13 +1088,11 @@ def run(args):
     make_master_peak(peak_files, diff_dir, out_combined_files, searchStr1, searchStr2)
     
     if args.fold_enrichment: 
-        
-
+        print('Use fold enrichment') 
         combine_signal_enrichment(peak_dir, blacklist_bin_file, chromosome_sizes, out_combined_files, searchStr1,searchStr2)
-        
-        
        #test jbw 23.06 
-    elif bedgraph is not None: 
+    elif bedgraph is not None:
+        print('Use bedgraph file')
         bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
         map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, searchStr1, searchStr2)
         
@@ -1098,9 +1104,10 @@ def run(args):
 
 
     if normalize:
-    
+        print('Normalize input data')
         do_normalization(out_combined_files)
-    
+    else:
+        print('Do not normalize input data')
     
     map_peaks_in_wind(out_combined_files, normalize)
     
@@ -1127,7 +1134,7 @@ def run(args):
     
     #test  jbw
     is_annotation= args.annotate.lower() == 'true'
-    if args.annotate:
+    if is_annotation:
         print('Do peak annotation ....')
         annotation2genome(diff_dir, DAR, out_combined_files)
     else:
