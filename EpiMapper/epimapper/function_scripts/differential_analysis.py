@@ -96,7 +96,8 @@ def set_parser(parser):
     
     required_name.add_argument("-la", "--list_a",  nargs='+', required = True)
     
-    optional_name.add_argument("-an", "--annotate", required=False, type =bool, default=False)
+    #test jbw
+    optional_name.add_argument("-an", "--annotate", required=False, type =str, default="False", help="Map peaks to various genomic regions , default=False")
     
     required_name.add_argument ("-lb", "--list_b", nargs='+', required= True)
     
@@ -715,7 +716,7 @@ def make_region_files(diff_dir,reference, chromosome_sizes,X,Y,M,N,intergenic_be
     
 
   
-def make_genome_files(out_combined_files, out_file,data, sample_names):
+def make_genome_files(out_combined_files, out_file,data, sample_names,cutoff):
     """
     Uses the imported dar module to create statistics about where the peaks are located in 
     the genome.
@@ -736,8 +737,9 @@ def make_genome_files(out_combined_files, out_file,data, sample_names):
  
     in_file= os.path.basename(out_file).split('.bed')[0]
     out_file_name='Epimapper'
+    #test jbw
     make_genome_annotation_files_by_hmst(out_gfolder, in_file, 
-               out_file_name, data, sample_names)
+               out_file_name, data, sample_names,cutoff)
     print('Done with - Genome file')
 
     return
@@ -1115,15 +1117,21 @@ def run(args):
     #here sample_names only contain the 2 conditions of the two groups samples, respectively
     #sample_names = searchStr1 + searchStr2
     sample_names= [searchStr1[0].split('_rep')[0] , searchStr2[0].split('_rep')[0]]
-    make_genome_files(out_combined_files, out_file, data, sample_names)
+    #test jbw
+    make_genome_files(out_combined_files, out_file, data, sample_names,cutoff)
     #end test
 
     make_pie_plot(out_combined_files, summary_tables,enhancer,cutoff)
         
     make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
-        
+    
+    #test  jbw
+    is_annotation= args.annotate.lower() == 'true'
     if args.annotate:
+        print('Do peak annotation ....')
         annotation2genome(diff_dir, DAR, out_combined_files)
+    else:
+        print('Skip peak annotation to genome ')
     #end test
 
     return

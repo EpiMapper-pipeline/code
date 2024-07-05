@@ -71,7 +71,7 @@ def make_pvalue_files(in_dar_file,in_dar_pval_file,pval_cutoff):
 
 
 def make_genome_annotation_files_by_hmst(out_gfolder, in_file, 
-           out_file_name, data, sample_names):
+           out_file_name, data, sample_names,cutoff):
   ''' use hmst-seq analyzer to map AR or DAR to genomic regions such as tss, tes, gene, 5dist, enhancers'''
 
 
@@ -80,7 +80,8 @@ def make_genome_annotation_files_by_hmst(out_gfolder, in_file,
      print('Create , ' , out_folder2genome)
      os.mkdir(out_folder2genome)
 
-  pval_cutoff=0.01
+  #test jbw
+  pval_cutoff=cutoff
   in_sortedDMR_file =os.path.join(out_gfolder,in_file+'.bed')
   in_geneRegion_file = glob.glob(os.path.join(data,'*region*.txt'))[0]
   in_refFlat_file = glob.glob(os.path.join(data,'*refFlat*.bed'))[0]
@@ -164,10 +165,11 @@ def pie_plot_of_dars(in_folder,file_name_string, regions,
   plt.subplot(1,2,1)
   plt.pie(pie_plot_tbl["number_of_total_dars"],colors=colors,labels=pie_plot_tbl.index, textprops={'fontsize': 15}) #fontsize
   plt.title("Number of total DARs", fontsize=18, fontweight='bold')
-     
+  
+  #test jbw
   plt.subplot(1,2,2)
   plt.pie(pie_plot_tbl["number_of_dars_0.001"],colors=colors,labels=pie_plot_tbl.index, textprops={'fontsize': 15}) #fontsize
-  plt.title("Number of DARs (p-value < 0.001)", fontsize=18, fontweight='bold')
+  plt.title("Number of DARs (p-value < "+ str(pval_cutoff) +")", fontsize=18, fontweight='bold')
   plt.savefig(out_fig_name,dpi=150)
 
   # save png
