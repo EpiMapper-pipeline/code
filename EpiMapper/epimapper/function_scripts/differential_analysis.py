@@ -1132,15 +1132,15 @@ def run(args):
         
     make_pca_plot(out_combined_files, summary_tables, searchStr1, searchStr2, normalize)
     
-    #test  jbw
-    is_annotation= args.annotate.lower() == 'true'
-    if is_annotation:
-        print('Do peak annotation ....')
-        annotation2genome(diff_dir, DAR, out_combined_files)
-    else:
-        print('Skip peak annotation to genome ')
+    #test  lgg
+    if args.annotate is not None:
+        is_annotation= args.annotate.lower() == 'true'
+        if is_annotation:
+            print('Do peak annotation ....')
+            annotation2genome(diff_dir, DAR, out_combined_files)
+        else:
+            print('Skip peak annotation to genome ')
     #end test
-
     return
 
 
