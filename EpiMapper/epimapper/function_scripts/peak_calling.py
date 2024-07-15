@@ -794,7 +794,9 @@ def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_c
 def bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl, macs2_control, macs2_top,reps):
     
     sample_data = {}
-    
+   
+    #test jbw 2024
+    max_file=0
     for file in sorted_files:
         
         sample_name = file.split("/")[-1].split("_")[0]
@@ -805,6 +807,17 @@ def bedtools_macs2(sorted_files, macs2, peak_summary, fragments,sum_tbl, macs2_c
             sample_data[sample_name] = []
 
         sample_data[sample_name].append(file_name)
+        #added jbw
+        if len(file_name)>max_file:
+            max_file=len(file_name)
+        
+    #test jbw 2024 , check list length and make all list in dictionary with the same legnth
+    #before converting it to dataFrame
+    for ki in sample_data.keys():
+        len_diff=max_file-len(sample_data[ki])
+        if len_diff > 0:
+            sample_data[ki]=sample_data[ki]+['']*len_diff
+    #end test
 
     #here assume all sample has the same number of data or export files!!
     sample_df = pd.DataFrame(sample_data)
@@ -1136,7 +1149,9 @@ def peakcall_macs2(peakCalling, bam_dir,control,percentage,summary_tables, fragm
         #test jbw
         types =macs2_run(macs2,peakCalling, bam_dir,control,percentage,genome_size, macs2_control, macs2_top,is_percent,
                 group_a_sample_list, control_sample_list,macs2_qvalue,is_export_bdg)
-        
+        #types=["macs2_control","macs2_top"]
+        #end test july 15 2024
+
         #test jbw
         sorted_files, peak_summary, peak_width,reps = macs2_summary(macs2,summary_tables, macs2_control,macs2_top,control)
       
