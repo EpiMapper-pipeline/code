@@ -688,7 +688,9 @@ def peak_width_seacr(sample_names, seacr, reps,types,seacr_top,seacr_control,con
 def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_control, seacr_top, reps):
     
     sample_data = {}
-    
+   
+    #test jbw 2024
+    max_file=0
     for file in sorted_files:
         #test jbw
         #print(file) 
@@ -701,7 +703,17 @@ def bedtools_seacr(sorted_files, seacr, peak_summary, fragments,sum_tbl, seacr_c
         
         #print(sample_name, file_name)
         sample_data[sample_name].append(file_name)
+        #added jbw
+        if len(file_name)>max_file:
+            max_file=len(file_name)
     
+    #test jbw 2024
+    for ki in sample_data.keys():
+        len_diff=max_file-len(sample_data[ki])
+        if len_diff>0:
+            sample_data[ki]= sample_data[ki] +['']*len_diff
+    #end test
+
     #here assume sample with the same number of export files in top and control
     #print(sample_data)
     sample_df = pd.DataFrame(sample_data)
