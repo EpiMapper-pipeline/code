@@ -621,10 +621,7 @@ def run(args):
     
     
     if args.atac_seq_shift:
-        atac = args.atac_seq_shift
-        if atac is not isinstance(atac, bool):
-            print("The -atac/--atac_seq_shift paramater must be set to either 'True' or 'False'. Default=False")
-            exit(1)
+        atac = args.atac_seq_shift.lower() == 'true'
     else: 
         atac=False
         
