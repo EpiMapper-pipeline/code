@@ -172,7 +172,12 @@ def shift_reads(input_bam, output_bed):
                 print $1, $2+4, $6+4
             }
             else if ($9 == "-") {
-                print $1, $2-5, $6-5
+	    	# 07.08 # If the calculated start position is less than 0, set it to 0
+	    	start = $2 - 5
+      		end = $6 - 5
+		if (start < 0) start = 0
+  		if (end < 0) end = 0
+                print $1, start, end
             }
         }
     '''
