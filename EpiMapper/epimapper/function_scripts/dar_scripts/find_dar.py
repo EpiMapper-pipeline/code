@@ -1,6 +1,6 @@
 #this script is used to extract eack called peak region from merged peaks and show or do DAR analysis
 import pandas as pd
-from scipy.stats import ttest_ind, norm
+from scipy.stats import norm, ttest_ind, ks_2samp, mannwhitneyu, ranksums 
 import matplotlib.pyplot as plt
 import multiprocessing as mp
 import numpy as np
@@ -21,15 +21,22 @@ def rratios(tmp_x,tmp_y):
 
 
 
-def do_dar_test2(tmp_xx,tmp_yy):
+def do_dar_test2(test_methods,tmp_xx,tmp_yy):
   '''input two numpy array for test'''
   #take mean of all samples
   tmp_x=tmp_xx.astype(float).mean(axis=1).to_numpy()
   tmp_y=tmp_yy.astype(float).mean(axis=1).to_numpy()
-
+  
   if len(tmp_x)>1:
      #peaks with multiple data points
-     tmp_p=ttest_ind(tmp_x,tmp_y)
+     if test_methods == 'kstest':
+      tmp_p=ks_2samp(tmp_x,tmp_y)
+     elif test_methods == 'mannwhitneyu':
+      tmp_p=mannwhitneyu(tmp_x,tmp_y)
+     elif test_methods == 'ranksumtest':
+      tmp_p=ranksums(tmp_x,tmp_y)
+     else: # ttest
+      tmp_p=ttest_ind(tmp_x,tmp_y)
      max_x=np.max(tmp_x)
      max_y=np.max(tmp_y)
      num_x=len(tmp_x)
@@ -38,7 +45,14 @@ def do_dar_test2(tmp_xx,tmp_yy):
      #peaks with single data points
      tmp_x=tmp_xx.astype(float).to_numpy()[0]
      tmp_y=tmp_yy.astype(float).to_numpy()[0]
-     tmp_p=ttest_ind(tmp_x,tmp_y)
+     if test_methods == 'kstest':
+      tmp_p=ks_2samp(tmp_x,tmp_y)
+     elif test_methods == 'mannwhitneyu':
+      tmp_p=mannwhitneyu(tmp_x,tmp_y)
+     elif test_methods == 'ranksumtest':
+      tmp_p=ranksums(tmp_x,tmp_y)
+     else:
+      tmp_p=ttest_ind(tmp_x,tmp_y)
      max_x=np.max(tmp_x)
      max_y=np.max(tmp_y)
      #print(tmp_x, tmp_y)
@@ -66,14 +80,14 @@ def initpool(peakSignal_df):
 def do_DAR_test(args):
  ''' do ttest sat_idx/X vs. vat_idx/Y'''
  global global_peakSignal_df
- in_tmp_ar_ids,sat_idx,vat_idx= args
+ in_tmp_ar_ids,sat_idx,vat_idx,test_methods= args
  all_p={}
  for ii in in_tmp_ar_ids:
      
    tmp_df=global_peakSignal_df[global_peakSignal_df.id==ii].copy()
    tmp_x=tmp_df.iloc[:,sat_idx-3+7]
    tmp_y=tmp_df.iloc[:,vat_idx-3+7]
-   tmp_p,max_x,max_y, num_x,num_y=do_dar_test2(tmp_x,tmp_y)
+   tmp_p,max_x,max_y, num_x,num_y=do_dar_test2(test_methods,tmp_x,tmp_y)
    all_p[ii]=[tmp_p[0],tmp_p[1],max_x,max_y,num_x,num_y]
  return all_p
 
@@ -87,7 +101,7 @@ def parallel_do_DAR(args):
   #do parallel computation for AR
   all_p=[]
   #num_of_process=15
-  num_of_process, in_ar_df, in_peakSignal_df, sat_idx, vat_idx= args
+  num_of_process, in_ar_df, in_peakSignal_df, sat_idx, vat_idx, test_methods= args
 
   #divide data to multiple processes
   len_of_data=len(in_ar_df.id.to_list())
@@ -105,7 +119,7 @@ def parallel_do_DAR(args):
   #do parallel calculation
   ar_ids=in_ar_df.id.to_numpy()
   pool= mp.Pool(processes=num_of_process, initializer=initpool,initargs=(in_peakSignal_df ,))
-  out_pvals= pool.map(do_DAR_test,[(ar_ids[tmp_index[loop]:tmp_index[loop+1]], sat_idx, vat_idx) for loop in range(0,num_of_process)],1)
+  out_pvals= pool.map(do_DAR_test,[(ar_ids[tmp_index[loop]:tmp_index[loop+1]], sat_idx, vat_idx, test_methods) for loop in range(0,num_of_process)],1)
   pool.close()
   out_pvals= list(filter(None, out_pvals))
 
