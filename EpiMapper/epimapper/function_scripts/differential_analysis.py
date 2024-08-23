@@ -108,6 +108,9 @@ def set_parser(parser):
     optional_name.add_argument("-fold", "--fold_enrichment", required=False, type = bool, default=False, help="Use either fold enrichment or bedgraph for differential analysis, default = bedgraph")
     
     optional_name.add_argument("-cut", "--p_value_cutoff", required=False, type=float)
+
+    #test lgg 16.08
+    optional_name.add_argument("-tm", "--test_methods", required = False, type = str, default = "ttest", help="there are three methods, ttest, kstest and ranksumtest")
     #test jbw
     #optional_name.add_argument("-n", "--normalize", required=False, type = bool, default = False, help="Whether to normlaize input reads, default= False")
     optional_name.add_argument("-n", "--normalize", required=False, type =str, default = None , help="Whether to normlaize input reads, default= None, use True if need to normalize the data")
@@ -589,7 +592,7 @@ def map_peaks_in_wind(out_combined_files, normalize):
 
 
 
-def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff):
+def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff,test_methods):
     """
     Uses the imported fdar and dar modules to preform DAR analysis on two groups of samples.
     
@@ -641,7 +644,7 @@ def do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff)
     #DAR finding
     tmp_xStr1_idx, tmp_yStr2_idx =find_col_index4sample(in_ar_head_df, searchStr1, searchStr2)
     
-    out_all_pval, out_passed_pval = parallel_do_DAR((num_of_process,in_ar_df,in_peakSignal_df,tmp_xStr1_idx,tmp_yStr2_idx ))
+    out_all_pval, out_passed_pval = parallel_do_DAR((num_of_process,in_ar_df,in_peakSignal_df,tmp_xStr1_idx,tmp_yStr2_idx,test_methods))
     #
     out_all_df=pd.DataFrame.from_dict(out_all_pval,orient='index')
     
@@ -1098,21 +1101,22 @@ def run(args):
         
         combine_windows(diff_dir, out_combined_files)
     else:
-        print("Neither folder_enrichment nor bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter or use True for folder_enrichment")
+       print("Neither folder_enrichment nor bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter or use True for folder_enrichment")
         exit(1)
     #end test
 
 
     if normalize:
-        print('Normalize input data')
-        do_normalization(out_combined_files)
+         print('Normalize input data')
+         do_normalization(out_combined_files)
     else:
         print('Do not normalize input data')
     
     map_peaks_in_wind(out_combined_files, normalize)
+    # 22.08 lgg 
+    test_methods = args.test_methods
     
-    
-    do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff)
+    do_dar_analysis(diff_dir, searchStr1, searchStr2, out_combined_files,cutoff,test_methods)
     
     out_file = make_pvalue_format(DAR, out_combined_files,cutoff)
     
