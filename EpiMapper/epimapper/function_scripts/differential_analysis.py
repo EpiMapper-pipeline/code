@@ -110,7 +110,7 @@ def set_parser(parser):
     optional_name.add_argument("-cut", "--p_value_cutoff", required=False, type=float)
 
     #test lgg 16.08
-    optional_name.add_argument("-tm", "--test_methods", required = False, type = str, default = "ttest", help="there are three methods, ttest, kstest and ranksumtest")
+    optional_name.add_argument("-tm", "--test_methods", required = False, type = str, default = "ttest", help="there are four methods, ttest, kstest, mannwhitneyu and ranksumtest")
     #test jbw
     #optional_name.add_argument("-n", "--normalize", required=False, type = bool, default = False, help="Whether to normlaize input reads, default= False")
     optional_name.add_argument("-n", "--normalize", required=False, type =str, default = None , help="Whether to normlaize input reads, default= None, use True if need to normalize the data")
@@ -1095,20 +1095,20 @@ def run(args):
         combine_signal_enrichment(peak_dir, blacklist_bin_file, chromosome_sizes, out_combined_files, searchStr1,searchStr2)
        #test jbw 23.06 
     elif bedgraph is not None:
-        print('Use bedgraph file')
+	print('Use bedgraph file')
         bdg_files = glob.glob(os.path.join(bedgraph, "*.fragments*.bedgraph"))
         map_bg_window(bedgraph, bdg_files, diff_dir, chromosome_sizes, LEN, searchStr1, searchStr2)
         
         combine_windows(diff_dir, out_combined_files)
     else:
-       print("Neither folder_enrichment nor bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter or use True for folder_enrichment")
+	print("Neither folder_enrichment nor bedgraph directory selected. \nPlease provide the path to a directory containing bedgraph files in the -bg parameter or use True for folder_enrichment")
         exit(1)
     #end test
 
 
     if normalize:
-         print('Normalize input data')
-         do_normalization(out_combined_files)
+	print('Normalize input data')
+	do_normalization(out_combined_files)
     else:
         print('Do not normalize input data')
     
