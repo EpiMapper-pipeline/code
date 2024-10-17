@@ -1,0 +1,50 @@
+#0. Add channel in configure file .condarc such as
+ channels:
+  - conda-forge
+  - bioconda
+  - anaconda
+  - defaults
+
+#1. remove old env
+echo "remove epimapper_mc"
+conda remove -n epimapper_mc --all --yes
+#or
+#mamba remove -n epimapper_mc --all --yes
+
+#2. create new env
+#firt way to create env and install dependence
+echo "create epimapper_mc"
+conda create --name epimapper_mc python==3.9.19 --yes
+#or
+##mamba create --name epimapper_mc python==3.9.19 --yes
+
+echo "activate epimapper_mc"
+conda activate epimapper_mc 
+#or source activate epimapper_mc
+
+echo "install required packages in epimapper_mc"
+conda install --yes --file requirements.txt
+#or mamba install --insecure --yes -file requirements.txt
+
+#altrnative way to creat env and install dependence
+#conda env create -f environment.yml --name epimapper_mc
+#or 
+#mamba env create -f environment.yml --name epimapper_mc
+
+#3. install epimapper
+echo "install epimapper"
+conda activate epimapper_mc
+
+# to insnstall or uninstall 
+#python -m pip uninstall epimapper
+python -m pip install . 
+#or
+#python setup.py install
+
+#4. run demo
+echo "run demo"
+#go to 
+#../demos/demo_histone/ 
+#then run 
+#./demo_histone.sh 
+

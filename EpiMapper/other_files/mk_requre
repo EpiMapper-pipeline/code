@@ -1,0 +1,5 @@
+#pip3 freeze > requirements.txt_pip
+conda env export --no-builds | grep -v "^prefix: " > environment.yml_conda_mac
+conda list -e > requirements.txt_conda_mac
+#conda env create -f environment.yml --name epimapper2
+
