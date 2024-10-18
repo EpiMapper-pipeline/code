@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>peak_calling &mdash; EpiMapper  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="heatmap" href="heatmap.html" />
+    <link rel="prev" title="spike_in_calibration" href="spike_in_calibration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EpiMapper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">peak_calling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage">Example Usage:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples - Ready-made Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Required_files_and_where_to_find_them.html">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EpiMapper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">peak_calling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/content/peak_calling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="peak-calling">
+<h1>peak_calling<a class="headerlink" href="#peak-calling" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#arguments" id="id3">Arguments</a></p></li>
+<li><p><a class="reference internal" href="#example-usage" id="id4">Example Usage:</a></p></li>
+<li><p><a class="reference internal" href="#output" id="id5">Output</a></p></li>
+</ul>
+</nav>
+<p>Finds enriched regions/calls for peaks from chromatin profiling data with <a class="reference external" href="https://github.com/FredHutch/SEACR">SEACR</a> or <a class="reference external" href="https://github.com/macs3-project/MACS">MACS2</a>, then visulizes results.</p>
+<p>Both of these peak calling software have an alternative where control samples are used to create a background noise level before finding enriched reagions, peaks. However, not every experiment does include control samples, therefore this a optional feature in the EpiMapper pipeline. If your experiment includes control samples and you wish it perform peak calling based on these, you may utilize the <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--control_index</span></code> parameter to insert the names of the control sampels.
+The peak_calling function will separate all the samples containing the <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--control_index</span></code>, and use these at input for background-noise.</p>
+<section id="arguments">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Arguments</a><a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
+<p><strong>Required arguments:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-soft,</span> <span class="pre">--software</span></code>: input has to be either “macs2” or “seacr”. Here you decide which peak calling software you would like to use. Generally, MACS2 is more used and prefered for samples with higher background noise ( ie. ATAC-seq and CHiP-seq), while SEACR may be used for samples with lower noise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f,</span> <span class="pre">--fragments</span></code>: Input file folder of filterd BED files for peak calling.</p></li>
+</ul>
+<p><em>If peak calling with SEACR software:</em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-bg,</span> <span class="pre">--bedgraph</span></code>: Input file folder of BedGraph files for peak calling with SEACR.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-norm,</span> <span class="pre">--seacr_norm</span></code>: Seacr peakcalling normalization option (norm, non), default= non for Seacr peakcalling”, default=”non”.</p></li>
+</ul>
+<p><em>If peak calling with MACS2 software:</em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-b</span> <span class="pre">--bam</span></code>: Input folder containing BAM files for MACS2 peak calling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-gs,</span> <span class="pre">--genome_size</span></code>: Relative genome size of organism being studied.  About 90% or 70% of the genome size. (i.e, 2.7e9 for humans, 1.87e9 for mice, 9e7 for <em>Caenorhabditis elegans</em>, or 1.2e8 for fruitfly).</p></li>
+</ul>
+<p><em>If peak calling with with control samples:</em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-la,</span> <span class="pre">--list_a</span></code>: A list of sample names.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-lb,</span> <span class="pre">--list_b</span></code>: A list of control sample names.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sample names and control sample names must be entered and they should be in the correct paired order in the list.</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--control_index</span></code>: Indexes of control files (i.e, ‘control’ ‘IgG’ ect.) that should be used as a background-noise reference during peak calling. If not provided the peak calling softwares will select peaks based on a cut-off value (i.e p-value for SEACR). Default = False. An example would be if you have the samples: [H3K4me3_rep1, H3K4me3_rep2, H3K27me3_rep1, H3K27me3_rep2, IgG_rep1, IgG_rep2], you would input “IgG” into the <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--control_index</span></code>. If you have the samples [healthy_rep1, healthy_rep2, cancer_rep1, cancer_rep2, control_rep1, control_rep2] you would input “control” into the <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--control_index</span></code>.</p></li>
+</ul>
+<p><strong>Optional arguments:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-p,</span> <span class="pre">--percentage</span></code>: Cut-off percentage for peak calling software, default= 0.01.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-qval,</span> <span class="pre">--macs2_qvalue</span></code>: Macs2 callpeak Q-value, default is None, if qvalue is used then Percentage or P-value will not be considered, default= None.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-eB,</span> <span class="pre">--export_bdg</span></code>: Macs2 Whether or not to save extended fragment pileup, defualt=False for not export, use True or exporting”, default= False.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-tbl,</span> <span class="pre">--fragment_table</span></code>: Input CSV file with the following columns = [“Sample”, “Replication”, “SequencingDepth”, “MappedFragments”, “AlignmentRate”] with corresponding sample information, default = “bowtie2_alignment_ref.csv” exported by this pipeline function: <code class="docutils literal notranslate"><span class="pre">bowtie2_alignment</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-o,</span> <span class="pre">out_dir</span></code>: Output directory, default = current working directory.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you first perform peak calling without control samples and then want to perform peak calling with control samples, you need to use a new output folder.</p>
+</div>
+</section>
+<section id="example-usage">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Example Usage:</a><a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<p>Example usage SEACR peak calling with control samples and specified cut-off percentage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>epimapper<span class="w"> </span>peak_calling<span class="w"> </span>-soft<span class="w"> </span>seacr<span class="w"> </span>-bg<span class="w"> </span>/Users/me/results/Epimapper/alignment/bedgraph<span class="w"> </span>-f<span class="w"> </span>/Users/me/results/Epimapper/alignment/bed<span class="w"> </span>-la<span class="w"> </span>H3K27me3_rep1<span class="w"> </span>H3K27me3_rep2<span class="w"> </span>H3K4me3_rep1<span class="w"> </span>H3K4me3_rep2<span class="w"> </span>-lb<span class="w"> </span>IgG_rep1<span class="w"> </span>IgG_rep2<span class="w"> </span>IgG_rep1<span class="w"> </span>IgG_rep2<span class="w"> </span>-c<span class="w"> </span>IgG<span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.05<span class="w"> </span>-o<span class="w"> </span>/Users/me/results
+</pre></div>
+</div>
+<p>Example usage SEACR peak calling without control and default cut-off precentage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>epimapper<span class="w"> </span>peak_calling<span class="w"> </span>-soft<span class="w"> </span>seacr<span class="w"> </span>-bg<span class="w"> </span>/Users/me/results/Epimapper/alignment/bedgraph<span class="w"> </span>-f<span class="w"> </span>/Users/me/results/Epimapper/alignment/bed<span class="w">  </span>-o<span class="w"> </span>/Users/me/results
+</pre></div>
+</div>
+<p>Example usage with MACS2 and control samples and normalized data:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>epimapper<span class="w"> </span>peak_calling<span class="w"> </span>-soft<span class="w"> </span>macs2<span class="w"> </span>-b<span class="w"> </span>/Users/me/results/Epimapper/alignment/bam<span class="w"> </span>-gs<span class="w"> </span><span class="m">1</span>.87e9<span class="w"> </span>-norm<span class="w"> </span>norm<span class="w"> </span>-f<span class="w"> </span>/Users/me/results/Epimapper/alignment/bed<span class="w"> </span>-la<span class="w"> </span>ZNF143-48h_rep1<span class="w"> </span>ZNF143-48h_rep2<span class="w"> </span>ZNF143-72h_rep1<span class="w"> </span>ZNF143-72h_rep2<span class="w"> </span>-lb<span class="w"> </span>ZNF143-Control-48h_rep1<span class="w"> </span>ZNF143-Control-48h_rep2<span class="w"> </span>ZNF143-Control-72h_rep1<span class="w"> </span>ZNF143-Control-72h_rep2<span class="w"> </span>-c<span class="w"> </span>Control<span class="w"> </span>-o<span class="w"> </span>/Users/me/results
+</pre></div>
+</div>
+<p>Example usage with MACS2, no control samples:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>epimapper<span class="w"> </span>peak_calling<span class="w"> </span>-soft<span class="w"> </span>macs2<span class="w"> </span>-b<span class="w"> </span>/Users/me/results/Epimapper/alignment/bam<span class="w"> </span>-gs<span class="w"> </span><span class="m">1</span>.87e9<span class="w"> </span>-f<span class="w"> </span>/Users/me/results/Epimapper/alignment/bed<span class="w"> </span>-o<span class="w"> </span>/Users/me/results
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Output</a><a class="headerlink" href="#output" title="Link to this heading"></a></h2>
+<p>Like all the other functions in EpiMapper Python package, the function will create a main <code class="docutils literal notranslate"><span class="pre">Epimapper</span></code> output directiry, if it is not already present in the chosen output directory. Further, this function will create multiple folders for each file conversion.
+Depending on your prefered peak calling software as well as if control samples are used, the output directory will differ. For detailed information about all output files created by <a class="reference external" href="https://github.com/FredHutch/SEACR">SEACR</a> and <a class="reference external" href="https://github.com/macs3-project/MACS">MACS2</a> please visit their websites.
+Further, this function will create a summary table (peak_summary.csv) as well as several plots of various peak statisitcs: peak width violin plot, peak number, peak reproducibility and fragment proposition in peaks (FRiPS).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Epimapper
+<span class="p">|</span>-<span class="w"> </span>peakCalling
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>macs2
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>top_peaks
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_macs2_top._peaks.narrowPeak
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_macs2_top._peaks_sorted.bed
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_macs2_top._peaks.xls
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_macs2_top._summits.bed
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>control_peaks
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_macs2_control_peaks.stringent.bed
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>seacr
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>top_0.01
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_seacr_top.0.01_peaks.stringent.bed
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>control_peaks
+<span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="p">|</span>-<span class="w"> </span><span class="s2">&quot;sample-name&quot;</span>_seacr_control_peaks.stringent.bed
+<span class="p">|</span>-<span class="w"> </span>summary_tables
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>peak_summary.csv
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>Peak_width.png
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>Peak_numbers.png
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>frips.png
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>peaks_reproducibility_rate.png
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="spike_in_calibration.html" class="btn btn-neutral float-left" title="spike_in_calibration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="heatmap.html" class="btn btn-neutral float-right" title="heatmap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jenny Sofie Dragland &amp; Junbai Wang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

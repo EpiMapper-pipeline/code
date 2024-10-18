@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Required Files and Where to Find Them &mdash; EpiMapper  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Further analysis - Example" href="further_analysis_example.html" />
+    <link rel="prev" title="Detailed Installation Guide" href="get_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EpiMapper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peak_calling.html">peak_calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples - Ready-made Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EpiMapper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Required Files and Where to Find Them</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/content/Required_files_and_where_to_find_them.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="required-files-and-where-to-find-them">
+<h1>Required Files and Where to Find Them<a class="headerlink" href="#required-files-and-where-to-find-them" title="Link to this heading"></a></h1>
+<p>When using this Python Package, you need to provide different reference files, which you may not know where to find. Therefore, we made this simple overveiw to make it easier for you to locate and download all the necessary files to run the full pipeline.
+If you are just using some of the functions, please check what files you need to provide in the documentation of the various functions, as you may not have to download them all.</p>
+<p>The EpiMapper flowthrough as shown in the figure below. Here, the different functions are represented by blue squares and their output represented by pink shapes. Files that must be provided by the user is represented by green shapes, below is a short decription of these files.</p>
+<a class="reference internal image-reference" href="../_images/input.png"><img alt="../_images/input.png" src="../_images/input.png" style="width: 550px;" /></a>
+<p><strong>Bowtie2 index files</strong></p>
+<p>As mentioned in the bowtie2_alignment documentation page, you may either supply the index files directly or you may provide a FASTA file of your reference genome.</p>
+<p>The <a class="reference external" href="https://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2 website</a> do actually conatin a lot of pre-made index files for download. Using these may cut the analysis time, as the bowtie2_alignment does not have to create indexing files itself.
+While these may be a quick solution, it is important to consider the requirement of every experiment (i.e, which parts of the genome should be considered).</p>
+<p>FASTA files of refernce genomes may easily be found and downloaded from <a class="reference external" href="https://www.ncbi.nlm.nih.gov/">NCBI´s website</a>. Again, it is essential to check what is included in the reference genome file, as some may include ChrUn or unknown clone contigs that cannot be confidently placed on a specific chromosome.
+These contigs are usually removed before further analysis as they do not tell us a whole lot and may actually interfere with the analysis, much like the next required file: genome blacklist.</p>
+<p><strong>Genome Blacklist BED File</strong></p>
+<p>A genome blacklist contrains regions of the genome that should be avioded in further analysis. The reason some areas are removed may differ, but some of the causes may be that the region is highly repetative, leading to false signals, the region is highly condensed or simply not of interest for the study.
+If you would like to leave out whole chromosomes it is possible to simply include the chromosomes in the geneome blacklist.
+The file format needed is BED, only containing [chromosome  start  end] in tab-separated columns.
+These BED files may be downloaded from <a class="reference external" href="https://hgdownload.soe.ucsc.edu/downloads.html">UCSC Website</a>  or the ENCODE blacklists may be found on <a class="reference external" href="https://github.com/Boyle-Lab/Blacklist">GitHub</a> , depending on the reference genome.
+Here, it is important to remember that the blacklist file must be sorted before using it as input for the EpiMapper pipeline.  If you have downloaded from the ENCODE GitHub you may sort the file by running this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sort<span class="w"> </span>-k1,1V<span class="w"> </span>-k2,2n<span class="w"> </span>-k3,3n<span class="w"> </span>YOUR_FILE.bed<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f1-3<span class="w"> </span>&gt;<span class="w"> </span>YOUR_FILE_SORTED.bed
+</pre></div>
+</div>
+<p><strong>Chromosome Sizes</strong></p>
+<p>A text (.txt) file containing chromosome names and their respective sizes in base pairs must be supplied to utilize the EpiMapper. Here, the two columns must be tab-separated.
+Here is an example for Rn6:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chr1<span class="w">        </span><span class="m">282763074</span>
+chr2<span class="w">        </span><span class="m">266435125</span>
+chr3<span class="w">        </span><span class="m">177699992</span>
+chr4<span class="w">        </span><span class="m">184226339</span>
+chr5<span class="w">        </span><span class="m">173707219</span>
+chr6<span class="w">        </span><span class="m">147991367</span>
+chr7<span class="w">        </span><span class="m">145729302</span>
+chr8<span class="w">        </span><span class="m">133307652</span>
+chr9<span class="w">        </span><span class="m">122095297</span>
+chr10<span class="w">       </span><span class="m">112626471</span>
+chr11<span class="w">       </span><span class="m">90463843</span>
+chr12<span class="w">       </span><span class="m">52716770</span>
+chr13<span class="w">       </span><span class="m">114033958</span>
+chr14<span class="w">       </span><span class="m">115493446</span>
+chr15<span class="w">       </span><span class="m">111246239</span>
+chr16<span class="w">       </span><span class="m">90668790</span>
+chr17<span class="w">       </span><span class="m">90843779</span>
+chr18<span class="w">       </span><span class="m">88201929</span>
+chr19<span class="w">       </span><span class="m">62275575</span>
+chr20<span class="w">       </span><span class="m">56205956</span>
+chrX<span class="w">        </span><span class="m">159970021</span>
+chrY<span class="w">        </span><span class="m">3310458</span>
+</pre></div>
+</div>
+<p>Chromosome size files are avalible for download at the <a class="reference external" href="https://hgdownload.soe.ucsc.edu/downloads.html">UCSC website</a>. However, as mentioned, these files may contain random chromosomes for example chr4_gl000194_random.
+These “random” molecules must be removed before utilzing the file. This may be done quite easily manually by simply opening the file in a text editor and removing all the “random” chromosomes. After that the file should be sorted, which is quicly done by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sort<span class="w"> </span>-k1,1<span class="w"> </span>YOUR_FILE.txt<span class="w"> </span>&gt;<span class="w"> </span>YOUR_FILE_SORTED.txt
+</pre></div>
+</div>
+<p><strong>RefFlat Reference Text File</strong></p>
+<p>The last file you will need is a RefFlat text file containing information about where genes are located in your reference genome. These files may also be found at  <a class="reference external" href="https://hgdownload.soe.ucsc.edu/downloads.html">UCSC website</a>.
+This file will serve as a reference for annotation as well as the creation of heatmaps.</p>
+<p><strong>Optinal: Enchancher</strong></p>
+<p>If you are intrested in annotation your peaks to enhancer regions, a seperate enhancer reference BED file must be supplied. Enchancer files may be found at <a class="reference external" href="http://www.enhanceratlas.org/index.php">EnchancerAtlas 2.0</a>.
+However,these files must be processed to have this format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chr1<span class="w">        </span><span class="m">50218</span><span class="w">   </span><span class="m">50564</span><span class="w">   </span>chr1:50218:50564<span class="o">||</span>enhancer:2<span class="o">||</span><span class="m">346</span>
+chr1<span class="w">        </span><span class="m">111057</span><span class="w">  </span><span class="m">111395</span><span class="w">  </span>chr1:111057:111395<span class="o">||</span>enhancer:1<span class="o">||</span><span class="m">338</span>
+chr1<span class="w">        </span><span class="m">173031</span><span class="w">  </span><span class="m">174331</span><span class="w">  </span>chr1:173031:174331<span class="o">||</span>enhancer:3<span class="o">||</span><span class="m">1300</span>
+chr1<span class="w">        </span><span class="m">174502</span><span class="w">  </span><span class="m">176296</span><span class="w">  </span>chr1:174502:176296<span class="o">||</span>enhancer:6<span class="o">||</span><span class="m">1794</span>
+chr1<span class="w">        </span><span class="m">176997</span><span class="w">  </span><span class="m">177953</span><span class="w">  </span>chr1:176997:177953<span class="o">||</span>enhancer:1<span class="o">||</span><span class="m">956</span>
+chr1<span class="w">        </span><span class="m">178015</span><span class="w">  </span><span class="m">178611</span><span class="w">  </span>chr1:178015:178611<span class="o">||</span>enhancer:1<span class="o">||</span><span class="m">596</span>
+chr1<span class="w">        </span><span class="m">180133</span><span class="w">  </span><span class="m">180455</span><span class="w">  </span>chr1:180133:180455<span class="o">||</span>enhancer:1<span class="o">||</span><span class="m">322</span>
+chr1<span class="w">        </span><span class="m">180586</span><span class="w">  </span><span class="m">180859</span><span class="w">  </span>chr1:180586:180859<span class="o">||</span>enhancer:1<span class="o">||</span><span class="m">273</span>
+</pre></div>
+</div>
+<p>How you achive this format will depend on your starting file, however below is a simple python code for creating this format based on hg19 pancreas from <a class="reference external" href="http://www.enhanceratlas.org/index.php">EnchancerAtlas 2.0</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import<span class="w"> </span>pandas<span class="w"> </span>as<span class="w"> </span>pd
+
+<span class="nv">bed_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/me/documents/Pancreas.bed&#39;</span>
+
+<span class="nv">bed_df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pd.read_csv<span class="o">(</span>bed_file,header<span class="o">=</span>None,<span class="w"> </span><span class="nv">sep</span><span class="o">=</span><span class="s2">&quot;\t&quot;</span>,<span class="w"> </span><span class="nv">names</span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;chr&#39;</span>,<span class="s1">&#39;start&#39;</span>,<span class="s1">&#39;end&#39;</span>,<span class="s1">&#39;remove&#39;</span><span class="o">])</span>
+
+<span class="nv">bed_out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bed_df<span class="o">[[</span><span class="s1">&#39;chr&#39;</span>,<span class="s1">&#39;start&#39;</span>,<span class="s1">&#39;end&#39;</span><span class="o">]]</span>.copy<span class="o">()</span>
+
+bed_out<span class="o">[</span><span class="s1">&#39;id&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bed_out.apply<span class="o">(</span>lambda<span class="w"> </span>row:<span class="w"> </span>f<span class="s2">&quot;{row[&#39;chr&#39;]}:{row[&#39;start&#39;]}:{row[&#39;end&#39;]}||enhancer||{row[&#39;end&#39;] - row[&#39;start&#39;]}&quot;</span>,<span class="w"> </span><span class="nv">axis</span><span class="o">=</span><span class="m">1</span><span class="o">)</span>
+
+bed_out.to_csv<span class="o">(</span>bed_file.replace<span class="o">(</span><span class="s1">&#39;.bed&#39;</span>,<span class="s1">&#39;_converted.bed&#39;</span><span class="o">)</span>,<span class="w"> </span><span class="nv">header</span><span class="o">=</span>None,<span class="w"> </span><span class="nv">sep</span><span class="o">=</span><span class="s1">&#39;\t&#39;</span>,<span class="w"> </span><span class="nv">index</span><span class="o">=</span>False<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="get_started.html" class="btn btn-neutral float-left" title="Detailed Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="further_analysis_example.html" class="btn btn-neutral float-right" title="Further analysis - Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jenny Sofie Dragland &amp; Junbai Wang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

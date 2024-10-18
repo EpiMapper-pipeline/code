@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples - Ready-made Pipeline &mdash; EpiMapper  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Detailed Installation Guide" href="get_started.html" />
+    <link rel="prev" title="differential_analysis" href="differential_analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EpiMapper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peak_calling.html">peak_calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples - Ready-made Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ready-made-files">Ready-made Files:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-configuration-file">Set Up Configuration File:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-ready-made-file">Running The Ready-made File:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Required_files_and_where_to_find_them.html">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EpiMapper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples - Ready-made Pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/content/Examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples-ready-made-pipeline">
+<h1>Examples - Ready-made Pipeline<a class="headerlink" href="#examples-ready-made-pipeline" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#ready-made-files" id="id1">Ready-made Files:</a></p></li>
+<li><p><a class="reference internal" href="#set-up-configuration-file" id="id2">Set Up Configuration File:</a></p></li>
+<li><p><a class="reference internal" href="#running-the-ready-made-file" id="id3">Running The Ready-made File:</a></p></li>
+</ul>
+</nav>
+<p>For novice command-line users we have made this page with examples on usage, as well as a ready-made file for useing the complete pipeline.</p>
+<section id="ready-made-files">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Ready-made Files:</a><a class="headerlink" href="#ready-made-files" title="Link to this heading"></a></h2>
+<p>Here is a shell script running the entire pipeline <a class="reference download internal" download="" href="../_downloads/c188761f02ef4acd1c28a8a1e050afb4/example_full_pipeline.sh"><code class="xref download docutils literal notranslate"><span class="pre">full</span> <span class="pre">pipeline</span> <span class="pre">example</span> <span class="pre">script</span></code></a></p>
+<p>Here is the configuration script needed to run the shell script of the full pipeline <a class="reference download internal" download="" href="../_downloads/4f68f00881707776c5b9eec98a737081/config.txt"><code class="xref download docutils literal notranslate"><span class="pre">configuration</span> <span class="pre">script</span></code></a></p>
+</section>
+<section id="set-up-configuration-file">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Set Up Configuration File:</a><a class="headerlink" href="#set-up-configuration-file" title="Link to this heading"></a></h2>
+<p>Before using the ready-made file for useing the complete pipeline, you need to set up the configuration file with all the paths to your files.</p>
+<p>We recommend to create a new folder containing everything you need to run the pipeline, so everything is in one place and is easier to find on a later occasion.</p>
+<p>Setting up the configuration file itself is quite easy as the file itself contains a lot of comments explaining where you should provide the various information.</p>
+<p>Here is an example setup for an input folder with the directory structure showcased below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>in_folder_cut_tag
+<span class="p">|</span>-<span class="w"> </span>fastq/
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>diabetic-1_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>diabetic-1_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>diabetic-2_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>diabetic-2_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-1_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-1_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-2_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-2_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-3_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>healthy-3_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>IgG-1_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>IgG-1_rep2.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>IgG-2_rep1.fastq
+<span class="p">|</span><span class="w">   </span><span class="p">|</span>-<span class="w"> </span>IgG-2_rep2.fastq
+<span class="p">|</span>-<span class="w"> </span>hg19_bowtie2_index/
+<span class="p">|</span>-<span class="w"> </span>ecoli_bowtie2_index/
+<span class="p">|</span>-<span class="w"> </span>hg19-blacklist_sorted.bed
+<span class="p">|</span>-<span class="w"> </span>hg19_chromosome_sizes_sorted.txt
+<span class="p">|</span>-<span class="w"> </span>hg19.refFlat.txt
+<span class="p">|</span>-<span class="w"> </span>hg19_all_enhancers_merged_4dmr.bed
+</pre></div>
+</div>
+<p>The configuration file below will execute every function, including spike_in_calibration, and in this example the data is thought to not be ATAC-seq data. Here, the peak calling software is set to MACS2 using the IgG control samples as a background reference.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">out_dir</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/cut_tag_results&quot;</span>
+
+<span class="nv">fastq</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/fastq&quot;</span>
+
+<span class="nv">bowtie2_index</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/hg19_bowtie2_index&quot;</span>
+
+<span class="nv">bowtie2_index_spike_in</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/ecoli_bowtie2_index&quot;</span>
+
+<span class="nv">blacklist</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/hg19-blacklist_sorted.bed&quot;</span>
+
+<span class="nv">atac</span><span class="o">=</span><span class="s2">&quot;False&quot;</span>
+
+<span class="nv">chromosome_sizes</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/hg19_chromosome_sizes_sorted.txt&quot;</span>
+
+<span class="nv">software</span><span class="o">=</span><span class="s2">&quot;macs2&quot;</span>
+
+<span class="nv">genome_size</span><span class="o">=</span><span class="s2">&quot;2.7e9&quot;</span>
+
+<span class="nv">control_index</span><span class="o">=</span><span class="s2">&quot;IgG&quot;</span>
+
+<span class="nv">refflat_ref</span><span class="o">=</span><span class="s2">&quot;/Users/me/documents/in_folder_cut_tag/hg19.refFlat.txt&quot;</span>
+
+<span class="nv">group_A</span><span class="o">=</span><span class="s2">&quot;diabetic-1_rep1 diabetic-1_rep2 diabetic-2_rep1 diabetic-2_rep2&quot;</span>
+
+<span class="nv">group_B</span><span class="o">=</span><span class="s2">&quot;healthy-1_rep1 healthy1-rep2 healthy-2_rep1 healthy-2_rep2 healthy-3_rep1 healthy_rep2&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-ready-made-file">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Running The Ready-made File:</a><a class="headerlink" href="#running-the-ready-made-file" title="Link to this heading"></a></h2>
+<p>When you have set up your configuration file, you are ready to run the analysis! You do not have to change anything in the example_full_pipeline.sh shell script, unless you wish to exclude some of the function.
+Just remember that most of the functions do rely on each other.</p>
+<p>When running the ready-made shell script containing the pipeline, it is important to place the config.txt file and the shell script in the same folder. If you they are not in the same folder, the shell script will not find the configuration file, leading to faliure.</p>
+<p>Then, when you are ready you may open your terminal window, move to the folder you have placed the config.txt file and shell script files. Then run the following command to start the analysis:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>bash<span class="w"> </span>example_full_pipeline.sh
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="differential_analysis.html" class="btn btn-neutral float-left" title="differential_analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="get_started.html" class="btn btn-neutral float-right" title="Detailed Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jenny Sofie Dragland &amp; Junbai Wang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

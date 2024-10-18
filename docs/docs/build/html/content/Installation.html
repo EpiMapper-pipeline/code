@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; EpiMapper  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fastqc" href="fastqc.html" />
+    <link rel="prev" title="EpiMapper" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EpiMapper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-installation">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-contents">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peak_calling.html">peak_calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples - Ready-made Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Required_files_and_where_to_find_them.html">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EpiMapper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/content/Installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#download" id="id1">Download</a></p></li>
+<li><p><a class="reference internal" href="#install" id="id2">Install</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id3">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#package-installation" id="id4">Package Installation</a></p></li>
+<li><p><a class="reference internal" href="#package-contents" id="id5">Package Contents</a></p></li>
+</ul>
+</nav>
+<section id="download">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Download</a><a class="headerlink" href="#download" title="Link to this heading"></a></h2>
+<p>epimapper is written in Python. It can be installed and accessed from the command line and is available for both Linux and macOS operating systems. The package can be downloaded from the  <a class="reference external" href="https://github.com/EpiMapper-pipeline/code/tree/main/epimapper">EpiMapper GitHub page</a>. Alternatively, you can use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget
+</pre></div>
+</div>
+</section>
+<section id="install">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Install</a><a class="headerlink" href="#install" title="Link to this heading"></a></h2>
+<p>It is highly recommended to create a separate virtual environment for the package to avoid any library conflicts. You can create a virtual environment using the following commands. We recommend installing and using Miniconda/Anaconda (<a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>). You can find a tutorial on creating and updating virtual environments here at <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">the Conda website</a>.</p>
+<p>If Miniconda is already installed, you can proceed with the following step-by-step installation. To set-up the EpiMapper Python package you can follow the step-by-step details provided below:</p>
+<ol class="arabic simple">
+<li><p>Create a virtual environment:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>epimapper<span class="w"> </span><span class="nv">python</span><span class="o">==</span><span class="m">3</span>.8.15
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Activate the virtual environment:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>epimapper
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Install pip if not already installed:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>pip
+</pre></div>
+</div>
+<p>Please allow any other installations when prompted.</p>
+</section>
+<section id="requirements">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>Before installing the package, the dependencies must be fulfilled. It is advised to install the dependencies using Miniconda. The list of dependencies is as follows:</p>
+<ul class="simple">
+<li><p>matplotlib=3.7.1</p></li>
+<li><p>numpy=1.23.0</p></li>
+<li><p>deeptools=3.5.1</p></li>
+<li><p>picard=3.0.0</p></li>
+<li><p>openjdk=17.0.8</p></li>
+<li><p>seaborn=0.12.2</p></li>
+<li><p>plotnine=0.10.1</p></li>
+<li><p>pandas=1.2.5</p></li>
+<li><p>scipy=1.10.1</p></li>
+<li><p>fastqc=0.12.1</p></li>
+<li><p>MACS2=2.2.9.1</p></li>
+<li><p>bedtools=2.31.0</p></li>
+<li><p>samtools=1.18</p></li>
+<li><p>bowtie2=2.5.1</p></li>
+</ul>
+<p>These dependencies can be installed one by one using the Conda package manager. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span><span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.23.0
+</pre></div>
+</div>
+<p>A requirements.txt file is provided with the package. You can automatically install all the requirements using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>--file<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p>Alternatively, you can install the requirements using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="package-installation">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Package Installation</a><a class="headerlink" href="#package-installation" title="Link to this heading"></a></h2>
+<p>To install the package, navigate to the <code class="docutils literal notranslate"><span class="pre">epimapper</span></code> directory (the folder containing setup.py and pyproject.toml) and run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+</pre></div>
+</div>
+<p>For more details, refer to the readme file in the package.</p>
+</section>
+<section id="package-contents">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Package Contents</a><a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<p>The package folder will contain the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">demo</span></code>: Contains function scripts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">epimapper</span></code>: Contains the Python source code of the pipeline.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readme.txt</span></code>: Instructions about the usage of the package.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>: List of requirements that can be used for automatic installation using Miniconda or pip.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code>: Setup file for the package.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seacr_tool</span></code>: Contains the SEACR shell scripts.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="EpiMapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fastqc.html" class="btn btn-neutral float-right" title="fastqc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jenny Sofie Dragland &amp; Junbai Wang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
