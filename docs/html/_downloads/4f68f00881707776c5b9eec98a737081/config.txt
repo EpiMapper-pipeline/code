@@ -1,0 +1,143 @@
+# This is a configuration file for the usage of the epimapper_full_pipeline.sh
+# The epimapper_full_pipeline.sh will perform the full data analysis pipeline from
+# fastq quality control to differential analysis of samples. 
+# However, there are two functions that may be dropped if it is not part of your
+# exprimental protocol: duplication removal and spike in calibration. 
+# This is done by simply removing the variable(s) linked to the function you want to avoid.
+
+# IMPORTANT NOTE: All paths must start with a forward slash "/"
+# and never end with a forward slash "/", this is so 
+# your system can find the directories and files you have defined.
+# In addition, do not remove/add quotation marks ("") around the variables.
+# These tell your computer whether the input is string (text) or not.
+# Correct example: "/Users/me/projects/histone-diabetes-atac/fastq"
+# Wrong example: cluster/home/username/in_folder/hg38_chromosome_sizes.txt/
+
+# ANOTHER IMPORTANT NOTE: The hashtags "#" at the start of a line means that it is a comment 
+# line, which means that it is not run. Do not write anything new unless you add a hashtag
+# in the beginning of the like. You can also remove all the comments if they are confusing you.
+
+
+# OUTPUT DIRECTORY 
+
+# You may choose a desired output directory, just make sure that the directory is actually
+# in existence. If you want to use your current directory as output directory, you may
+# remove the line below defining the out_dir. 
+out_dir="/path/to/desired/output/directory/default/is/current/directory"
+
+
+# FASTQC
+
+# Here you should input the path leading to the fastq reads files you want to analyze.
+fastq="/directory/containing/your/fastq/files/here"
+
+
+# BOWTIE2 ALIGNMENT - REFERENCE GENOME
+
+# If you have downloaded or created bowtie2 indexing files, write the path to the directory
+# containing these indexing files below and remove 
+# the defining fasta_reference line, as it is not needed. 
+bowtie2_index="/directory/containing/bowtie2/indexing/files"
+
+# If you have not downloaded or created bowtie2 indexing files,
+# write the path to your reference genome FASTA file and 
+# please remove the defining bowtie2_index line above, as it is not needed.
+fasta_reference="/path/to/fasta/reference/genome/file/if/you/dont/have/bowtie2/indexing/files"
+
+
+# BOWTIE2 ALIGNMENT - SPIKE IN CALIBRATION
+# If you would like to perform spike in calibration on your samples, you need to supply either
+# bowtie2 indexing files based on a spike in genome (i.e., E.coli) or the FASTA file of 
+# of a spike in genome. If you DO NOT want to perform spike in normalization, remove both variables
+# below. As for alignment to the reference genome, you may remove the variable 
+# (bowtie2_index_spike_in or fasta_reference_spike_in) if you do not intend to use it. 
+
+bowtie2_index_spike_in="/directory/containing/spike/in/bowtie2/indexing/files"
+
+fasta_reference_spike_in="/spike/in/fasta/reference/genome/file/if/you/dont/have/bowtie2/indexing"
+
+# REMOVE DUPLICATES
+# If you do not want to remove duplicates, change the below variable to false
+
+rm_duplicates=true
+
+
+# FILTERING
+
+# Here you must input the path to a sorted BED file containing the genomic
+# regions you want to ignore in your analysis.
+blacklist="/path/to/blacklist/of/genomc/regions/that/should/be/avoided"
+
+
+# Here you must input the path to a sorted txt file containing the chromosomes
+# and corresponding sizes of your reference genome. 
+chromosome_sizes="/path/to/chromosome/sizes/file"
+
+
+# PEAK CALLING
+
+# When using the EpiMapper Python package, you must choose whether to between the peak
+# calling software SEACR or MACS2. To gain knowledge about which suits your project better
+# please see the documentation for the "peak_calling" function. 
+# To select a software, simply remove the line with the software you DO NOT 
+# want to use.
+
+software="macs2"
+
+software="macs2" 
+
+# Peak calling with MACS2:
+
+# If you have chosen to use the MACS2 software for peak calling 
+# you need to provide the relative genome size of the organism being studied.
+# This means bout 90% or 70% of the genome size.
+# i.e, 2.7e9 for humans, 1.87e9 for mice, 9e7 for Caenorhabditis elegans, or 1.2e8 for fruitfly.
+# If you have selected SEACR peak calling, simply ignore this. 
+
+genome_size="some-number-e9"
+
+# Peak calling with control samples:
+
+# If some of your samples are control samples for your experiment (i.e., IgG samples),
+# it is smart to use control sample based peak calling. 
+# For more details please read the documentation for the "peak_calling" function.
+# Please supply the indexes of control files (i.e., 'control' 'igG' ect.) 
+# that should be used as a background noise reference during peak calling. 
+# If not provided the peak calling software will select peaks based on a cut-off value 
+# (i.e. p-value for SEACR). Default = False, here represented by 0
+
+control_index=0
+
+# Changing the cut-off value for peak calling without control samples
+# If you want to customize the Cut-off percentage for
+# peak calling software you may change it here.
+# Default= 0.01 for SEACR, and for MACS2 it is 0.05 q-value.
+
+percentage="some_number"
+
+
+HEATMAPS
+
+# To create heatmaps of enrichments around genes, you need to input a reference genome
+# file in RefFlat format. This should be a text file (.txt) with information
+# about where genes are located in the genome.
+
+refflat_ref="path/to/input/reference/genome/RefFlat/text/(.txt)/file"
+
+# If you have access to a powerful computer, you may change the number of cores 
+# to your desired number here. The default is set to 8. 
+
+cores="8"
+
+
+# DIFFERNTIAL ANALYSIS 
+# To find differentially enriched, statistically significant changes to specific genomic regions between 
+# two groups, and annotate them.
+# You need to define the names of the samples in the two groups in the following parameters:
+# The names below are just examples, there is no default here, so the names must be changed and defined.
+group_A="diabetic-1_rep1 diabetic-1_rep2 diabetic-2_rep1 diabetic-2_rep2"
+
+group_B="healthy-1_rep1 healthy1-rep2 healthy-2_rep1 healthy-2_rep2 healthy-3_rep1 healthy_rep2"
+
+
+
