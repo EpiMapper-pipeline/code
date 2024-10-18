@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EpiMapper &mdash; EpiMapper  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="content/Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            EpiMapper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="content/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/peak_calling.html">peak_calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/Examples.html">Examples - Ready-made Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/Required_files_and_where_to_find_them.html">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">EpiMapper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">EpiMapper</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <a class="reference external image-reference" href="https://www.oslo-universitetssykehus.no/"><img alt="_images/oslo-universitetssykehus-ous-logo.png" src="_images/oslo-universitetssykehus-ous-logo.png" style="width: 150px;" /></a>
+<a class="reference external image-reference" href="https://www.uio.no/"><img alt="_images/uio_segl_a.png" src="_images/uio_segl_a.png" style="width: 150px;" /></a>
+<a class="reference external image-reference" href="https://www.helse-sorost.no/"><img alt="_images/helse-sor-ost.jpg" src="_images/helse-sor-ost.jpg" style="width: 150px;" /></a>
+<a class="reference external image-reference" href="https://www.ahus.no/"><img alt="_images/ahhus.png" src="_images/ahhus.png" style="width: 150px;" /></a>
+<section id="epimapper">
+<h1>EpiMapper<a class="headerlink" href="#epimapper" title="Link to this heading"></a></h1>
+<p>A Python package containing a full data analysis pipeline of ChIP-seq, CUT&amp;RUN, ATAC-seq and CUT&amp;Tag data.</p>
+<section id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="content/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/fastqc.html">fastqc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/bowtie2_alignment.html">bowtie2_alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/remove_duplicates.html">remove_duplicates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/fragment_length.html">fragment_length</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/filtering.html">filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/spike_in_calibration.html">spike_in_calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/peak_calling.html">peak_calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/heatmap.html">heatmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/differential_analysis.html">differential_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/Examples.html">Examples - Ready-made Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/get_started.html">Detailed Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/Required_files_and_where_to_find_them.html">Required Files and Where to Find Them</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/further_analysis_example.html">Further analysis - Example</a></li>
+</ul>
+</div>
+<p><strong>positional arguments</strong>:
+- <strong>task</strong>: Pipeline task to run</p>
+<p><strong>optional arguments</strong>:
+- <strong>-h, –help</strong>: Show this help message and exits</p>
+<p>Usage: epimapper &lt;task&gt; [&lt;args&gt;]</p>
+</section>
+<section id="tasks-available-for-using">
+<h2>Tasks available for using:<a class="headerlink" href="#tasks-available-for-using" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>fastqc</strong>: Performs quality control on raw reads fastq files from high-thoughput sequencing.</p></li>
+<li><p><strong>bowtie2_alignment</strong>: Mapping reads to a reference genome with Bowtie2 alignment of fastq sequencing reads files from high-thoughput sequecing, and visulizing results.</p></li>
+<li><p><strong>remove_duplicates</strong>: Remove duplicated reads mapped to the same place in of a reference genome during alignment, and visulizing results.</p></li>
+<li><p><strong>fragment_length</strong>: Evaluation of mapped fragment length distribution of input SAM files exported from high-thoughput sequencing alignment, and visulizing results.</p></li>
+<li><p><strong>spike_in_calibration</strong>: Removes experimental bias by normalizing fragment counts based on sequencing depth to a spike-in genome and visulizes results.</p></li>
+<li><p><strong>peak_calling</strong>: Finds enriched regions/calls for peaks from chromatin profiling data with SEACR or MACS2, then visulizes results.</p></li>
+<li><p><strong>heatmap</strong>: Visualizes the enrichment of target protein in predefined genomic regions and peaks by creating heatmaps.</p></li>
+<li><p><strong>differential_analysis</strong>:Preforms differntial analysis on enriched reagions/peaks before annotating the stastitically significant changes to spesific genomic reagions and visulizing the results.</p></li>
+</ul>
+</section>
+<section id="files-needed-for-a-complete-run-of-the-pipeline">
+<h2>Files needed for a complete run of the pipeline:<a class="headerlink" href="#files-needed-for-a-complete-run-of-the-pipeline" title="Link to this heading"></a></h2>
+<p><strong>Required</strong>:</p>
+<ul class="simple">
+<li><p><strong>FASTQ</strong>: Text files that contains the sequence data from next generation sequencing. The files must be stored togheter in one single directory.</p></li>
+<li><p><strong>Chromosome Sizes</strong>: Text file containin one column with information the chromosome sizes of the genome.</p></li>
+<li><p><strong>Genome Blacklist</strong>: A BED file conaining genome that should be avoided in the data analysis (i.e highly repetative regions)</p></li>
+<li><p><strong>Genome RefFlat Reference</strong>: A text (.txt) file containing the reference genome in RefFlat format.</p></li>
+</ul>
+<p><em>either</em>
+- <strong>Bowtie2 Indexing Files</strong>: Input file folder of Bowtie2 reference genome indexing files.
+<em>or</em>
+- <strong>Reference Genome FASTA</strong>: Input reference genome FASTA file for the creation of Bowtie2 reference genome.</p>
+<p><strong>Optional</strong>:</p>
+<ul class="simple">
+<li><p><strong>Enchancher</strong>: A sorted BED file containing the enhancer regions. This will be used as a refereence for annotation of the differntially bound marks.</p></li>
+</ul>
+</section>
+<section id="name-requirements-for-files">
+<h2>Name requirements for files:<a class="headerlink" href="#name-requirements-for-files" title="Link to this heading"></a></h2>
+<p>All input FASTQ files must follow a naming protocal, this is to ensure smooth transitions between the pipeline´s functions.
+The naming protocal is as following:</p>
+<blockquote>
+<div><p>[SAMPEL-NAME]_rep[REPLICATION-NUMBER]_[R1/R2]_[(TECHNICAL-REPLICATE)].fastq</p>
+</div></blockquote>
+<dl>
+<dt>The sampl name section must not contain underscore “_” or dot “.” in the name.</dt><dd><p>If there are none technical replicates, just skip the number.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li><p>H4K3me3_rep1_R2.fastq</p></li>
+<li><p>ZNF143-Control-48h_rep1_R1.fastq</p></li>
+<li><p>IgG_rep1_R2_001.fastq</p></li>
+<li><p>Control-sample_rep2_R2.fastq</p></li>
+<li><p>H4K27me3_rep1_R2_3.fastq</p></li>
+<li><p>Any-thing-you-want-except-underscore-or-dot_rep2_R2.fastq</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="output-created-by-the-pipeline">
+<h2>Output created by the pipeline<a class="headerlink" href="#output-created-by-the-pipeline" title="Link to this heading"></a></h2>
+<p>After a complete run of the EpiMapper pipeline you will be left with several newly created folders following the directory structure below.</p>
+<a class="reference internal image-reference" href="_images/output.png"><img alt="_images/output.png" src="_images/output.png" style="width: 550px;" /></a>
+<p>As the figure shows, and to make it eaiser for the user the main output directory “Epimapper” contains all the output from every subfunction. Please see each functions´documentation page to gain further knowledge about the output file of each repective function.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="content/Installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jenny Sofie Dragland &amp; Junbai Wang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
